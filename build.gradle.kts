@@ -40,7 +40,7 @@ dependencies {
     implementation("org.mapstruct:mapstruct:$mapstrcutVersion")
     kapt("org.mapstruct:mapstruct-processor:$mapstrcutVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
