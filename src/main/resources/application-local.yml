@@ -15,6 +15,23 @@ spring:
           physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
+
+jwt:
+  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+
+springdoc:
+  packages-to-scan : com.aria.server
+  swagger-ui :
+    path : /api
+  api-docs :
+    path : /api-docs/json
+    groups :
+      enabled : true
+  cache :
+    disabled : true
+  default-consumes-media-type : application/json;charset=UTF-8
+  default-produces-media-type : application/json;charset=UTF-8
+
 logging:
   level:
     root: INFO
