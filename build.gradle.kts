@@ -14,6 +14,10 @@ plugins {
     kotlin("kapt") version kotlinVersion
 }
 
+
+
+
+
 group = "com.aria"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
@@ -54,8 +58,4 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
-}
-
-allOpen {
-    annotation("javax.persistence.Entity")
 }
