@@ -5,7 +5,7 @@ import com.aria.server.art.infrastructure.dto.CreateArtResponse
 import com.aria.server.art.infrastructure.dto.GetRandomArtResponse
 
 
-interface IArtService {
+interface ArtService {
     fun createArt(dto: CreateArtRequest): CreateArtResponse
     fun getRandomArt(): GetRandomArtResponse
 }
