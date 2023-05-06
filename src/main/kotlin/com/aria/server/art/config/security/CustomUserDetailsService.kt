@@ -18,14 +18,12 @@ class CustomUserDetailsService(private val memberRepository: MemberRepository): 
 
     @Transactional
     @Throws(UsernameNotFoundException::class)
-    override fun loadUserByUsername(username: String): UserDetails =
-        memberRepository.findByEmail(username)
-            .map(::createUserDetails)
-            .orElseThrow { UsernameNotFoundException("$username -> 데이터베이스에서 찾을 수 없습니다.") }
+    override fun loadUserByUsername(email: String): UserDetails =
+        memberRepository.findByEmail(email)
+            ?. let { createUserDetails(it) }
+            ?: throw UsernameNotFoundException("$email -> 데이터베이스에서 찾을 수 없습니다.");
+
 
     private fun createUserDetails(member: Member): UserDetails =
-        User(
-            member.email,
-            member.password, setOf(SimpleGrantedAuthority(member.role.toString()))
-        )
+        User(member.email, member.id.toString(), setOf(SimpleGrantedAuthority(member.role.toString())))
 }

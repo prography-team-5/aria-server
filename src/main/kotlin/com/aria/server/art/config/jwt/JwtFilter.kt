@@ -14,6 +14,11 @@ import javax.servlet.http.HttpServletResponse
 class JwtFilter (private val jwtProvider: JwtProvider) : OncePerRequestFilter() {
     // 실제 필터링 로직은 doFilterInternal 에 들어감
     // JWT 토큰의 인증 정보를 현재 쓰레드의 SecurityContext 에 저장하는 역할 수행
+    companion object {
+        const val AUTHORIZATION_HEADER = "Authorization"
+        const val BEARER_PREFIX = "Bearer "
+    }
+
     @Throws(IOException::class, ServletException::class)
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -35,8 +40,4 @@ class JwtFilter (private val jwtProvider: JwtProvider) : OncePerRequestFilter() 
         } else "nothing"
     }
 
-    companion object {
-        const val AUTHORIZATION_HEADER = "Authorization"
-        const val BEARER_PREFIX = "Bearer "
-    }
 }

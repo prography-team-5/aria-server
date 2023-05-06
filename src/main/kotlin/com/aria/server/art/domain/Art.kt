@@ -1,15 +1,6 @@
 package com.aria.server.art.domain
 
-import javax.persistence.Column
-import javax.persistence.Embedded
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.OneToMany
-import javax.persistence.OneToOne
+import javax.persistence.*
 
 
 @Entity
@@ -21,7 +12,7 @@ class Art (
     size: Size,
     description: String,
     member: Member
-): BaseEntity() {
+): AuditEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
@@ -50,7 +41,7 @@ class Art (
     var description: String = description
         protected set
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     var member: Member = member
         protected set

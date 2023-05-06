@@ -21,10 +21,14 @@ import java.util.stream.Collectors
 class JwtProvider(@Value("\${jwt.secret}") secretKey: String) {
     private val key: Key
     private val log = LoggerFactory.logger(javaClass)
-
+    companion object {
+        private const val AUTHORITIES_KEY = "auth"
+        private const val BEARER_TYPE = "bearer"
+        private const val ACCESS_TOKEN_EXPIRE_TIME = (1000 * 60 * 60 * 24).toLong() // 1일
+        private const val REFRESH_TOKEN_EXPIRE_TIME = (1000 * 60 * 60 * 24 * 7).toLong() // 7일
+    }
     init {
-        val keyBytes = Decoders.BASE64.decode(secretKey)
-        key = Keys.hmacShaKeyFor(keyBytes)
+        key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey))
     }
 
     fun createTokenDto(authentication: Authentication): TokenDto =
@@ -93,12 +97,4 @@ class JwtProvider(@Value("\${jwt.secret}") secretKey: String) {
             e.claims
         }
 
-    companion object {
-        private const val AUTHORITIES_KEY = "auth"
-        private const val BEARER_TYPE = "bearer"
-        private const val ACCESS_TOKEN_EXPIRE_TIME = (1000 * 60 * 60 * 24 // 1시간 * 24 = 24시간(-Dev)
-                ).toLong()
-        private const val REFRESH_TOKEN_EXPIRE_TIME = (1000 * 60 * 60 * 24 * 7 // 7일
-                ).toLong()
-    }
 }
