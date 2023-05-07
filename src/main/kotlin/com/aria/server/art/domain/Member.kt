@@ -37,4 +37,12 @@ class Member(
     @Column(nullable = false)
     var signType: SignType = signType
         protected set
+
+    fun changeProfileImageUrl(profileImageUrl: String) {
+        this.profileImageUrl = profileImageUrl
+    }
+
+    fun changeRole(role: Role) {
+        this.profileImageUrl = profileImageUrl
+    }
 }
