@@ -1,5 +1,7 @@
 package com.aria.server.art.domain
 
 enum class Role {
-    ADMIN, MEMBER, ARTIST
+    ROLE_ADMIN,
+    ROLE_MEMBER,
+    ROLE_ARTIST
 }
