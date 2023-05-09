@@ -6,8 +6,9 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "Response from server")
-@JsonPropertyOrder(*["code", "data"])
+@JsonPropertyOrder(*["msg", "data"])
 data class Response (
-    val code: Int,
+    // TODO code 로 바꿔야 함
+    val msg: String,
     val data: Any?
 )
