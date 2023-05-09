@@ -22,17 +22,15 @@ class MemberController(
 
     @Operation(summary = "Sign up API")
     @PostMapping("/sign-up")
-    @ResponseStatus(OK)
-    fun signUp(@RequestBody request: SignUpRequestDto): ResponseEntity<TokenDto> {
-        val response = memberService.signUp(request)
-        return ResponseEntity(response, CREATED)
-    }
+    @ResponseStatus(CREATED)
+    fun signUp(@RequestBody request: SignUpRequestDto): ResponseEntity<TokenDto> =
+         ResponseEntity(memberService.signUp(request), CREATED)
+
 
     @Operation(summary = "Sign in API")
     @PostMapping("/sign-in")
     @ResponseStatus(OK)
-    fun signIn(@RequestBody request: SignInRequestDto): ResponseEntity<TokenDto> {
-        val response = memberService.signIn(request)
-        return ResponseEntity(response, CREATED)
-    }
+    fun signIn(@RequestBody request: SignInRequestDto): ResponseEntity<TokenDto> =
+         ResponseEntity(memberService.signIn(request), CREATED)
+
 }

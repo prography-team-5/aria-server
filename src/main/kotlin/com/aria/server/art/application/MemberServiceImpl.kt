@@ -1,16 +1,12 @@
 package com.aria.server.art.application
 
 import com.aria.server.art.config.jwt.JwtProvider
-import com.aria.server.art.domain.Member
-import com.aria.server.art.domain.MemberRepository
-import com.aria.server.art.domain.Role
-import com.aria.server.art.domain.SignType
-import com.aria.server.art.domain.SignType.*
+import com.aria.server.art.domain.member.*
+import com.aria.server.art.domain.member.FindType.*
+import com.aria.server.art.domain.member.SignType.*
 import com.aria.server.art.infrastructure.MemberService
 import com.aria.server.art.infrastructure.dto.*
-import com.aria.server.art.infrastructure.exception.situation.MemberNotFoundException
-import com.aria.server.art.infrastructure.exception.situation.NoResponseBodyException
-import org.hibernate.annotations.common.util.impl.LoggerFactory
+import com.aria.server.art.infrastructure.exception.member.situation.*
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -18,6 +14,7 @@ import org.springframework.http.HttpMethod.GET
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestTemplate
@@ -30,32 +27,57 @@ class MemberServiceImpl(
     private val jwtProvider: JwtProvider,
 ): MemberService {
 
-    private val log = LoggerFactory.logger(javaClass)
+    @Transactional(readOnly = true)
+    override fun <T> getMember(param: T, findType: FindType): Member =
+        when (findType) {
+            ID -> memberRepository.findByIdOrNull(param as Long)?:throw MemberWithIdNotFoundException()
+            EMAIL -> memberRepository.findByEmail(param as String)?:throw MemberWithEmailNotFoundException()
+            NICKNAME -> memberRepository.findByNickname(param as String)?:throw MemberWithNicknameNotFoundException()
+            else -> throw UnsupportedFindTypeException()
+        }
+
+    @Transactional(readOnly = true)
+    override fun <T> checkDuplicatedMember(param: T, findType: FindType): Boolean =
+        when (findType) {
+            EMAIL -> memberRepository.existsByEmail(param as String)
+            NICKNAME -> memberRepository.existsByNickname(param as String)
+            else -> throw UnsupportedFindTypeException()
+        }
 
     @Transactional
-    override fun signUp(dto: SignUpRequestDto): TokenDto {
-        val email = getEmailFromSocialPlatform(dto.accessToken, dto.signType)
-        memberRepository.save(Member(email, dto.nickname, "basic.jpg", Role.ROLE_MEMBER, dto.signType))
-        return jwtProvider.createTokenDto(getUserAuthentication(email))
-    }
+    override fun signUp(dto: SignUpRequestDto): TokenDto =
+        if (!checkDuplicatedMember(dto.nickname, NICKNAME)) {
+            getEmailFromSocialPlatform(dto.accessToken, dto.signType)
+                .run {
+                    memberRepository.save(Member(this, dto.nickname, "basic.jpg", Role.ROLE_MEMBER, dto.signType))
+                    jwtProvider.createTokenDto(getUserAuthentication(this))
+                }
+        } else {
+            throw DuplicatedNicknameException()
+        }
 
     override fun signIn(dto: SignInRequestDto): TokenDto =
         getEmailFromSocialPlatform(dto.accessToken, dto.signType)
-            .takeIf(memberRepository::existsByEmail)
-            ?.let { jwtProvider.createTokenDto(getUserAuthentication(it)) }
-            ?:throw MemberNotFoundException()
-
-    fun getEmailFromSocialPlatform(accessToken: String, signType: SignType): String {
-        val(url, responseType) = getSocialUrlAndResponseType(signType)
-        val response = RestTemplate().exchange(url, GET, null, KakaoUserInfoResponse::class.java)
-        log.info(response.toString())
-        return RestTemplate()
             .run {
-                exchange(url, GET, HttpEntity(HttpHeaders().setBearerAuth(accessToken)), responseType).body
-                    ?.let { getEmailFromResponse(signType, it) }
-                    ?:throw NoResponseBodyException()
+                if (checkDuplicatedMember(this, EMAIL)) {
+                    jwtProvider.createTokenDto(getUserAuthentication(this))
+                } else {
+                    throw MemberWithEmailNotFoundException()
+                }
             }
-    }
+
+    // TODO RestTemplate 에서 일어날 수 있는 에러를 유형별로 잡아서 ExceptionAdvice 에서 처리해야 합니다
+    // TODO IllegalArgumentException 을 특히 잡아야 합니다
+    fun getEmailFromSocialPlatform(accessToken: String, signType: SignType): String =
+        getSocialUrlAndResponseType(signType)
+            .run {
+                RestTemplate()
+                    .run {
+                        exchange(first, GET, HttpEntity(HttpHeaders().setBearerAuth(accessToken)), second).body
+                            ?.let { getEmailFromResponse(signType, it) }
+                            ?:throw NoResponseBodyException()
+                    }
+            }
 
     fun getSocialUrlAndResponseType(signType: SignType): Pair<String, Class<*>> =
         when (signType) {
@@ -71,18 +93,13 @@ class MemberServiceImpl(
             APPLE -> (response as AppleUserInfoResponse).email
         }
 
+    fun getCurrentMember() {
+        getMember(SecurityContextHolder.getContext().authentication.name, EMAIL)
+    }
+
     fun getUserAuthentication(email: String): Authentication =
          authenticationManagerBuilder.getObject()
              .authenticate(UsernamePasswordAuthenticationToken(email, email))
 
-
-     override fun getMemberInfo(email: String) =
-         memberRepository.findByEmail(email)
-             ?: throw MemberNotFoundException()
-
-
-    override fun getMemberInfo(id: Long) =
-        memberRepository.findByIdOrNull(id)
-            ?: throw MemberNotFoundException()
 
 }
