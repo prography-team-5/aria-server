@@ -1,4 +1,4 @@
-package com.aria.server.art.domain
+package com.aria.server.art.domain.art
 
 import javax.persistence.Embeddable
 

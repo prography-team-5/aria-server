@@ -1,5 +1,6 @@
-package com.aria.server.art.domain
+package com.aria.server.art.domain.member
 
+import com.aria.server.art.domain.AuditEntity
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue

@@ -1,6 +1,6 @@
 package com.aria.server.art.application
 
-import com.aria.server.art.domain.ArtRepository
+import com.aria.server.art.domain.art.ArtRepository
 import com.aria.server.art.infrastructure.ArtService
 import com.aria.server.art.infrastructure.dto.CreateArtRequest
 import com.aria.server.art.infrastructure.dto.CreateArtResponse

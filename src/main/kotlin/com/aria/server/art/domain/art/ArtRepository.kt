@@ -1,5 +1,6 @@
-package com.aria.server.art.domain
+package com.aria.server.art.domain.art
 
+import com.aria.server.art.domain.art.Art
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository

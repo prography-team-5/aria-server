@@ -1,6 +1,6 @@
 package com.aria.server.art.infrastructure.dto
 
-import com.aria.server.art.domain.SignType
+import com.aria.server.art.domain.member.SignType
 import com.fasterxml.jackson.annotation.JsonProperty
 
 // 리스폰스들 중 emali은 nullable 하지 않게 해줘도 될까?
