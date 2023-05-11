@@ -59,7 +59,7 @@ data class NaverUserInfoResponse(
 
 data class AppleUserInfoResponse(
     val sub: String,
-    val email: String?,
+    val email: String,
     val email_verified: String?,
     val name: AppleUserName?,
     val is_private_email: Boolean?,

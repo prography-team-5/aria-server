@@ -19,7 +19,7 @@ class CommonExceptionAdvice {
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     fun illegalArgumentExceptionAdvice(e: IllegalArgumentException) {
         log.info("IllegalArgumentException is " + e.message.toString())
-        Response(e.message.toString(), null)
+        ResponseEntity(e.message.toString(), INTERNAL_SERVER_ERROR)
     }
 
     @ExceptionHandler(UnsupportedServiceException::class)

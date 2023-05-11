@@ -55,8 +55,6 @@ class JwtProvider(@Value("\${jwt.secret}") secretKey: String) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true
-        } catch (e: SecurityException) {
-            log.info("잘못된 JWT 서명입니다.")
         } catch (e: MalformedJwtException) {
             log.info("잘못된 JWT 서명입니다.")
         } catch (e: ExpiredJwtException) {

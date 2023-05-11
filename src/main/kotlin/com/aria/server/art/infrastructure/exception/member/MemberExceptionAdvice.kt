@@ -15,9 +15,9 @@ class MemberExceptionAdvice {
     private val log = LoggerFactory.logger(javaClass)
 
     @ExceptionHandler(RestClientException::class)
-    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    @ResponseStatus(UNAUTHORIZED)
     fun restClientExceptionAdvice(e: RestClientException) =
-        Response("소셜 서비스와 연결에 실패했습니다.", null)
+        Response("인증되지 않은 엑세스 토큰입니다.", null)
 
     @ExceptionHandler(UnsupportedFindTypeException::class)
     @ResponseStatus(BAD_REQUEST)
@@ -48,4 +48,5 @@ class MemberExceptionAdvice {
     @ResponseStatus(NOT_FOUND)
     fun memberWithIdNotFoundExceptionAdvice(e: MemberWithIdNotFoundException) =
         Response("해당 ID를 가진 사용자를 찾을 수 없습니다.", null)
+    
 }

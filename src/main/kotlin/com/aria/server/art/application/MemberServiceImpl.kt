@@ -11,6 +11,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod.GET
+import org.springframework.http.HttpMethod.POST
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.core.Authentication
@@ -66,14 +67,12 @@ class MemberServiceImpl(
                 }
             }
 
-    // TODO RestTemplate 에서 일어날 수 있는 에러를 유형별로 잡아서 ExceptionAdvice 에서 처리해야 합니다
-    // TODO IllegalArgumentException 을 특히 잡아야 합니다
     fun getEmailFromSocialPlatform(accessToken: String, signType: SignType): String =
         getSocialUrlAndResponseType(signType)
             .run {
                 RestTemplate()
                     .run {
-                        exchange(first, GET, HttpEntity(HttpHeaders().setBearerAuth(accessToken)), second).body
+                        exchange(first, POST, HttpEntity(HttpHeaders().setBearerAuth(accessToken)), second).body
                             ?.let { getEmailFromResponse(signType, it) }
                             ?:throw NoResponseBodyException()
                     }
