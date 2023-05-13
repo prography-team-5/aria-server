@@ -33,17 +33,24 @@ class MemberServiceImpl(
     val APPLE_API = "https://appleid.apple.com/auth/userinfo"
     val BASIC_IMAGE = "basic.jpg"
 
+    @Transactional(readOnly = true)
     fun getMemberById(id: Long) =
         memberRepository.findByIdOrNull(id)
             ?:throw MemberNotFoundException("ID")
 
+    @Transactional(readOnly = true)
     fun getMemberByEmail(email: String) =
         memberRepository.findByEmail(email)
             ?:throw MemberNotFoundException("이메일")
 
+    @Transactional(readOnly = true)
     fun getMemberByNickname(nickname: String) =
         memberRepository.findByNickname(nickname)
             ?:throw MemberNotFoundException("닉네임")
+
+    fun getCurrentMember() {
+        getMemberByEmail(SecurityContextHolder.getContext().authentication.name)
+    }
 
     @Transactional
     override fun signUp(dto: SignUpRequestDto): TokenDto =
@@ -57,6 +64,7 @@ class MemberServiceImpl(
             throw DuplicatedNicknameException()
         }
 
+    @Transactional(readOnly = true)
     override fun signIn(dto: SignInRequestDto): TokenDto =
         getEmail(dto.accessToken, dto.platformType)
             .run {
@@ -75,7 +83,7 @@ class MemberServiceImpl(
                     ?:throw NoResponseBodyException()
             }
 
-    fun <T> getResponse(url: String, accessToken: String, responseType: Class<T>, platformType: PlatformType) =
+    private fun <T> getResponse(url: String, accessToken: String, responseType: Class<T>, platformType: PlatformType) =
         RestTemplate()
             .run {
                 try {
@@ -87,27 +95,22 @@ class MemberServiceImpl(
                 }
             }
 
-    fun getSocialUrlAndResponseType(platformType: PlatformType): Pair<String, Class<*>> =
+    private fun getSocialUrlAndResponseType(platformType: PlatformType): Pair<String, Class<*>> =
         when (platformType) {
             KAKAO -> KAKAO_API to KakaoUserInfoResponse::class.java
             NAVER -> NAVER_API to NaverUserInfoResponse::class.java
             APPLE -> APPLE_API to AppleUserInfoResponse::class.java
         }
 
-    fun getEmailFromResponse(platformType: PlatformType, response: Any) =
+    private fun getEmailFromResponse(platformType: PlatformType, response: Any) =
         when (platformType) {
             KAKAO -> (response as KakaoUserInfoResponse).kakaoAccount.email
             NAVER -> (response as NaverUserInfoResponse).response.email
             APPLE -> (response as AppleUserInfoResponse).email
         }
 
-    fun getCurrentMember() {
-        getMemberByEmail(SecurityContextHolder.getContext().authentication.name)
-    }
-
-    fun getUserAuthentication(email: String): Authentication =
+    private fun getUserAuthentication(email: String): Authentication =
          authenticationManagerBuilder.getObject()
              .authenticate(UsernamePasswordAuthenticationToken(email, email))
-
-
+    
 }
