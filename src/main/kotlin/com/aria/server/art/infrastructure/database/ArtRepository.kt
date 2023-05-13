@@ -1,4 +1,4 @@
-package com.aria.server.art.domain.art
+package com.aria.server.art.infrastructure.database
 
 import com.aria.server.art.domain.art.Art
 import org.springframework.data.jpa.repository.Query

@@ -1,5 +1,6 @@
-package com.aria.server.art.domain.member
+package com.aria.server.art.infrastructure.database
 
+import com.aria.server.art.domain.member.Member
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface MemberRepository : JpaRepository<Member, Long> {

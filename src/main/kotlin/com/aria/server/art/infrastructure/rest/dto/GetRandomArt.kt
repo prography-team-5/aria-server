@@ -1,4 +1,4 @@
-package com.aria.server.art.infrastructure.dto
+package com.aria.server.art.infrastructure.rest.dto
 
 import com.aria.server.art.domain.art.Size
 

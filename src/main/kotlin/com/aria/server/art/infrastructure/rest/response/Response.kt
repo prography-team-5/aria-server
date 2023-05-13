@@ -1,4 +1,4 @@
-package com.aria.server.art.infrastructure.response
+package com.aria.server.art.infrastructure.rest.response
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonPropertyOrder

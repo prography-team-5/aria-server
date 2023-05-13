@@ -1,7 +1,7 @@
 package com.aria.server.art.config.security
 
 import com.aria.server.art.domain.member.Member
-import com.aria.server.art.domain.member.MemberRepository
+import com.aria.server.art.infrastructure.database.MemberRepository
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails

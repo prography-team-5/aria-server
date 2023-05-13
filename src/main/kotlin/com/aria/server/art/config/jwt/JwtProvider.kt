@@ -1,6 +1,6 @@
 package com.aria.server.art.config.jwt
 
-import com.aria.server.art.infrastructure.dto.TokenDto
+import com.aria.server.art.infrastructure.rest.dto.TokenDto
 import io.jsonwebtoken.*
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys

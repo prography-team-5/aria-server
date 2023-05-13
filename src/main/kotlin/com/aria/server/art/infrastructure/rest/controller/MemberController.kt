@@ -1,9 +1,11 @@
-package com.aria.server.art.infrastructure
+package com.aria.server.art.infrastructure.rest.controller
 
 import com.aria.server.art.infrastructure.dto.*
+import com.aria.server.art.infrastructure.rest.dto.SignInRequestDto
+import com.aria.server.art.infrastructure.rest.dto.SignUpRequestDto
+import com.aria.server.art.infrastructure.rest.dto.TokenDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.*
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

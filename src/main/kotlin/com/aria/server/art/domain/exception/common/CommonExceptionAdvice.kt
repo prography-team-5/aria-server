@@ -1,8 +1,7 @@
-package com.aria.server.art.infrastructure.exception.common
+package com.aria.server.art.domain.exception.common
 
-import com.aria.server.art.infrastructure.exception.common.situation.UnsupportedServiceException
 import com.aria.server.art.infrastructure.exception.member.situation.*
-import com.aria.server.art.infrastructure.response.Response
+import com.aria.server.art.infrastructure.rest.response.Response
 import org.hibernate.annotations.common.util.impl.LoggerFactory
 import org.springframework.http.HttpStatus.*
 import org.springframework.http.ResponseEntity

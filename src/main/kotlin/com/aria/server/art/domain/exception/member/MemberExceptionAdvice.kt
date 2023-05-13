@@ -1,14 +1,13 @@
-package com.aria.server.art.infrastructure.exception.member
+package com.aria.server.art.domain.exception.member
 
 import com.aria.server.art.infrastructure.exception.member.situation.*
-import com.aria.server.art.infrastructure.response.Response
+import com.aria.server.art.infrastructure.rest.response.Response
 import org.hibernate.annotations.common.util.impl.LoggerFactory
 import org.springframework.http.HttpStatus.*
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.client.RestClientException
-import java.lang.reflect.Member
 
 @RestControllerAdvice
 class MemberExceptionAdvice {

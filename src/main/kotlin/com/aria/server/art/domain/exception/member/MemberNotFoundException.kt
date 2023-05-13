@@ -1,3 +1,3 @@
-package com.aria.server.art.infrastructure.exception.member.situation
+package com.aria.server.art.domain.exception.member
 
 class MemberNotFoundException(message: String?) : RuntimeException(message)

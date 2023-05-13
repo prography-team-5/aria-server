@@ -1,10 +1,10 @@
 package com.aria.server.art.application
 
-import com.aria.server.art.domain.art.ArtRepository
-import com.aria.server.art.infrastructure.ArtService
-import com.aria.server.art.infrastructure.dto.CreateArtRequest
-import com.aria.server.art.infrastructure.dto.CreateArtResponse
-import com.aria.server.art.infrastructure.dto.GetRandomArtResponse
+import com.aria.server.art.infrastructure.database.ArtRepository
+import com.aria.server.art.infrastructure.rest.controller.ArtService
+import com.aria.server.art.infrastructure.rest.dto.CreateArtRequest
+import com.aria.server.art.infrastructure.rest.dto.CreateArtResponse
+import com.aria.server.art.infrastructure.rest.dto.GetRandomArtResponse
 import org.springframework.stereotype.Service
 
 @Service
