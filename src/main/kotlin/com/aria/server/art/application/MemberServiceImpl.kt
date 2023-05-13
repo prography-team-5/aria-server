@@ -75,7 +75,7 @@ class MemberServiceImpl(
                 }
             }
 
-    fun getEmail(accessToken: String, platformType: PlatformType): String =
+    private fun getEmail(accessToken: String, platformType: PlatformType): String =
         getSocialUrlAndResponseType(platformType)
             .run {
                 getResponse(first, accessToken, second, platformType)
