@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.client.RestClientException
+import java.lang.reflect.Member
 
 @RestControllerAdvice
 class MemberExceptionAdvice {
@@ -34,19 +35,10 @@ class MemberExceptionAdvice {
     fun duplicatedNicknameExceptionAdvice(e: DuplicatedNicknameException) =
         Response("이미 존재하는 닉네임입니다.", null)
 
-    @ExceptionHandler(MemberWithNicknameNotFoundException::class)
+    @ExceptionHandler(MemberNotFoundException::class)
     @ResponseStatus(NOT_FOUND)
-    fun memberWithNicknameNotFoundExceptionAdvice(e: MemberWithNicknameNotFoundException) =
-        Response("해당 닉네임을 가진 사용자를 찾을 수 없습니다.", null)
+    fun memberNotFoundExceptionAdvice(e: MemberNotFoundException) =
+        Response("해당 " + e.message + "을 가진 사용자를 찾을 수 없습니다.", null)
 
-    @ExceptionHandler(MemberWithEmailNotFoundException::class)
-    @ResponseStatus(NOT_FOUND)
-    fun memberWithEmailNotFoundExceptionAdvice(e: MemberWithEmailNotFoundException) =
-        Response("해당 이메일을 가진 사용자를 찾을 수 없습니다.", null)
 
-    @ExceptionHandler(MemberWithIdNotFoundException::class)
-    @ResponseStatus(NOT_FOUND)
-    fun memberWithIdNotFoundExceptionAdvice(e: MemberWithIdNotFoundException) =
-        Response("해당 ID를 가진 사용자를 찾을 수 없습니다.", null)
-    
 }

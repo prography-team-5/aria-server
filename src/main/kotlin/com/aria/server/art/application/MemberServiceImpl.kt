@@ -2,22 +2,23 @@ package com.aria.server.art.application
 
 import com.aria.server.art.config.jwt.JwtProvider
 import com.aria.server.art.domain.member.*
-import com.aria.server.art.domain.member.FindType.*
-import com.aria.server.art.domain.member.SignType.*
+import com.aria.server.art.domain.member.PlatformType.*
+import com.aria.server.art.domain.member.Role.*
 import com.aria.server.art.infrastructure.MemberService
 import com.aria.server.art.infrastructure.dto.*
 import com.aria.server.art.infrastructure.exception.member.situation.*
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod.GET
 import org.springframework.http.HttpMethod.POST
+import org.springframework.http.converter.HttpMessageConversionException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 
 
@@ -27,30 +28,29 @@ class MemberServiceImpl(
     private val authenticationManagerBuilder: AuthenticationManagerBuilder,
     private val jwtProvider: JwtProvider,
 ): MemberService {
+    val KAKAO_API = "https://kapi.kakao.com/v2/user/me"
+    val NAVER_API = "https://openapi.naver.com/v1/nid/me"
+    val APPLE_API = "https://appleid.apple.com/auth/userinfo"
+    val BASIC_IMAGE = "basic.jpg"
 
-    @Transactional(readOnly = true)
-    override fun <T> getMember(param: T, findType: FindType): Member =
-        when (findType) {
-            ID -> memberRepository.findByIdOrNull(param as Long)?:throw MemberWithIdNotFoundException()
-            EMAIL -> memberRepository.findByEmail(param as String)?:throw MemberWithEmailNotFoundException()
-            NICKNAME -> memberRepository.findByNickname(param as String)?:throw MemberWithNicknameNotFoundException()
-            else -> throw UnsupportedFindTypeException()
-        }
+    fun getMemberById(id: Long) =
+        memberRepository.findByIdOrNull(id)
+            ?:throw MemberNotFoundException("ID")
 
-    @Transactional(readOnly = true)
-    override fun <T> checkDuplicatedMember(param: T, findType: FindType): Boolean =
-        when (findType) {
-            EMAIL -> memberRepository.existsByEmail(param as String)
-            NICKNAME -> memberRepository.existsByNickname(param as String)
-            else -> throw UnsupportedFindTypeException()
-        }
+    fun getMemberByEmail(email: String) =
+        memberRepository.findByEmail(email)
+            ?:throw MemberNotFoundException("이메일")
+
+    fun getMemberByNickname(nickname: String) =
+        memberRepository.findByNickname(nickname)
+            ?:throw MemberNotFoundException("닉네임")
 
     @Transactional
     override fun signUp(dto: SignUpRequestDto): TokenDto =
-        if (!checkDuplicatedMember(dto.nickname, NICKNAME)) {
-            getEmailFromSocialPlatform(dto.accessToken, dto.signType)
+        if (!memberRepository.existsByNickname(dto.nickname)) {
+            getEmail(dto.accessToken, dto.platformType)
                 .run {
-                    memberRepository.save(Member(this, dto.nickname, "basic.jpg", Role.ROLE_MEMBER, dto.signType))
+                    memberRepository.save(Member(this, dto.nickname, BASIC_IMAGE, ROLE_MEMBER, dto.platformType))
                     jwtProvider.createTokenDto(getUserAuthentication(this))
                 }
         } else {
@@ -58,42 +58,51 @@ class MemberServiceImpl(
         }
 
     override fun signIn(dto: SignInRequestDto): TokenDto =
-        getEmailFromSocialPlatform(dto.accessToken, dto.signType)
+        getEmail(dto.accessToken, dto.platformType)
             .run {
-                if (checkDuplicatedMember(this, EMAIL)) {
+                if (memberRepository.existsByEmail(this)) {
                     jwtProvider.createTokenDto(getUserAuthentication(this))
                 } else {
-                    throw MemberWithEmailNotFoundException()
+                    throw MemberNotFoundException("이메일")
                 }
             }
 
-    fun getEmailFromSocialPlatform(accessToken: String, signType: SignType): String =
-        getSocialUrlAndResponseType(signType)
+    fun getEmail(accessToken: String, platformType: PlatformType): String =
+        getSocialUrlAndResponseType(platformType)
             .run {
-                RestTemplate()
-                    .run {
-                        exchange(first, POST, HttpEntity(HttpHeaders().setBearerAuth(accessToken)), second).body
-                            ?.let { getEmailFromResponse(signType, it) }
-                            ?:throw NoResponseBodyException()
-                    }
+                getResponse(first, accessToken, second, platformType)
+                    ?.let { getEmailFromResponse(platformType, it) }
+                    ?:throw NoResponseBodyException()
             }
 
-    fun getSocialUrlAndResponseType(signType: SignType): Pair<String, Class<*>> =
-        when (signType) {
-            KAKAO -> "https://kapi.kakao.com/v2/user/me" to KakaoUserInfoResponse::class.java
-            NAVER -> "https://openapi.naver.com/v1/nid/me" to NaverUserInfoResponse::class.java
-            APPLE -> "https://appleid.apple.com/auth/userinfo" to AppleUserInfoResponse::class.java
+    fun <T> getResponse(url: String, accessToken: String, responseType: Class<T>, platformType: PlatformType) =
+        RestTemplate()
+            .run {
+                try {
+                    exchange(url, POST, HttpEntity(HttpHeaders().setBearerAuth(accessToken)), responseType).body
+                } catch (e: RestClientException) {
+                    throw AccessTokenUnauthorizedException()
+                } catch (e: Exception) {
+                    throw SocialPlatformConnectionException()
+                }
+            }
+
+    fun getSocialUrlAndResponseType(platformType: PlatformType): Pair<String, Class<*>> =
+        when (platformType) {
+            KAKAO -> KAKAO_API to KakaoUserInfoResponse::class.java
+            NAVER -> NAVER_API to NaverUserInfoResponse::class.java
+            APPLE -> APPLE_API to AppleUserInfoResponse::class.java
         }
 
-    fun getEmailFromResponse(signType: SignType, response: Any) =
-        when (signType) {
+    fun getEmailFromResponse(platformType: PlatformType, response: Any) =
+        when (platformType) {
             KAKAO -> (response as KakaoUserInfoResponse).kakaoAccount.email
             NAVER -> (response as NaverUserInfoResponse).response.email
             APPLE -> (response as AppleUserInfoResponse).email
         }
 
     fun getCurrentMember() {
-        getMember(SecurityContextHolder.getContext().authentication.name, EMAIL)
+        getMemberByEmail(SecurityContextHolder.getContext().authentication.name)
     }
 
     fun getUserAuthentication(email: String): Authentication =

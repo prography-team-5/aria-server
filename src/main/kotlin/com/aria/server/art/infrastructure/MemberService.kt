@@ -7,7 +7,5 @@ import com.aria.server.art.infrastructure.dto.*
 interface MemberService {
     fun signUp(dto: SignUpRequestDto): TokenDto
     fun signIn(dto: SignInRequestDto): TokenDto
-    fun <T> getMember(param: T, findType: FindType): Member
-    fun <T> checkDuplicatedMember(param: T, findType: FindType): Boolean
 
 }

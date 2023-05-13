@@ -1,18 +1,18 @@
 package com.aria.server.art.infrastructure.dto
 
-import com.aria.server.art.domain.member.SignType
+import com.aria.server.art.domain.member.PlatformType
 import com.fasterxml.jackson.annotation.JsonProperty
 
 // 리스폰스들 중 emali은 nullable 하지 않게 해줘도 될까?
 data class SignUpRequestDto(
-    val signType: SignType,
+    val platformType: PlatformType,
     val nickname: String,
     val accessToken: String,
     val refreshToken: String
     )
 
 data class SignInRequestDto(
-    val signType: SignType,
+    val platformType: PlatformType,
     val accessToken: String,
     val refreshToken: String
 )

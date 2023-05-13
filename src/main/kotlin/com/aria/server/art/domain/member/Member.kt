@@ -13,7 +13,7 @@ class Member(
     nickname: String,
     profileImageUrl: String,
     role: Role,
-    signType: SignType
+    platformType: PlatformType
 ): AuditEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +36,7 @@ class Member(
         protected set
 
     @Column(nullable = false)
-    var signType: SignType = signType
+    var platformType: PlatformType = platformType
         protected set
 
     fun changeProfileImageUrl(profileImageUrl: String) {

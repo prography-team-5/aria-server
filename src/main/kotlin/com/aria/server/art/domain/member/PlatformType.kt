@@ -1,6 +1,6 @@
 package com.aria.server.art.domain.member
 
-enum class SignType {
+enum class PlatformType {
     KAKAO,
     NAVER,
     APPLE
