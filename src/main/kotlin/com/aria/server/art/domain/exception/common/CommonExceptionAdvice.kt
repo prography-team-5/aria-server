@@ -1,6 +1,5 @@
 package com.aria.server.art.domain.exception.common
 
-import com.aria.server.art.infrastructure.exception.member.situation.*
 import com.aria.server.art.infrastructure.rest.response.Response
 import org.hibernate.annotations.common.util.impl.LoggerFactory
 import org.springframework.http.HttpStatus.*

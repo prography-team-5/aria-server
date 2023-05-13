@@ -3,12 +3,11 @@ package com.aria.server.art.application
 import com.aria.server.art.config.jwt.JwtProvider
 import com.aria.server.art.domain.exception.member.*
 import com.aria.server.art.domain.member.Member
-import com.aria.server.art.infrastructure.database.MemberRepository
 import com.aria.server.art.domain.member.PlatformType
 import com.aria.server.art.domain.member.PlatformType.*
 import com.aria.server.art.domain.member.Role.ROLE_MEMBER
+import com.aria.server.art.infrastructure.database.MemberRepository
 import com.aria.server.art.infrastructure.rest.controller.MemberService
-import com.aria.server.art.infrastructure.dto.*
 import com.aria.server.art.infrastructure.rest.dto.*
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpEntity
