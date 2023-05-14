@@ -27,7 +27,7 @@ class JwtFilter (private val jwtProvider: JwtProvider) : OncePerRequestFilter() 
     ) {
         val jwt = resolveToken(request)
         if (StringUtils.hasText(jwt) && jwtProvider.validateToken(jwt)) {
-            val authentication: Authentication = jwtProvider.getAuthentication(jwt)
+            val authentication = jwtProvider.getAuthentication(jwt)
             SecurityContextHolder.getContext().authentication = authentication
         }
         filterChain.doFilter(request, response)

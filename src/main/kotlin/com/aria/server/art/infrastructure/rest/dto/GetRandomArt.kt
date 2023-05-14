@@ -1,6 +1,6 @@
-package com.aria.server.art.infrastructure.dto
+package com.aria.server.art.infrastructure.rest.dto
 
-import com.aria.server.art.domain.Size
+import com.aria.server.art.domain.art.Size
 
 data class GetRandomArtResponse(
     val artId: Long,

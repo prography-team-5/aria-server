@@ -1,5 +1,7 @@
-package com.aria.server.art.domain
+package com.aria.server.art.domain.art
 
+import com.aria.server.art.domain.AuditEntity
+import com.aria.server.art.domain.member.Member
 import javax.persistence.*
 
 
