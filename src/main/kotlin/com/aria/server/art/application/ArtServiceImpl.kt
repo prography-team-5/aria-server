@@ -86,7 +86,7 @@ class ArtServiceImpl(
                 GetRandomArtResponse(
                     artId = id,
                     memberId = member.id,
-                    imageUrl = mainImageUrl.imageUrl,
+                    mainImageUrl = mainImageUrl.imageUrl,
                     title = title,
                     year = year,
                     styles = styles.map { it.name },

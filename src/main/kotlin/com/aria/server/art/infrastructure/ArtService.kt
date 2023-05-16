@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile
 
 interface ArtService {
     fun createArt(dto: CreateArtRequest): CreateArtResponse
-
     fun createArtImage(image: MultipartFile): CreateArtImageResponse
     fun getRandomArt(): GetRandomArtResponse
 }
