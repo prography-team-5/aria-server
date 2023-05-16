@@ -35,7 +35,7 @@ class Art (
     var year: Int = year
         protected set
 
-    @OneToMany(mappedBy = "art")
+    @OneToMany(mappedBy = "art", cascade = [CascadeType.PERSIST])
     var styles: MutableList<Style> = styles
         protected set
 

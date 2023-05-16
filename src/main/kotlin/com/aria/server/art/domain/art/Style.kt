@@ -18,4 +18,8 @@ class Style(
     @JoinColumn(name = "art_id")
     var art: Art? = null
         protected set
+
+    fun changeArt(art: Art) {
+        this.art = art
+    }
 }

@@ -8,8 +8,8 @@ import com.aria.server.art.domain.art.Art
 import com.aria.server.art.domain.art.ArtImageUrl
 import com.aria.server.art.domain.art.Size
 import com.aria.server.art.domain.art.Style
-import com.aria.server.art.domain.exception.ArtImageS3Exception
-import com.aria.server.art.domain.exception.ArtImageUrlNotFoundException
+import com.aria.server.art.domain.exception.art.ArtImageS3Exception
+import com.aria.server.art.domain.exception.art.ArtImageUrlNotFoundException
 import com.aria.server.art.domain.member.Member
 import com.aria.server.art.infrastructure.database.ArtImageUrlRepository
 import com.aria.server.art.infrastructure.database.ArtRepository
@@ -39,16 +39,21 @@ class ArtServiceImpl(
     override fun createArt(dto: CreateArtRequest): CreateArtResponse {
         val member = SecurityContextHolder.getContext().authentication.principal as Member
 
+        val styles = dto.styles.map { Style(it) }
+        val artImageUrls = dto.imageUrlIds.map { artImageUrlRepository.findById(it).orElseThrow() }
         val art = Art(
             title = dto.title,
             year = dto.year,
-            styles = dto.styles.map { Style(it) }.toMutableList(),
+            styles = styles.toMutableList(),
             size = Size(dto.size.width, dto.size.height),
             description = dto.description,
             mainImageUrl = artImageUrlRepository.findById(dto.imageUrlIds[0]).orElseThrow(),
-            imageUrls = dto.imageUrlIds.map { artImageUrlRepository.findById(it).orElseThrow() }.toMutableList(),
+            imageUrls = artImageUrls.toMutableList(),
             member = member
         )
+
+        styles.map { it.changeArt(art) }
+        artImageUrls.map { it.changeArt(art) }
         artRepository.save(art)
         // TODO: 삭제된 이미지는 S3에서 이미지 삭제
         // val removedImageUrls = dto.totalImageUrlIds - dto.imageUrlIds
@@ -66,9 +71,9 @@ class ArtServiceImpl(
         try {
             s3Client.putObject(bucketName, objectKey, image.inputStream, metadata)
         } catch (e: SdkClientException) {
-            throw ArtImageS3Exception(e.message)
+            throw ArtImageS3Exception()
         } catch (e: AmazonServiceException) {
-            throw ArtImageS3Exception(e.message)
+            throw ArtImageS3Exception()
         }
 
         val imageUrl = s3Client.getUrl(bucketName, objectKey).toString()

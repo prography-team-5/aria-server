@@ -33,4 +33,8 @@ class ArtImageUrl(
     @JoinColumn(name = "member_id", nullable = false)
     var member: Member = member
         protected set
+
+    fun changeArt(art: Art) {
+        this.art = art
+    }
 }
