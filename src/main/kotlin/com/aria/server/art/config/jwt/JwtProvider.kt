@@ -1,6 +1,6 @@
 package com.aria.server.art.config.jwt
 
-import com.aria.server.art.infrastructure.dto.TokenDto
+import com.aria.server.art.infrastructure.rest.dto.TokenDto
 import io.jsonwebtoken.*
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
@@ -55,8 +55,6 @@ class JwtProvider(@Value("\${jwt.secret}") secretKey: String) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true
-        } catch (e: SecurityException) {
-            log.info("잘못된 JWT 서명입니다.")
         } catch (e: MalformedJwtException) {
             log.info("잘못된 JWT 서명입니다.")
         } catch (e: ExpiredJwtException) {

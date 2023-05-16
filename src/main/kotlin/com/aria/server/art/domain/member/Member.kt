@@ -1,5 +1,6 @@
-package com.aria.server.art.domain
+package com.aria.server.art.domain.member
 
+import com.aria.server.art.domain.AuditEntity
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -12,7 +13,7 @@ class Member(
     nickname: String,
     profileImageUrl: String,
     role: Role,
-    signType: SignType
+    platformType: PlatformType
 ): AuditEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +36,14 @@ class Member(
         protected set
 
     @Column(nullable = false)
-    var signType: SignType = signType
+    var platformType: PlatformType = platformType
         protected set
+
+    fun changeProfileImageUrl(profileImageUrl: String) {
+        this.profileImageUrl = profileImageUrl
+    }
+
+    fun changeRole(role: Role) {
+        this.profileImageUrl = profileImageUrl
+    }
 }

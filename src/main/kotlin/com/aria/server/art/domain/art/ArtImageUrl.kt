@@ -1,5 +1,7 @@
-package com.aria.server.art.domain
+package com.aria.server.art.domain.art
 
+import com.aria.server.art.domain.AuditEntity
+import com.aria.server.art.domain.member.Member
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
@@ -10,19 +12,25 @@ import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 
 @Entity
-class Style(
-    name: String
-){
+class ArtImageUrl(
+    imageUrl: String,
+    member: Member
+): AuditEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
 
     @Column(nullable = false)
-    var name: String = name
+    var imageUrl: String = imageUrl
         protected set
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "art_id")
+    @JoinColumn(name = "art_id", nullable = true)
     var art: Art? = null
+        protected set
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    var member: Member = member
         protected set
 }
