@@ -16,6 +16,18 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAYUXU5CD4K57H5JNR
+      secretKey: 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
+    s3:
+      bucket: bucket-8th-team5
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
 jwt:
   secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
 

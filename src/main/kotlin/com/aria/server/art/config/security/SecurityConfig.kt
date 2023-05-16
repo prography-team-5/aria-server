@@ -54,5 +54,4 @@ class SecurityConfig (
                     .authenticated()
             }
              .build()
-
 }

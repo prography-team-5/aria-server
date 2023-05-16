@@ -22,9 +22,14 @@ repositories {
     mavenCentral()
 }
 
+val awsVersion = "2.2.6.RELEASE"
 val coroutineVersion = "1.6.0"
 val querydslVersion = "5.0.0"
+val jwtVersion = "0.11.2"
+val swaggerVersion = "1.7.0"
 val mapstrcutVersion = "1.5.3.Final"
+val jsonSerializationVersion = "1.3.3"
+val annotationVersion = "23.0.0"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
@@ -32,17 +37,18 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation ("org.springframework.cloud:spring-cloud-starter-aws:$awsVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     // Swagger
-    implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
+    implementation("org.springdoc:springdoc-openapi-ui:$swaggerVersion")
 
     // JWT
-    implementation("io.jsonwebtoken:jjwt-api:0.11.2")
-    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.2")
-    implementation("org.jetbrains:annotations:23.0.0")
+    implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:$jwtVersion")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
+    implementation("org.jetbrains:annotations:$annotationVersion")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.mysql:mysql-connector-j")
@@ -51,7 +57,7 @@ dependencies {
     implementation("org.mapstruct:mapstruct:$mapstrcutVersion")
     kapt("org.mapstruct:mapstruct-processor:$mapstrcutVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$jsonSerializationVersion")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
@@ -72,4 +78,6 @@ tasks.withType<Test> {
 
 allOpen {
     annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
 }

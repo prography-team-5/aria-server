@@ -2,11 +2,11 @@ package com.aria.server.art.domain
 
 import javax.persistence.*
 
-
 @Entity
 class Art (
     title: String,
-    imageUrl: String,
+    mainImageUrl: ArtImageUrl,
+    imageUrls: MutableList<ArtImageUrl>,
     year: Int,
     styles: MutableList<Style>,
     size: Size,
@@ -21,8 +21,12 @@ class Art (
     var title: String = title
         protected set
 
-    @Column(nullable = false)
-    var imageUrl: String = imageUrl
+    @OneToOne
+    var mainImageUrl: ArtImageUrl = mainImageUrl
+        protected set
+
+    @OneToMany(mappedBy = "art")
+    var imageUrls: MutableList<ArtImageUrl> = imageUrls
         protected set
 
     @Column(nullable = false)
