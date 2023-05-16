@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile
 @RestController
 @RequestMapping("/v1/arts")
 class ArtController(
-    private val artService: ArtService,
+    private val artService: ArtService
 ) {
 
     @PostMapping
