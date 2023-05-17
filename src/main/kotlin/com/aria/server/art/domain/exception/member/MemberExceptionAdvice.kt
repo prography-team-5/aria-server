@@ -18,11 +18,6 @@ class MemberExceptionAdvice {
     fun restClientExceptionAdvice(e: RestClientException) =
         Response("인증되지 않은 엑세스 토큰입니다.", null)
 
-    @ExceptionHandler(UnsupportedFindTypeException::class)
-    @ResponseStatus(BAD_REQUEST)
-    fun unsupportedServiceExceptionAdvice(e: UnsupportedFindTypeException) =
-        Response("해당 조건으로는 사용자를 찾을 수 없습니다", null)
-
     @ExceptionHandler(NoResponseBodyException::class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     fun noResponseBodyExceptionAdvice(e: NoResponseBodyException) =
@@ -37,6 +32,11 @@ class MemberExceptionAdvice {
     @ResponseStatus(NOT_FOUND)
     fun memberNotFoundExceptionAdvice(e: MemberNotFoundException) =
         Response("해당 " + e.message + "을 가진 사용자를 찾을 수 없습니다.", null)
+
+    @ExceptionHandler(CurrentMemberNotFoundException::class)
+    @ResponseStatus(NOT_FOUND)
+    fun currentMemberNotFoundExceptionAdvice(e: CurrentMemberNotFoundException) =
+        Response("현재 로그인한 사용자를 찾을 수 없습니다.", null)
 
 
 }

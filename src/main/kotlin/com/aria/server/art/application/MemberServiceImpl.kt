@@ -35,23 +35,25 @@ class MemberServiceImpl(
     val BASIC_IMAGE = "basic.jpg"
 
     @Transactional(readOnly = true)
-    fun getMemberById(id: Long) =
+    override fun getMemberById(id: Long) =
         memberRepository.findByIdOrNull(id)
             ?:throw MemberNotFoundException("ID")
 
-    @Transactional(readOnly = true)
-    fun getMemberByEmail(email: String) =
+    private fun getMemberByEmail(email: String) =
         memberRepository.findByEmail(email)
             ?:throw MemberNotFoundException("이메일")
 
-    @Transactional(readOnly = true)
-    fun getMemberByNickname(nickname: String) =
+    private fun getMemberByNickname(nickname: String) =
         memberRepository.findByNickname(nickname)
             ?:throw MemberNotFoundException("닉네임")
 
-    fun getCurrentMember() {
-        getMemberByEmail(SecurityContextHolder.getContext().authentication.name)
-    }
+    @Transactional(readOnly = true)
+    override fun getCurrentMember() =
+        try {
+            getMemberByEmail(SecurityContextHolder.getContext().authentication.name)
+        }  catch (e: MemberNotFoundException) {
+            throw CurrentMemberNotFoundException()
+        }
 
     @Transactional
     override fun signUp(dto: SignUpRequestDto): TokenDto =
@@ -79,12 +81,12 @@ class MemberServiceImpl(
     private fun getEmail(accessToken: String, platformType: PlatformType): String =
         getSocialUrlAndResponseType(platformType)
             .run {
-                getResponse(first, accessToken, second, platformType)
+                getResponse(first, accessToken, second)
                     ?.let { getEmailFromResponse(platformType, it) }
                     ?:throw NoResponseBodyException()
             }
 
-    private fun <T> getResponse(url: String, accessToken: String, responseType: Class<T>, platformType: PlatformType) =
+    private fun <T> getResponse(url: String, accessToken: String, responseType: Class<T>) =
         RestTemplate()
             .run {
                 try {
