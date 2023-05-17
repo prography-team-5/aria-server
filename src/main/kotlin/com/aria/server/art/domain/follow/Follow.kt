@@ -14,12 +14,12 @@ class Follow (
     val id: Long = 0
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(referencedColumnName = "id", name = "follower_id", nullable = false)
     var follower: Member = follower
         protected set
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(referencedColumnName = "id", name = "followee_id", nullable = false)
     var followee: Member = followee
         protected set
 }

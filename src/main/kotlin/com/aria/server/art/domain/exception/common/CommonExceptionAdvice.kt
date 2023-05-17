@@ -25,4 +25,9 @@ class CommonExceptionAdvice {
     fun unsupportedServiceExceptionAdvice(e: UnsupportedServiceException) =
         Response("지원하지 않는 서비스 입니다.", null)
 
+    @ExceptionHandler(UnauthorizedException::class)
+    @ResponseStatus(UNAUTHORIZED)
+    fun unauthorizedExceptionAdvice(e: UnauthorizedException) =
+        Response("해당 사용자의 권한으로는 요청이 불가합니다.", null)
+
 }
