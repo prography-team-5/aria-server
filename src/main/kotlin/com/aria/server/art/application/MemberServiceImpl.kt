@@ -34,7 +34,6 @@ class MemberServiceImpl(
     val APPLE_API = "https://appleid.apple.com/auth/userinfo"
     val BASIC_IMAGE = "basic.jpg"
 
-    @Transactional(readOnly = true)
     override fun getMemberById(id: Long) =
         memberRepository.findByIdOrNull(id)
             ?:throw MemberNotFoundException("ID")
@@ -47,7 +46,6 @@ class MemberServiceImpl(
         memberRepository.findByNickname(nickname)
             ?:throw MemberNotFoundException("닉네임")
 
-    @Transactional(readOnly = true)
     override fun getCurrentMember() =
         try {
             getMemberByEmail(SecurityContextHolder.getContext().authentication.name)
