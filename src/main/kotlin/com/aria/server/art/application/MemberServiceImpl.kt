@@ -87,16 +87,13 @@ class MemberServiceImpl(
             }
 
     private fun <T> getResponse(url: String, accessToken: String, responseType: Class<T>) =
-        RestTemplate()
-            .run {
-                try {
-                    exchange(url, POST, HttpEntity(HttpHeaders().setBearerAuth(accessToken)), responseType).body
-                } catch (e: RestClientException) {
-                    throw AccessTokenUnauthorizedException()
-                } catch (e: Exception) {
-                    throw SocialPlatformConnectionException()
-                }
-            }
+        try {
+            RestTemplate().exchange(url, POST, HttpEntity(HttpHeaders().setBearerAuth(accessToken)), responseType).body
+        } catch (e: RestClientException) {
+            throw AccessTokenUnauthorizedException()
+        } catch (e: Exception) {
+            throw SocialPlatformConnectionException()
+        }
 
     private fun getSocialUrlAndResponseType(platformType: PlatformType): Pair<String, Class<*>> =
         when (platformType) {
