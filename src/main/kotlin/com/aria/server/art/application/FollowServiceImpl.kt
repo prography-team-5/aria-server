@@ -17,10 +17,12 @@ class FollowServiceImpl (
     private val followRepository: FollowRepository
 ): FollowService {
 
+    @Transactional
     override fun follow(follower: Member, followee: Member) {
         followRepository.save(Follow(follower, followee))
     }
 
+    @Transactional
     override fun unfollow(follower: Member, followId: Long) =
         getFollowById(followId).run {
             if (this.follower == follower) {
@@ -31,6 +33,7 @@ class FollowServiceImpl (
         }
 
     // TODO entity <-> dto 처리 어떻게 하는지?
+    @Transactional(readOnly = true)
     override fun getFollowers(followee: Member) =
         followRepository.findFollowsByFollowee(followee)
             .map { follow ->
@@ -38,9 +41,11 @@ class FollowServiceImpl (
                     follow.id,
                     follow.follower.id,
                     follow.follower.nickname,
-                    follow.follower.profileImageUrl)
+                    follow.follower.profileImageUrl
+                )
             }
 
+    @Transactional(readOnly = true)
     override fun getFollowees(follower: Member) =
         followRepository.findFollowsByFollower(follower)
             .map { follow ->
@@ -48,7 +53,8 @@ class FollowServiceImpl (
                     follow.id,
                     follow.followee.id,
                     follow.followee.nickname,
-                    follow.followee.profileImageUrl)
+                    follow.followee.profileImageUrl
+                )
             }
 
     private fun getFollowById(id: Long): Follow =
