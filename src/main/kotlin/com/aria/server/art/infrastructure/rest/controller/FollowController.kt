@@ -1,7 +1,7 @@
 package com.aria.server.art.infrastructure.rest.controller
 
-import com.aria.server.art.infrastructure.rest.dto.FolloweeDto
-import com.aria.server.art.infrastructure.rest.dto.FollowerDto
+import com.aria.server.art.infrastructure.rest.dto.GetFolloweeResponseDto
+import com.aria.server.art.infrastructure.rest.dto.GetFollowerResponseDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 
 @Tag(name = "Follow", description = "Follow API Document")
 @RestController
-@RequestMapping("/v1/follow")
+@RequestMapping("/v1/follows")
 class FollowController (
     private val followService: FollowService,
     private val memberService: MemberService
@@ -35,29 +35,29 @@ class FollowController (
 
     // TODO 프론트와 얘기 후 Paging 도입 결정
     @Operation(summary = "Get my follower list API")
-    @GetMapping("/follower/my")
-    fun getMyFollowers(): ResponseEntity<List<FollowerDto>>{
+    @GetMapping("/followers/my")
+    fun getMyFollowers(): ResponseEntity<List<GetFollowerResponseDto>>{
         val followee = memberService.getCurrentMember()
         return ResponseEntity(followService.getFollowers(followee), HttpStatus.OK)
     }
 
     @Operation(summary = "Get my followee list API")
-    @GetMapping("/followee/my")
-    fun getMyFollowees(): ResponseEntity<List<FolloweeDto>>{
+    @GetMapping("/followees/my")
+    fun getMyFollowees(): ResponseEntity<List<GetFolloweeResponseDto>>{
         val follower = memberService.getCurrentMember()
         return ResponseEntity(followService.getFollowees(follower), HttpStatus.OK)
     }
 
     @Operation(summary = "Get follower list API")
-    @GetMapping("/follower")
-    fun getFollowers(followeeId: Long): ResponseEntity<List<FollowerDto>>{
+    @GetMapping("/followers")
+    fun getFollowers(followeeId: Long): ResponseEntity<List<GetFollowerResponseDto>>{
         val followee = memberService.getMemberById(followeeId)
         return ResponseEntity(followService.getFollowers(followee), HttpStatus.OK)
     }
 
     @Operation(summary = "Get followee list API")
-    @GetMapping("/followee")
-    fun getFollowees(followerId: Long): ResponseEntity<List<FolloweeDto>>{
+    @GetMapping("/followees")
+    fun getFollowees(followerId: Long): ResponseEntity<List<GetFolloweeResponseDto>>{
         val follower = memberService.getMemberById(followerId)
         return ResponseEntity(followService.getFollowees(follower), HttpStatus.OK)
     }

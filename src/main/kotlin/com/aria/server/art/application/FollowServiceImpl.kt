@@ -6,8 +6,8 @@ import com.aria.server.art.domain.follow.Follow
 import com.aria.server.art.domain.member.Member
 import com.aria.server.art.infrastructure.database.FollowRepository
 import com.aria.server.art.infrastructure.rest.controller.FollowService
-import com.aria.server.art.infrastructure.rest.dto.FolloweeDto
-import com.aria.server.art.infrastructure.rest.dto.FollowerDto
+import com.aria.server.art.infrastructure.rest.dto.GetFolloweeResponseDto
+import com.aria.server.art.infrastructure.rest.dto.GetFollowerResponseDto
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -37,7 +37,7 @@ class FollowServiceImpl (
     override fun getFollowers(followee: Member) =
         followRepository.findFollowsByFollowee(followee)
             .map { follow ->
-                FollowerDto(
+                GetFollowerResponseDto(
                     follow.id,
                     follow.follower.id,
                     follow.follower.nickname,
@@ -49,7 +49,7 @@ class FollowServiceImpl (
     override fun getFollowees(follower: Member) =
         followRepository.findFollowsByFollower(follower)
             .map { follow ->
-                FolloweeDto(
+                GetFolloweeResponseDto(
                     follow.id,
                     follow.followee.id,
                     follow.followee.nickname,
