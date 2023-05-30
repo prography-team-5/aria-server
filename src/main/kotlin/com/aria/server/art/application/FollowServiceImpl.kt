@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class FollowServiceImpl (
+class FollowServiceImpl(
     private val followRepository: FollowRepository
-): FollowService {
+) : FollowService {
 
     @Transactional
     override fun follow(follower: Member, followee: Member) {
@@ -32,33 +32,22 @@ class FollowServiceImpl (
             }
         }
 
-    // TODO entity <-> dto 처리 어떻게 하는지?
     @Transactional(readOnly = true)
     override fun getFollowers(followee: Member) =
         followRepository.findFollowsByFollowee(followee)
             .map { follow ->
-                GetFollowerResponseDto(
-                    follow.id,
-                    follow.follower.id,
-                    follow.follower.nickname,
-                    follow.follower.profileImageUrl
-                )
+                GetFollowerResponseDto.from(follow)
             }
 
     @Transactional(readOnly = true)
     override fun getFollowees(follower: Member) =
         followRepository.findFollowsByFollower(follower)
             .map { follow ->
-                GetFolloweeResponseDto(
-                    follow.id,
-                    follow.followee.id,
-                    follow.followee.nickname,
-                    follow.followee.profileImageUrl
-                )
+                GetFolloweeResponseDto.from(follow)
             }
 
     private fun getFollowById(id: Long): Follow =
         followRepository.findByIdOrNull(id)
-            ?:throw FollowNotFoundException()
+            ?: throw FollowNotFoundException()
 
 }
