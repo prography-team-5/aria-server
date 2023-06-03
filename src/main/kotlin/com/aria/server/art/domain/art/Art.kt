@@ -7,8 +7,8 @@ import javax.persistence.*
 @Entity
 class Art (
     title: String,
-    mainImageUrl: ArtImageUrl,
-    imageUrls: MutableList<ArtImageUrl>,
+    mainImage: ArtImage,
+    images: MutableList<ArtImage>,
     year: Int,
     styles: MutableList<Style>,
     size: Size,
@@ -24,11 +24,11 @@ class Art (
         protected set
 
     @OneToOne
-    var mainImageUrl: ArtImageUrl = mainImageUrl
+    var mainImage: ArtImage = mainImage
         protected set
 
     @OneToMany(mappedBy = "art")
-    var imageUrls: MutableList<ArtImageUrl> = imageUrls
+    var images: MutableList<ArtImage> = images
         protected set
 
     @Column(nullable = false)

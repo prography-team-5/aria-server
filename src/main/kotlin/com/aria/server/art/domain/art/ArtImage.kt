@@ -12,8 +12,8 @@ import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 
 @Entity
-class ArtImageUrl(
-    imageUrl: String,
+class ArtImage(
+    url: String,
     member: Member
 ): AuditEntity() {
     @Id
@@ -21,7 +21,7 @@ class ArtImageUrl(
     val id: Long = 0
 
     @Column(nullable = false)
-    var imageUrl: String = imageUrl
+    var url: String = url
         protected set
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -14,8 +14,8 @@ class ArtExceptionAdvice {
     fun artImageS3ExceptionAdvice(e: ArtImageS3Exception) =
         Response("S3에 이미지 업로드를 실패했습니다.", null)
 
-    @ExceptionHandler(ArtImageUrlNotFoundException::class)
+    @ExceptionHandler(ArtImageNotFoundException::class)
     @ResponseStatus(NOT_FOUND)
-    fun artImageUrlNotFoundExceptionAdvice(e: ArtImageUrlNotFoundException) =
+    fun artImageUrlNotFoundExceptionAdvice(e: ArtImageNotFoundException) =
         Response("해당 이미지를 찾을 수 없습니다.", null)
 }

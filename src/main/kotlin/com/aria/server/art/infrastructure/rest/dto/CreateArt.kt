@@ -6,8 +6,8 @@ data class CreateArtRequest(
     val styles: List<String>,
     val size: Size,
     val description: String,
-    val imageUrlIds: List<Long>,
-    val totalImageUrlIds: List<Long>
+    val artImageIds: List<Long>,
+    val totalArtImageIds: List<Long>
 )
 
 data class Size(
