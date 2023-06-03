@@ -5,7 +5,7 @@ import com.aria.server.art.domain.art.Size
 data class GetRandomArtResponse(
     val artId: Long,
     val memberId: Long,
-    val imageUrl: String,
+    val mainImageUrl: String,
     val title: String,
     val year: Int,
     val styles: List<String>,

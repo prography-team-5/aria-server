@@ -15,7 +15,8 @@ abstract class AuditEntity {
 
     @CreatedDate
     @Column(nullable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now()
+    var createdAt: LocalDateTime = LocalDateTime.now()
+        protected set
 
     @LastModifiedDate
     @Column(nullable = true)

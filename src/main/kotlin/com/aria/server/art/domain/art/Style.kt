@@ -4,8 +4,7 @@ import javax.persistence.*
 
 @Entity
 class Style(
-    name: String,
-    art: Art
+    name: String
 ){
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +16,10 @@ class Style(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "art_id")
-    var art: Art = art
+    var art: Art? = null
         protected set
+
+    fun changeArt(art: Art) {
+        this.art = art
+    }
 }
