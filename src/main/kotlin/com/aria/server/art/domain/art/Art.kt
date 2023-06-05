@@ -4,11 +4,11 @@ import com.aria.server.art.domain.AuditEntity
 import com.aria.server.art.domain.member.Member
 import javax.persistence.*
 
-
 @Entity
 class Art (
     title: String,
-    imageUrl: String,
+    mainImage: ArtImage,
+    images: MutableList<ArtImage>,
     year: Int,
     styles: MutableList<Style>,
     size: Size,
@@ -23,15 +23,19 @@ class Art (
     var title: String = title
         protected set
 
-    @Column(nullable = false)
-    var imageUrl: String = imageUrl
+    @OneToOne
+    var mainImage: ArtImage = mainImage
+        protected set
+
+    @OneToMany(mappedBy = "art")
+    var images: MutableList<ArtImage> = images
         protected set
 
     @Column(nullable = false)
     var year: Int = year
         protected set
 
-    @OneToMany(mappedBy = "art")
+    @OneToMany(mappedBy = "art", cascade = [CascadeType.PERSIST])
     var styles: MutableList<Style> = styles
         protected set
 
