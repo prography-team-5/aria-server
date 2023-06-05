@@ -3,7 +3,7 @@ package com.aria.server.art.infrastructure.rest.dto
 import com.aria.server.art.domain.member.PlatformType
 import com.fasterxml.jackson.annotation.JsonProperty
 
-// 리스폰스들 중 emali은 nullable 하지 않게 해줘도 될까?
+// TODO response 중 emali은 꼭 받아야해서 nullable 처리 안해줬기 때문에, 프론트와 이에대해 논의
 data class SignUpRequestDto(
     val platformType: PlatformType,
     val nickname: String,
@@ -36,11 +36,6 @@ data class KakaoUserInfoResponse(
     )
 }
 
-data class KakaoUserInfoRequest(
-    @JsonProperty("access_token")
-    val accessToken: String
-)
-
 data class NaverUserInfoResponse(
     val resultcode: String,
     val message: String,
@@ -70,17 +65,5 @@ data class AppleUserInfoResponse(
 data class AppleUserName(
     val firstName: String?,
     val lastName: String?
-)
-
-data class KakaoFailure(
-    val msg: String,
-    val code: Int
-)
-
-data class Failure(
-    val userId: Int,
-    val id: Int,
-    val title: String,
-    val completed: Boolean
 )
 

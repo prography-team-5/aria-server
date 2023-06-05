@@ -34,24 +34,24 @@ class MemberServiceImpl(
     val APPLE_API = "https://appleid.apple.com/auth/userinfo"
     val BASIC_IMAGE = "basic.jpg"
 
-    @Transactional(readOnly = true)
-    fun getMemberById(id: Long) =
+    override fun getMemberById(id: Long) =
         memberRepository.findByIdOrNull(id)
             ?:throw MemberNotFoundException("ID")
 
-    @Transactional(readOnly = true)
-    fun getMemberByEmail(email: String) =
+    private fun getMemberByEmail(email: String) =
         memberRepository.findByEmail(email)
             ?:throw MemberNotFoundException("이메일")
 
-    @Transactional(readOnly = true)
-    fun getMemberByNickname(nickname: String) =
+    private fun getMemberByNickname(nickname: String) =
         memberRepository.findByNickname(nickname)
             ?:throw MemberNotFoundException("닉네임")
 
-    fun getCurrentMember() {
-        getMemberByEmail(SecurityContextHolder.getContext().authentication.name)
-    }
+    override fun getCurrentMember() =
+        try {
+            getMemberByEmail(SecurityContextHolder.getContext().authentication.name)
+        }  catch (e: MemberNotFoundException) {
+            throw CurrentMemberNotFoundException()
+        }
 
     @Transactional
     override fun signUp(dto: SignUpRequestDto): TokenDto =
@@ -79,22 +79,19 @@ class MemberServiceImpl(
     private fun getEmail(accessToken: String, platformType: PlatformType): String =
         getSocialUrlAndResponseType(platformType)
             .run {
-                getResponse(first, accessToken, second, platformType)
+                getResponse(first, accessToken, second)
                     ?.let { getEmailFromResponse(platformType, it) }
                     ?:throw NoResponseBodyException()
             }
 
-    private fun <T> getResponse(url: String, accessToken: String, responseType: Class<T>, platformType: PlatformType) =
-        RestTemplate()
-            .run {
-                try {
-                    exchange(url, POST, HttpEntity(HttpHeaders().setBearerAuth(accessToken)), responseType).body
-                } catch (e: RestClientException) {
-                    throw AccessTokenUnauthorizedException()
-                } catch (e: Exception) {
-                    throw SocialPlatformConnectionException()
-                }
-            }
+    private fun <T> getResponse(url: String, accessToken: String, responseType: Class<T>) =
+        try {
+            RestTemplate().exchange(url, POST, HttpEntity(HttpHeaders().setBearerAuth(accessToken)), responseType).body
+        } catch (e: RestClientException) {
+            throw AccessTokenUnauthorizedException()
+        } catch (e: Exception) {
+            throw SocialPlatformConnectionException()
+        }
 
     private fun getSocialUrlAndResponseType(platformType: PlatformType): Pair<String, Class<*>> =
         when (platformType) {

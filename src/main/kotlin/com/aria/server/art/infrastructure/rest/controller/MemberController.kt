@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 
@@ -23,15 +22,13 @@ class MemberController(
 
     @Operation(summary = "Sign up API")
     @PostMapping("/sign-up")
-    @ResponseStatus(CREATED)
     fun signUp(@RequestBody request: SignUpRequestDto): ResponseEntity<TokenDto> =
          ResponseEntity(memberService.signUp(request), CREATED)
 
 
     @Operation(summary = "Sign in API")
     @PostMapping("/sign-in")
-    @ResponseStatus(OK)
     fun signIn(@RequestBody request: SignInRequestDto): ResponseEntity<TokenDto> =
-         ResponseEntity(memberService.signIn(request), CREATED)
+         ResponseEntity(memberService.signIn(request), OK)
 
 }
