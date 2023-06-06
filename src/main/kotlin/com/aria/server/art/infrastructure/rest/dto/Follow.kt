@@ -1,6 +1,5 @@
 package com.aria.server.art.infrastructure.rest.dto
 
-import com.aria.server.art.domain.art.Size
 import com.aria.server.art.domain.follow.Follow
 
 data class GetFollowerResponseDto(

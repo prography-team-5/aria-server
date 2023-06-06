@@ -2,9 +2,16 @@ package com.aria.server.art.infrastructure.rest.controller
 
 import com.aria.server.art.infrastructure.rest.dto.GetFolloweeResponseDto
 import com.aria.server.art.infrastructure.rest.dto.GetFollowerResponseDto
+import com.aria.server.art.infrastructure.rest.response.Response
+import com.aria.server.art.infrastructure.rest.response.Response.Companion.success
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Slice
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.CREATED
+import org.springframework.http.HttpStatus.OK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -12,54 +19,35 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/v1/follows")
 class FollowController (
-    private val followService: FollowService,
-    private val memberService: MemberService
+    private val followUseCase: FollowUseCase
 ){
 
     @Operation(summary = "Follow API")
     @PostMapping("")
-    fun follow(followeeId: Long): ResponseEntity<HttpStatus> {
-        val follower = memberService.getCurrentMember()
-        val followee = memberService.getMemberById(followeeId)
-        followService.follow(follower, followee)
-        return ResponseEntity<HttpStatus>(HttpStatus.CREATED)
+    @ResponseStatus(CREATED)
+    fun follow(followeeId: Long): Response {
+        followUseCase.follow(followeeId)
+        return success(CREATED.reasonPhrase)
     }
 
     @Operation(summary = "Unfollow API")
     @DeleteMapping("")
-    fun unfollow(followId: Long): ResponseEntity<HttpStatus> {
-        val follower = memberService.getCurrentMember()
-        followService.unfollow(follower, followId)
-        return ResponseEntity<HttpStatus>(HttpStatus.OK)
+    fun unfollow(followId: Long): Response {
+        followUseCase.unFollow(followId)
+        return success(CREATED.reasonPhrase)
     }
 
-    // TODO 프론트와 얘기 후 Paging 도입 결정
-    @Operation(summary = "Get my follower list API")
-    @GetMapping("/followers/my")
-    fun getMyFollowers(): ResponseEntity<List<GetFollowerResponseDto>>{
-        val followee = memberService.getCurrentMember()
-        return ResponseEntity(followService.getFollowers(followee), HttpStatus.OK)
-    }
-
-    @Operation(summary = "Get my followee list API")
-    @GetMapping("/followees/my")
-    fun getMyFollowees(): ResponseEntity<List<GetFolloweeResponseDto>>{
-        val follower = memberService.getCurrentMember()
-        return ResponseEntity(followService.getFollowees(follower), HttpStatus.OK)
-    }
-
+    // TODO 로그인 시, 로그인 한 유저의 ID도 같이 줘야함
     @Operation(summary = "Get follower list API")
     @GetMapping("/followers")
-    fun getFollowers(followeeId: Long): ResponseEntity<List<GetFollowerResponseDto>>{
-        val followee = memberService.getMemberById(followeeId)
-        return ResponseEntity(followService.getFollowers(followee), HttpStatus.OK)
+    fun getFollowers(followeeId: Long, pageable: Pageable): Response {
+        return success(OK.reasonPhrase, followUseCase.getFollowers(followeeId, pageable))
     }
 
     @Operation(summary = "Get followee list API")
     @GetMapping("/followees")
-    fun getFollowees(followerId: Long): ResponseEntity<List<GetFolloweeResponseDto>>{
-        val follower = memberService.getMemberById(followerId)
-        return ResponseEntity(followService.getFollowees(follower), HttpStatus.OK)
+    fun getFollowees(followerId: Long, pageable: Pageable): Response {
+        return success(OK.reasonPhrase, followUseCase.getFollowees(followerId, pageable))
     }
 
 }
