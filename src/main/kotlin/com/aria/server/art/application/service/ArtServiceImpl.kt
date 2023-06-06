@@ -1,4 +1,4 @@
-package com.aria.server.art.application
+package com.aria.server.art.application.service
 
 import com.amazonaws.AmazonServiceException
 import com.amazonaws.SdkClientException
