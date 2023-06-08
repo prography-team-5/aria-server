@@ -25,7 +25,7 @@ class TagServiceImpl(
         tagRepository.deleteById(id)
     }
 
-    override fun getTags(memberId: Long): MutableList<Tag> =
-        tagRepository.findTagsByMemberId(memberId)
+    override fun getTags(artistId: Long): MutableList<Tag> =
+        tagRepository.findTagsByMemberId(artistId)
 
 }

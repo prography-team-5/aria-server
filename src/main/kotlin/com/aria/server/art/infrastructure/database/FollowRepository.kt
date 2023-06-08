@@ -10,8 +10,10 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface FollowRepository: JpaRepository<Follow, Long>{
     @EntityGraph(attributePaths = ["follower"])
-    fun findFollowsByFollowee(followee: Member, pageable: Pageable): Slice<Follow>
+    fun findFollowsByFolloweeId(id: Long, pageable: Pageable): Slice<Follow>
     @EntityGraph(attributePaths = ["followee"])
-    fun findFollowsByFollower(follower: Member, pageable: Pageable): Slice<Follow>
+    fun findFollowsByFollowerId(id: Long, pageable: Pageable): Slice<Follow>
     fun existsByFollowerAndFollowee(follower: Member, followee: Member): Boolean
+    fun countByFolloweeId(id: Long): Int
+    fun countByFollowerId(id: Long): Int
 }

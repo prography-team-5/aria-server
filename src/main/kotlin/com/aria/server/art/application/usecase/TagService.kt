@@ -6,5 +6,5 @@ import com.aria.server.art.domain.tag.Tag
 interface TagService {
     fun createTag(tag: Tag)
     fun deleteTag(id: Long)
-    fun getTags(memberId: Long): MutableList<Tag>
+    fun getTags(artistId: Long): MutableList<Tag>
 }
