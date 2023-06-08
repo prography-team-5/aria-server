@@ -33,7 +33,7 @@ class FollowUseCaseImpl (
     @Transactional(readOnly = true)
     override fun getFollowers(followeeId: Long, pageable: Pageable): Slice<GetFollowerResponseDto> {
         val followee = memberService.getMemberById(followeeId)
-        return followService.getFollows(followee, FOLLOWEE, pageable)
+        return followService.getFollowsByFollowee(followee, pageable)
             .map { follow ->
                 GetFollowerResponseDto.from(follow)
             }
@@ -42,7 +42,7 @@ class FollowUseCaseImpl (
     @Transactional(readOnly = true)
     override fun getFollowees(followerId: Long, pageable: Pageable): Slice<GetFolloweeResponseDto> {
         val follower = memberService.getMemberById(followerId)
-        return followService.getFollows(follower, FOLLOWER, pageable)
+        return followService.getFollowsByFollower(follower, pageable)
             .map { follow ->
                 GetFolloweeResponseDto.from(follow)
             }

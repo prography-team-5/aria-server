@@ -29,9 +29,9 @@ data class GetFolloweeResponseDto(
         fun from(follow: Follow): GetFolloweeResponseDto =
             GetFolloweeResponseDto(
                 follow.id,
-                follow.follower.id,
-                follow.follower.nickname,
-                follow.follower.profileImageUrl
+                follow.followee.id,
+                follow.followee.nickname,
+                follow.followee.profileImageUrl
             )
     }
 }
