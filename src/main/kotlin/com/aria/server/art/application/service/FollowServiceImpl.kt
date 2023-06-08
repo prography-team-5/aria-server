@@ -36,8 +36,8 @@ class FollowServiceImpl(
             }
         }
 
-    override fun getFollowsByFollower(follower: Member, pageable: Pageable): Slice<Follow> {
-        val follows = followRepository.findFollowsByFollower(follower, pageable)
+    override fun getFollowsByFollowerId(id: Long, pageable: Pageable): Slice<Follow> {
+        val follows = followRepository.findFollowsByFollowerId(id, pageable)
         if (follows.isEmpty) {
             throw NoMoreFollowException()
         } else {
@@ -45,14 +45,22 @@ class FollowServiceImpl(
         }
     }
 
-    override fun getFollowsByFollowee(followee: Member, pageable: Pageable): Slice<Follow> {
-        val follows = followRepository.findFollowsByFollower(followee, pageable)
+    override fun getFollowsByFolloweeId(id: Long, pageable: Pageable): Slice<Follow> {
+        val follows = followRepository.findFollowsByFolloweeId(id, pageable)
         if (follows.isEmpty) {
             throw NoMoreFollowException()
         } else {
             return follows
         }
     }
+
+    override fun getFollowerCount(memberId: Long): Int =
+        followRepository.countByFollowerId(memberId)
+
+
+    override fun getFolloweeCount(memberId: Long): Int =
+        followRepository.countByFolloweeId(memberId)
+
 
     private fun getFollowById(id: Long): Follow =
         followRepository.findByIdOrNull(id)
