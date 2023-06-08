@@ -1,6 +1,5 @@
 package com.aria.server.art.infrastructure.rest.dto
 
-import com.aria.server.art.domain.art.Size
 import com.aria.server.art.domain.follow.Follow
 
 data class GetFollowerResponseDto(
@@ -30,9 +29,9 @@ data class GetFolloweeResponseDto(
         fun from(follow: Follow): GetFolloweeResponseDto =
             GetFolloweeResponseDto(
                 follow.id,
-                follow.follower.id,
-                follow.follower.nickname,
-                follow.follower.profileImageUrl
+                follow.followee.id,
+                follow.followee.nickname,
+                follow.followee.profileImageUrl
             )
     }
 }

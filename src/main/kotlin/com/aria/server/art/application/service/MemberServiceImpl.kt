@@ -1,4 +1,4 @@
-package com.aria.server.art.application
+package com.aria.server.art.application.service
 
 import com.aria.server.art.config.jwt.JwtProvider
 import com.aria.server.art.domain.exception.member.*
