@@ -1,13 +1,13 @@
 package com.aria.server.art.application.service
 
-import com.aria.server.art.domain.follow.TargetType.*
+import com.aria.server.art.application.usecase.FollowService
 import com.aria.server.art.domain.exception.common.UnauthorizedException
-import com.aria.server.art.domain.exception.follow.*
+import com.aria.server.art.domain.exception.follow.AlreadyFollowException
+import com.aria.server.art.domain.exception.follow.FollowNotFoundException
+import com.aria.server.art.domain.exception.follow.NoMoreFollowException
 import com.aria.server.art.domain.follow.Follow
-import com.aria.server.art.domain.follow.TargetType
 import com.aria.server.art.domain.member.Member
 import com.aria.server.art.infrastructure.database.FollowRepository
-import com.aria.server.art.application.usecase.FollowService
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.data.repository.findByIdOrNull
@@ -36,11 +36,17 @@ class FollowServiceImpl(
             }
         }
 
-    override fun getFollows(target: Member, targetType: TargetType, pageable: Pageable): Slice<Follow> {
-        val follows = when(targetType) {
-            FOLLOWER -> followRepository.findFollowsByFollower(target, pageable)
-            FOLLOWEE -> followRepository.findFollowsByFollowee(target, pageable)
+    override fun getFollowsByFollower(follower: Member, pageable: Pageable): Slice<Follow> {
+        val follows = followRepository.findFollowsByFollower(follower, pageable)
+        if (follows.isEmpty) {
+            throw NoMoreFollowException()
+        } else {
+            return follows
         }
+    }
+
+    override fun getFollowsByFollowee(followee: Member, pageable: Pageable): Slice<Follow> {
+        val follows = followRepository.findFollowsByFollower(followee, pageable)
         if (follows.isEmpty) {
             throw NoMoreFollowException()
         } else {
