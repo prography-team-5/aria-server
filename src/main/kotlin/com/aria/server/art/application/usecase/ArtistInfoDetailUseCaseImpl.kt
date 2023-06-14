@@ -1,31 +1,28 @@
 package com.aria.server.art.application.usecase
 
-import com.aria.server.art.infrastructure.rest.controller.ArtistPageUseCase
+import com.aria.server.art.infrastructure.rest.controller.ArtistInfoDetailUseCase
 import com.aria.server.art.infrastructure.rest.controller.MemberService
-import com.aria.server.art.infrastructure.rest.dto.CreateArtistInfoRequestDto
-import com.aria.server.art.infrastructure.rest.dto.CreateSocialLinkRequestDto
-import com.aria.server.art.infrastructure.rest.dto.CreateTagRequestDto
-import com.aria.server.art.infrastructure.rest.dto.GetArtistPageResponseDto
+import com.aria.server.art.infrastructure.rest.dto.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class ArtistPageUseCaseImpl (
+class ArtistInfoDetailUseCaseImpl (
     private val memberService: MemberService,
     private val followService: FollowService,
     private val artistInfoService: ArtistInfoService,
     private val socialLinkService: SocialLinkService,
-    private val tagService: TagService,
-): ArtistPageUseCase {
+    private val artistTagService: ArtistTagService,
+): ArtistInfoDetailUseCase {
 
     @Transactional(readOnly = true)
-    override fun getArtistPage(artistId: Long): GetArtistPageResponseDto {
+    override fun getArtistInfoDetail(artistId: Long): GetArtistInfoDetailResponseDto {
         val artist = memberService.getMemberById(artistId)
         val artistInfo = artistInfoService.getArtistInfo(artistId)
-        val tags = tagService.getTags(artistId)
+        val artistTags = artistTagService.getArtistTags(artistId)
         val followers = followService.getFollowerCount(artistId)
         val socialLinks = socialLinkService.getSocialLinks(artistId)
-        return GetArtistPageResponseDto.from(artist, artistInfo, tags, followers, socialLinks)
+        return GetArtistInfoDetailResponseDto.from(artist, artistInfo, artistTags, followers, socialLinks)
     }
 
     @Transactional
@@ -36,16 +33,16 @@ class ArtistPageUseCaseImpl (
     }
 
     @Transactional
-    override fun createTag(dto: CreateTagRequestDto) {
+    override fun createArtistTag(dto: CreateArtistTagRequestDto) {
         val artist = memberService.getCurrentMember()
-        val tag = dto.toEntity(artist)
-        tagService.createTag(tag)
+        val artistTag = dto.toEntity(artist)
+        artistTagService.createArtistTag(artistTag)
     }
 
     // TODO 본인검증
     @Transactional
-    override fun deleteTag(id: Long) {
-        tagService.deleteTag(id)
+    override fun deleteArtistTag(id: Long) {
+        artistTagService.deleteArtistTag(id)
     }
 
     @Transactional

@@ -1,11 +1,11 @@
-package com.aria.server.art.domain.tag
+package com.aria.server.art.domain.artisttag
 
 import com.aria.server.art.domain.AuditEntity
 import com.aria.server.art.domain.member.Member
 import javax.persistence.*
 
 @Entity
-class Tag (
+class ArtistTag (
     name: String,
     member: Member
 ): AuditEntity() {

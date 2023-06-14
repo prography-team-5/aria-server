@@ -4,13 +4,12 @@ import com.aria.server.art.domain.artistinfo.ArtistInfo
 import com.aria.server.art.domain.member.Member
 import com.aria.server.art.domain.sociallink.SocialLink
 import com.aria.server.art.domain.sociallink.SocialType
-import com.aria.server.art.domain.tag.Tag
+import com.aria.server.art.domain.artisttag.ArtistTag
 
-data class GetArtistPageResponseDto (
-    val profileArtImageUrl: String?,
+data class GetArtistInfoDetailResponseDto (
     val artistProfile: ArtistProfileResponseDto,
-    val tags: List<TagResponseDto>,
-    val followers: Int,
+    val artistTags: List<ArtistTagResponseDto>,
+    val followerCount: Int,
     val intro: String?,
     val socialLinks: List<SocialLinkResponseDto>
 ) {
@@ -18,15 +17,14 @@ data class GetArtistPageResponseDto (
         fun from(
             artistProfile: Member,
             artistInfo: ArtistInfo,
-            tags: MutableList<Tag>,
-            followers: Int,
+            artistTags: MutableList<ArtistTag>,
+            followerCount: Int,
             socialLinks: MutableList<SocialLink>
-            ): GetArtistPageResponseDto =
-            GetArtistPageResponseDto(
-                artistInfo.profileArtImageUrl,
+            ): GetArtistInfoDetailResponseDto =
+            GetArtistInfoDetailResponseDto(
                 ArtistProfileResponseDto.from(artistProfile),
-                tags.map { tag -> TagResponseDto.from(tag) },
-                followers,
+                artistTags.map { tag -> ArtistTagResponseDto.from(tag) },
+                followerCount,
                 artistInfo.intro,
                 socialLinks.map { socialLink -> SocialLinkResponseDto.from(socialLink) }
             )
@@ -48,15 +46,15 @@ data class SocialLinkResponseDto (
     }
 }
 
-data class TagResponseDto (
-    val tagId: Long,
+data class ArtistTagResponseDto (
+    val artistTagId: Long,
     val name: String
 ) {
     companion object {
-        fun from(tag: Tag): TagResponseDto =
-            TagResponseDto(
-                tag.id,
-                tag.name
+        fun from(artistTag: ArtistTag): ArtistTagResponseDto =
+            ArtistTagResponseDto(
+                artistTag.id,
+                artistTag.name
             )
     }
 }

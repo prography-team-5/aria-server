@@ -1,8 +1,8 @@
 package com.aria.server.art.infrastructure.rest.controller
 
 import com.aria.server.art.infrastructure.rest.dto.CreateArtistInfoRequestDto
+import com.aria.server.art.infrastructure.rest.dto.CreateArtistTagRequestDto
 import com.aria.server.art.infrastructure.rest.dto.CreateSocialLinkRequestDto
-import com.aria.server.art.infrastructure.rest.dto.CreateTagRequestDto
 import com.aria.server.art.infrastructure.rest.response.Response
 import com.aria.server.art.infrastructure.rest.response.Response.Companion.success
 import io.swagger.v3.oas.annotations.Operation
@@ -10,55 +10,55 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus.*
 import org.springframework.web.bind.annotation.*
 
-@Tag(name = "Artist Page", description = "Artist Page API Document")
+@Tag(name = "Artist Info Detail", description = "Artist Info Detail API Document")
 @RestController
-@RequestMapping("/v1/artist-page")
-class ArtistPageController (
-    private val artistPageUseCase: ArtistPageUseCase
+@RequestMapping("/v1/artist-info-details")
+class ArtistInfoDetailController (
+    private val artistInfoDetailUseCase: ArtistInfoDetailUseCase
 ){
-    @Operation(summary = "Get Artist Page API")
+    @Operation(summary = "Get Artist Info Detail API")
     @GetMapping("")
     @ResponseStatus(OK)
     fun getArtistPage(artistId: Long): Response =
-        success(OK.reasonPhrase, artistPageUseCase.getArtistPage(artistId))
+        success(OK.reasonPhrase, artistInfoDetailUseCase.getArtistInfoDetail(artistId))
 
     @Operation(summary = "Create Artist Info API")
-    @PostMapping("/artist-info")
+    @PostMapping("/infos")
     @ResponseStatus(CREATED)
     fun createArtistInfo(dto: CreateArtistInfoRequestDto): Response {
-        artistPageUseCase.createArtistInfo(dto)
+        artistInfoDetailUseCase.createArtistInfo(dto)
         return success(CREATED.reasonPhrase)
     }
 
-    @Operation(summary = "Create Tag API")
-    @PostMapping("/tag")
+    @Operation(summary = "Create Artist Tag API")
+    @PostMapping("/tags")
     @ResponseStatus(CREATED)
-    fun createTag(dto: CreateTagRequestDto): Response {
-        artistPageUseCase.createTag(dto)
+    fun createArtistTags(dto: CreateArtistTagRequestDto): Response {
+        artistInfoDetailUseCase.createArtistTag(dto)
         return success(CREATED.reasonPhrase)
     }
 
-    @Operation(summary = "Delete Tag API")
-    @DeleteMapping("/tag")
+    @Operation(summary = "Delete Artist Tag API")
+    @DeleteMapping("/tags")
     @ResponseStatus(OK)
-    fun deleteTag(id: Long): Response {
-        artistPageUseCase.deleteTag(id)
+    fun deleteArtistTag(id: Long): Response {
+        artistInfoDetailUseCase.deleteArtistTag(id)
         return success(OK.reasonPhrase)
     }
 
     @Operation(summary = "Create Social Link API")
-    @PostMapping("/social-link")
+    @PostMapping("/social-links")
     @ResponseStatus(CREATED)
     fun createSocialLink(dto: CreateSocialLinkRequestDto): Response {
-        artistPageUseCase.createSocialLink(dto)
+        artistInfoDetailUseCase.createSocialLink(dto)
         return success(CREATED.reasonPhrase)
     }
 
     @Operation(summary = "Delete Social Link API")
-    @DeleteMapping("/social-link")
+    @DeleteMapping("/social-links")
     @ResponseStatus(OK)
     fun deleteSocialLink(id: Long): Response {
-        artistPageUseCase.deleteSocialLink(id)
+        artistInfoDetailUseCase.deleteSocialLink(id)
         return success(OK.reasonPhrase)
     }
 
