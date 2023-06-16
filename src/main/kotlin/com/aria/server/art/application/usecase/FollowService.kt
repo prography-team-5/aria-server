@@ -9,7 +9,9 @@ import org.springframework.data.domain.Slice
 interface FollowService {
     fun createFollow(follower: Member, followee: Member)
     fun deleteFollow(follower: Member, followId: Long)
-    fun getFollowsByFollower(follower: Member, pageable: Pageable): Slice<Follow>
-    fun getFollowsByFollowee(followee: Member, pageable: Pageable): Slice<Follow>
+    fun getFollowsByFollowerId(id: Long, pageable: Pageable): Slice<Follow>
+    fun getFollowsByFolloweeId(id: Long, pageable: Pageable): Slice<Follow>
+    fun getFollowerCount(memberId: Long): Int
+    fun getFolloweeCount(memberId: Long): Int
 
 }
