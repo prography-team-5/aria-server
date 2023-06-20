@@ -24,5 +24,5 @@ class CustomUserDetailsService(private val memberRepository: MemberRepository): 
 
 
     private fun createUserDetails(member: Member): UserDetails =
-        User(member.email, member.id.toString(), setOf(SimpleGrantedAuthority(member.role.toString())))
+        User(member.email, member.email, setOf(SimpleGrantedAuthority(member.role.toString())))
 }
