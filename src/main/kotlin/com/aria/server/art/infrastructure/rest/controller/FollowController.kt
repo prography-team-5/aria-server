@@ -32,7 +32,6 @@ class FollowController (
         return success(CREATED.reasonPhrase)
     }
 
-    // TODO 로그인 시, 로그인 한 유저의 ID도 같이 줘야함
     @Operation(summary = "Get follower list API")
     @GetMapping("/followers")
     @ResponseStatus(OK)
@@ -40,11 +39,25 @@ class FollowController (
         return success(OK.reasonPhrase, followUseCase.getFollowers(followeeId, pageable))
     }
 
+    @Operation(summary = "Get my follower list API")
+    @GetMapping("/followers/me")
+    @ResponseStatus(OK)
+    fun getMyFollowers(pageable: Pageable): Response {
+        return success(OK.reasonPhrase, followUseCase.getMyFollowers(pageable))
+    }
+
     @Operation(summary = "Get followee list API")
     @GetMapping("/followees")
     @ResponseStatus(OK)
     fun getFollowees(followerId: Long, pageable: Pageable): Response {
         return success(OK.reasonPhrase, followUseCase.getFollowees(followerId, pageable))
+    }
+
+    @Operation(summary = "Get my followee list API")
+    @GetMapping("/followees/me")
+    @ResponseStatus(OK)
+    fun getMyFollowees(pageable: Pageable): Response {
+        return success(OK.reasonPhrase, followUseCase.getMyFollowees(pageable))
     }
 
 }
