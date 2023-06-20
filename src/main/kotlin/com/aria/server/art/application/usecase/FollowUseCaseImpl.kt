@@ -35,6 +35,15 @@ class FollowUseCaseImpl (
                 GetFollowerResponseDto.from(follow)
             }
 
+    @Transactional(readOnly = true)
+    override fun getMyFollowers(pageable: Pageable): Slice<GetFollowerResponseDto> {
+        val currentMemberId = memberService.getCurrentMember().id
+        return followService.getFollowsByFolloweeId(currentMemberId, pageable)
+            .map { follow ->
+                GetFollowerResponseDto.from(follow)
+            }
+    }
+
 
     @Transactional(readOnly = true)
     override fun getFollowees(followerId: Long, pageable: Pageable): Slice<GetFolloweeResponseDto> =
@@ -42,5 +51,14 @@ class FollowUseCaseImpl (
             .map { follow ->
                 GetFolloweeResponseDto.from(follow)
             }
+
+    @Transactional(readOnly = true)
+    override fun getMyFollowees(pageable: Pageable): Slice<GetFolloweeResponseDto> {
+        val currentMemberId = memberService.getCurrentMember().id
+        return followService.getFollowsByFolloweeId(currentMemberId, pageable)
+            .map { follow ->
+                GetFolloweeResponseDto.from(follow)
+            }
+    }
 
 }
