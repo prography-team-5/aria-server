@@ -6,6 +6,7 @@ services:
     image: ${APP_IMAGE}
     build: .
     restart: always
+    platform: linux/amd64
     ports:
       - "${APP_LOCAL_PORT}:${APP_SERVER_PORT}"
     environment:
