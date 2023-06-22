@@ -47,7 +47,7 @@ jobs:
           docker push ariaserver/aria-server
 
       - name: Up docker-compose
-        uses: appleboy/ssh-action@main
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           username: ubuntu
