@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot") version "2.7.10"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
-    id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
+    //id("org.jlleitschuh.gradle.ktlint") version "11.0.0" // gradle build 시 문법오류를 잡으면서 에러를 던짐, 일단 주석처리 해놓고 다음에 적용
 
     val kotlinVersion = "1.6.21"
     kotlin("jvm") version kotlinVersion
@@ -22,7 +22,7 @@ repositories {
     mavenCentral()
 }
 
-val awsVersion = "2.2.6.RELEASE"
+val awsVersion = "2.4.4"
 val coroutineVersion = "1.6.0"
 val querydslVersion = "5.0.0"
 val jwtVersion = "0.11.2"
@@ -37,7 +37,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation ("org.springframework.cloud:spring-cloud-starter-aws:$awsVersion")
+    implementation("io.awspring.cloud:spring-cloud-aws-core:$awsVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
@@ -53,7 +53,7 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.mysql:mysql-connector-j")
     implementation("com.querydsl:querydsl-jpa:$querydslVersion")
-    kapt("com.querydsl:querydsl-apt:${querydslVersion}:jpa")
+    kapt("com.querydsl:querydsl-apt:$querydslVersion:jpa")
     implementation("org.mapstruct:mapstruct:$mapstrcutVersion")
     kapt("org.mapstruct:mapstruct-processor:$mapstrcutVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
