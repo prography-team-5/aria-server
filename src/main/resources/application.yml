@@ -1,5 +1,35 @@
 spring:
+
   profiles:
-    active: ${APP_PROFILE}
-server:
-  port: ${SERVER_PORT}
+    active: local
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+cloud:
+  aws:
+    region:
+      static: ${aws.region}
+    credentials:
+      secret-key: ${aws.secret-key}
+      access-key: ${aws.access-key}
+    s3:
+      bucket: ${aws.bucket}
+
+jwt:
+  secret: ${jwt.secret-key}
+
+springdoc:
+  packages-to-scan : com.aria.server
+  swagger-ui :
+    path : /api
+  api-docs :
+    path : /api-docs/json
+    groups :
+      enabled : true
+  cache :
+    disabled : true
+  default-consumes-media-type : application/json;charset=UTF-8
+  default-produces-media-type : application/json;charset=UTF-8

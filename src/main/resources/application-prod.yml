@@ -2,14 +2,15 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/aria
-    username: bjj
-    password: 1234
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
 
   jpa:
+    open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
@@ -17,7 +18,3 @@ spring:
           physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
-
-logging:
-  level:
-    root: INFO
