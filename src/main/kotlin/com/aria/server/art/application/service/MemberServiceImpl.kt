@@ -1,51 +1,24 @@
 package com.aria.server.art.application.service
 
-import com.aria.server.art.config.jwt.JwtProvider
-import com.aria.server.art.domain.exception.member.*
+import com.aria.server.art.domain.exception.member.CurrentMemberNotFoundException
+import com.aria.server.art.domain.exception.member.DuplicatedNicknameException
+import com.aria.server.art.domain.exception.member.MemberNotFoundException
 import com.aria.server.art.domain.member.Member
-import com.aria.server.art.domain.member.PlatformType
-import com.aria.server.art.domain.member.PlatformType.*
-import com.aria.server.art.domain.member.Role.ROLE_MEMBER
 import com.aria.server.art.infrastructure.database.MemberRepository
 import com.aria.server.art.infrastructure.rest.controller.MemberService
-import com.aria.server.art.infrastructure.rest.dto.*
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod.POST
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
-import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.client.RestTemplate
-
 
 @Service
-class MemberServiceImpl(
-    private val memberRepository: MemberRepository,
-    private val authenticationManagerBuilder: AuthenticationManagerBuilder,
-    private val jwtProvider: JwtProvider,
+class MemberServiceImpl (
+    private val memberRepository: MemberRepository
 ): MemberService {
-    val KAKAO_API = "https://kapi.kakao.com/v2/user/me"
-    val NAVER_API = "https://openapi.naver.com/v1/nid/me"
-    val APPLE_API = "https://appleid.apple.com/auth/userinfo"
-    val BASIC_IMAGE = "basic.jpg"
 
-    override fun getMemberById(id: Long) =
-        memberRepository.findByIdOrNull(id)
-            ?:throw MemberNotFoundException("ID")
-
-    private fun getMemberByEmail(email: String) =
-        memberRepository.findByEmail(email)
-            ?:throw MemberNotFoundException("이메일")
-
-    private fun getMemberByNickname(nickname: String) =
-        memberRepository.findByNickname(nickname)
-            ?:throw MemberNotFoundException("닉네임")
+    fun createMember(member: Member) {
+        checkDuplicateMemberByNickname(member.nickname)
+        memberRepository.save(member)
+    }
 
     override fun getCurrentMember() =
         try {
@@ -54,59 +27,27 @@ class MemberServiceImpl(
             throw CurrentMemberNotFoundException()
         }
 
-    @Transactional
-    override fun signUp(dto: SignUpRequestDto): TokenDto =
-        if (!memberRepository.existsByNickname(dto.nickname)) {
-            getEmail(dto.accessToken, dto.platformType)
-                .run {
-                    memberRepository.save(Member(this, dto.nickname, BASIC_IMAGE, ROLE_MEMBER, dto.platformType))
-                    jwtProvider.createTokenDto(getUserAuthentication(this))
-                }
-        } else {
+    override fun getMemberById(id: Long) =
+        memberRepository.findByIdOrNull(id)
+            ?:throw MemberNotFoundException("ID")
+
+    fun getMemberByEmail(email: String) =
+        memberRepository.findByEmail(email)
+            ?:throw MemberNotFoundException("이메일")
+
+    fun getMemberByNickname(nickname: String) =
+        memberRepository.findByNickname(nickname)
+            ?:throw MemberNotFoundException("닉네임")
+
+    fun checkDuplicateMemberByNickname(nickname: String) {
+        if (memberRepository.existsByNickname(nickname))
             throw DuplicatedNicknameException()
-        }
-
-    @Transactional(readOnly = true)
-    override fun signIn(dto: SignInRequestDto): TokenDto =
-        getEmail(dto.accessToken, dto.platformType)
-            .run {
-                if (memberRepository.existsByEmail(this)) {
-                    jwtProvider.createTokenDto(getUserAuthentication(this))
-                } else {
-                    throw MemberNotFoundException("이메일")
-                }
-            }
-
-    private fun getEmail(accessToken: String, platformType: PlatformType): String =
-        getSocialUrlAndResponseType(platformType)
-            .run {
-                getResponse(first, accessToken, second)
-                    ?.let { getEmailFromResponse(platformType, it) }
-                    ?:throw NoResponseBodyException()
-            }
-
-    private fun <T> getResponse(url: String, accessToken: String, responseType: Class<T>): T? {
-        val httpHeaders = HttpHeaders()
-        httpHeaders.setBearerAuth(accessToken)
-        return RestTemplate().exchange(url, POST, HttpEntity<T>(httpHeaders), responseType).body
     }
 
-    private fun getSocialUrlAndResponseType(platformType: PlatformType): Pair<String, Class<*>> =
-        when (platformType) {
-            KAKAO -> KAKAO_API to KakaoUserInfoResponse::class.java
-            NAVER -> NAVER_API to NaverUserInfoResponse::class.java
-            APPLE -> APPLE_API to AppleUserInfoResponse::class.java
-        }
+    fun checkExistsMemberByEmail(email: String) {
+        if (!memberRepository.existsByEmail(email))
+            throw MemberNotFoundException("이메일")
+    }
 
-    private fun getEmailFromResponse(platformType: PlatformType, response: Any) =
-        when (platformType) {
-            KAKAO -> (response as KakaoUserInfoResponse).kakao_account.email
-            NAVER -> (response as NaverUserInfoResponse).response.email
-            APPLE -> (response as AppleUserInfoResponse).email
-        }
 
-    private fun getUserAuthentication(email: String): Authentication =
-         authenticationManagerBuilder.getObject()
-             .authenticate(UsernamePasswordAuthenticationToken(email, email))
-    
 }

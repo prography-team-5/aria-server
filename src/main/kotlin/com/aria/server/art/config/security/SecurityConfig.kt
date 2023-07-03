@@ -49,7 +49,7 @@ class SecurityConfig (
             .authorizeHttpRequests { authorize ->
                 authorize
                     .shouldFilterAllDispatcherTypes(false)
-                    .antMatchers("/swagger-ui/**", "/api-docs/**", "/v1/members/sign-up", "/v1/members/sign-in", "/api")
+                    .antMatchers("/swagger-ui/**", "/api-docs/**", "/v1/auth/sign-up", "/v1/auth/sign-in", "/api")
                     .permitAll()
                     .anyRequest()
                     .authenticated()
