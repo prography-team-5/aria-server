@@ -28,5 +28,8 @@ class ArtistInfoServiceImpl (
         artistInfoRepository.findByMemberId(artistId)
             ?: throw ArtistInfoNotFoundException()
 
+    override fun getRandArtistInfo(): ArtistInfo =
+        artistInfoRepository.findRandomArtistInfo()
+            ?: throw ArtistInfoNotFoundException()
 
 }
