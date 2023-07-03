@@ -27,4 +27,8 @@ class SocialLink (
     @JoinColumn(name = "member_id", nullable = false)
     var member: Member = member
         protected set
+
+    fun changeUrl(url: String) {
+        this.url = url
+    }
 }

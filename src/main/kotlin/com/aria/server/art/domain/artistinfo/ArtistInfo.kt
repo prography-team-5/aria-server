@@ -27,4 +27,12 @@ class ArtistInfo (
     var intro: String? = intro
         protected set
 
+    fun changeProfileArtImageUrl(profileArtImageUrl: String) {
+        this.profileArtImageUrl = profileArtImageUrl
+    }
+
+    fun changeIntro(intro: String) {
+        this.intro = intro
+    }
+
 }

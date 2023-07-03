@@ -42,6 +42,22 @@ class ArtistInfoDetailUseCaseImpl (
     }
 
     @Transactional
+    override fun editArtistInfoIntro(dto: EditArtistInfoIntroRequestDto) {
+        val artist = memberService.getCurrentMember()
+        val artistInfo = artistInfoService.getArtistInfo(artist.id)
+        artistInfo.changeIntro(dto.intro)
+    }
+
+
+    // TODO 대표 이미지 바꾸기
+//    @Transactional
+//    override fun changeProfileArtImageUrl() {
+//        val artist = memberService.getCurrentMember()
+//        val artistInfo = artistInfoService.getArtistInfo(artist.id)
+//        artistInfo.changeProfileArtImageUrl()
+//    }
+
+    @Transactional
     override fun createArtistTag(dto: CreateArtistTagRequestDto) {
         val artist = memberService.getCurrentMember()
         val artistTag = dto.toEntity(artist)
@@ -59,6 +75,11 @@ class ArtistInfoDetailUseCaseImpl (
         val artist = memberService.getCurrentMember()
         val socialLink = dto.toEntity(artist)
         socialLinkService.createSocialLink(socialLink)
+    }
+
+    @Transactional
+    override fun editSocialLink(id: Long, dto: EditSocialLinkRequestDto) {
+        socialLinkService.updateSocialLink(id, dto.url)
     }
 
     @Transactional

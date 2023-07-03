@@ -11,3 +11,7 @@ data class CreateSocialLinkRequestDto (
     fun toEntity(artist: Member) =
         SocialLink(url, socialType, artist)
 }
+
+data class EditSocialLinkRequestDto (
+    val url: String
+)

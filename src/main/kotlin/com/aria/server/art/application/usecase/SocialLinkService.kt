@@ -5,6 +5,6 @@ import com.aria.server.art.domain.sociallink.SocialLink
 interface SocialLinkService {
     fun createSocialLink(socialLink: SocialLink)
     fun deleteSocialLink(id: Long)
-    fun updateSocialLink()
+    fun updateSocialLink(id: Long, url: String)
     fun getSocialLinks(artistId: Long): MutableList<SocialLink>
 }
