@@ -15,7 +15,7 @@ class MemberServiceImpl (
     private val memberRepository: MemberRepository
 ): MemberService {
 
-    fun createMember(member: Member) {
+    override fun createMember(member: Member) {
         checkDuplicateMemberByNickname(member.nickname)
         memberRepository.save(member)
     }
@@ -44,7 +44,7 @@ class MemberServiceImpl (
             throw DuplicatedNicknameException()
     }
 
-    fun checkExistsMemberByEmail(email: String) {
+    override fun checkExistsMemberByEmail(email: String) {
         if (!memberRepository.existsByEmail(email))
             throw MemberNotFoundException("이메일")
     }
