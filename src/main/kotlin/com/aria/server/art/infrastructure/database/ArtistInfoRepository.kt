@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query
 interface ArtistInfoRepository: JpaRepository<ArtistInfo, Long> {
     fun findByMemberId(id: Long): ArtistInfo?
     fun existsByMemberId(id: Long): Boolean
-    @Query(value = "SELECT * FROM art ORDER BY RAND() LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM artist_info ORDER BY RAND() LIMIT 1", nativeQuery = true)
     fun findRandomArtistInfo(): ArtistInfo?
 }
