@@ -8,13 +8,11 @@ data class SignUpRequestDto(
     val platformType: PlatformType,
     val nickname: String,
     val accessToken: String,
-    val refreshToken: String
     )
 
 data class SignInRequestDto(
     val platformType: PlatformType,
     val accessToken: String,
-    val refreshToken: String
 )
 
 
