@@ -43,6 +43,10 @@ class Member(
         this.profileImageUrl = profileImageUrl
     }
 
+    fun changeNickname(nickname: String) {
+        this.nickname = nickname
+    }
+
     fun changeRole(role: Role) {
         this.profileImageUrl = profileImageUrl
     }
