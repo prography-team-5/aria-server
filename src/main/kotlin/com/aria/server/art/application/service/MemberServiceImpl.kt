@@ -17,9 +17,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 
 
@@ -84,14 +85,11 @@ class MemberServiceImpl(
                     ?:throw NoResponseBodyException()
             }
 
-    private fun <T> getResponse(url: String, accessToken: String, responseType: Class<T>) =
-        try {
-            RestTemplate().exchange(url, POST, HttpEntity(HttpHeaders().setBearerAuth(accessToken)), responseType).body
-        } catch (e: RestClientException) {
-            throw AccessTokenUnauthorizedException()
-        } catch (e: Exception) {
-            throw SocialPlatformConnectionException()
-        }
+    private fun <T> getResponse(url: String, accessToken: String, responseType: Class<T>): T? {
+        val httpHeaders = HttpHeaders()
+        httpHeaders.setBearerAuth(accessToken)
+        return RestTemplate().exchange(url, POST, HttpEntity<T>(httpHeaders), responseType).body
+    }
 
     private fun getSocialUrlAndResponseType(platformType: PlatformType): Pair<String, Class<*>> =
         when (platformType) {
@@ -102,7 +100,7 @@ class MemberServiceImpl(
 
     private fun getEmailFromResponse(platformType: PlatformType, response: Any) =
         when (platformType) {
-            KAKAO -> (response as KakaoUserInfoResponse).kakaoAccount.email
+            KAKAO -> (response as KakaoUserInfoResponse).kakao_account.email
             NAVER -> (response as NaverUserInfoResponse).response.email
             APPLE -> (response as AppleUserInfoResponse).email
         }

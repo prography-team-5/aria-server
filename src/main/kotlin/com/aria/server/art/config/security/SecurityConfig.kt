@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.NoOpPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
@@ -23,8 +24,9 @@ class SecurityConfig (
     private val jwtAccessDeniedHandler: JwtAccessDeniedHandler
 ) {
 
+    // 최종적으론 패스워드 없이 로그인, 현재는 Deprecated 문제해결 요
     @Bean
-    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
+    fun passwordEncoder(): PasswordEncoder = NoOpPasswordEncoder.getInstance()
 
     @Bean
     @Throws(Exception::class)

@@ -17,23 +17,35 @@ data class SignInRequestDto(
     val refreshToken: String
 )
 
+
 data class KakaoUserInfoResponse(
     val id: Long,
+    val connected_at: String,
     val properties: Properties,
-    val kakaoAccount: KakaoAccount
-) {
+    val kakao_account: KakaoAccount,
+    ) {
     data class Properties(
         val nickname: String,
-        val profileImage: String?,
-        val thumbnailImage: String?
+        val profile_image: String?,
+        val thumbnail_image: String?
     )
-
     data class KakaoAccount(
-        val email: String,
-        val gender: String?,
-        val birthday: String?,
-        val ageRange: String?
-    )
+        val profile_nickname_needs_agreement: Boolean,
+        val profile_image_needs_agreement: Boolean,
+        val profile: Profile,
+        val has_email: Boolean,
+        val email_needs_agreement: Boolean,
+        val is_email_valid: Boolean,
+        val is_email_verified: Boolean,
+        val email: String
+    ) {
+        data class Profile(
+            val nickname: String,
+            val thumbnail_image_url: String?,
+            val profile_image_url: String?,
+            val is_dafault_image: Boolean
+        )
+    }
 }
 
 data class NaverUserInfoResponse(
