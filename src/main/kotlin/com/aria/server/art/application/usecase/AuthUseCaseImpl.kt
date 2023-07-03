@@ -1,6 +1,5 @@
 package com.aria.server.art.application.usecase
 
-import com.aria.server.art.application.service.MemberServiceImpl
 import com.aria.server.art.config.jwt.JwtProvider
 import com.aria.server.art.domain.exception.member.NoResponseBodyException
 import com.aria.server.art.domain.member.Member
@@ -20,7 +19,7 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class AuthUseCaseImpl(
-    private val memberServiceImpl: MemberServiceImpl,
+    private val memberService: MemberService,
     private val authenticationManagerBuilder: AuthenticationManagerBuilder,
     private val jwtProvider: JwtProvider,
 ): AuthUseCase {
@@ -33,7 +32,7 @@ class AuthUseCaseImpl(
     override fun signUp(dto: SignUpRequestDto): TokenDto =
         getEmail(dto.accessToken, dto.platformType)
             .run {
-                memberServiceImpl.createMember(Member(this, dto.nickname, BASIC_IMAGE, Role.ROLE_MEMBER, dto.platformType))
+                memberService.createMember(Member(this, dto.nickname, BASIC_IMAGE, Role.ROLE_MEMBER, dto.platformType))
                 jwtProvider.createTokenDto(getUserAuthentication(this))
             }
 
@@ -41,7 +40,7 @@ class AuthUseCaseImpl(
     override fun signIn(dto: SignInRequestDto): TokenDto =
         getEmail(dto.accessToken, dto.platformType)
             .run {
-                memberServiceImpl.checkExistsMemberByEmail(this)
+                memberService.checkExistsMemberByEmail(this)
                 jwtProvider.createTokenDto(getUserAuthentication(this))
             }
 

@@ -5,7 +5,7 @@ import com.aria.server.art.domain.exception.member.DuplicatedNicknameException
 import com.aria.server.art.domain.exception.member.MemberNotFoundException
 import com.aria.server.art.domain.member.Member
 import com.aria.server.art.infrastructure.database.MemberRepository
-import com.aria.server.art.infrastructure.rest.controller.MemberService
+import com.aria.server.art.application.usecase.MemberService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service

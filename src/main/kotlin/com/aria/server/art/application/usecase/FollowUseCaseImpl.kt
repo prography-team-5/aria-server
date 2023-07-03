@@ -1,7 +1,6 @@
 package com.aria.server.art.application.usecase
 
 import com.aria.server.art.infrastructure.rest.controller.FollowUseCase
-import com.aria.server.art.infrastructure.rest.controller.MemberService
 import com.aria.server.art.infrastructure.rest.dto.GetFolloweeResponseDto
 import com.aria.server.art.infrastructure.rest.dto.GetFollowerResponseDto
 import org.springframework.data.domain.Pageable

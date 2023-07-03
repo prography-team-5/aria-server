@@ -6,7 +6,6 @@ import com.aria.server.art.domain.art.Size
 import com.aria.server.art.domain.art.Style
 import com.aria.server.art.infrastructure.rest.controller.ArtService
 import com.aria.server.art.infrastructure.rest.controller.ArtUseCase
-import com.aria.server.art.infrastructure.rest.controller.MemberService
 import com.aria.server.art.infrastructure.rest.dto.CreateArtImageResponse
 import com.aria.server.art.infrastructure.rest.dto.CreateArtRequest
 import com.aria.server.art.infrastructure.rest.dto.CreateArtResponse

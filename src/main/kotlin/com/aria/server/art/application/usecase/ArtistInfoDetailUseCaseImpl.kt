@@ -1,7 +1,6 @@
 package com.aria.server.art.application.usecase
 
 import com.aria.server.art.infrastructure.rest.controller.ArtistInfoDetailUseCase
-import com.aria.server.art.infrastructure.rest.controller.MemberService
 import com.aria.server.art.infrastructure.rest.dto.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
