@@ -3,6 +3,7 @@ package com.aria.server.art.infrastructure.rest.controller
 import com.aria.server.art.infrastructure.rest.dto.CreateArtistInfoRequestDto
 import com.aria.server.art.infrastructure.rest.dto.CreateArtistTagRequestDto
 import com.aria.server.art.infrastructure.rest.dto.CreateSocialLinkRequestDto
+import com.aria.server.art.infrastructure.rest.dto.EditSocialLinkRequestDto
 import com.aria.server.art.infrastructure.rest.response.Response
 import com.aria.server.art.infrastructure.rest.response.Response.Companion.success
 import io.swagger.v3.oas.annotations.Operation
@@ -31,7 +32,7 @@ class ArtistInfoDetailController (
     @Operation(summary = "Create Artist Info API")
     @PostMapping("/infos")
     @ResponseStatus(CREATED)
-    fun createArtistInfo(dto: CreateArtistInfoRequestDto): Response {
+    fun createArtistInfo(@RequestBody dto: CreateArtistInfoRequestDto): Response {
         artistInfoDetailUseCase.createArtistInfo(dto)
         return success(CREATED.reasonPhrase)
     }
@@ -39,7 +40,7 @@ class ArtistInfoDetailController (
     @Operation(summary = "Create Artist Tag API")
     @PostMapping("/tags")
     @ResponseStatus(CREATED)
-    fun createArtistTags(dto: CreateArtistTagRequestDto): Response {
+    fun createArtistTags(@RequestBody dto: CreateArtistTagRequestDto): Response {
         artistInfoDetailUseCase.createArtistTag(dto)
         return success(CREATED.reasonPhrase)
     }
@@ -55,9 +56,17 @@ class ArtistInfoDetailController (
     @Operation(summary = "Create Social Link API")
     @PostMapping("/social-links")
     @ResponseStatus(CREATED)
-    fun createSocialLink(dto: CreateSocialLinkRequestDto): Response {
+    fun createSocialLink(@RequestBody dto: CreateSocialLinkRequestDto): Response {
         artistInfoDetailUseCase.createSocialLink(dto)
         return success(CREATED.reasonPhrase)
+    }
+
+    @Operation(summary = "Edit Social Link API")
+    @PatchMapping("/social-links")
+    @ResponseStatus(OK)
+    fun editSocialLink(@RequestParam id: Long, @RequestBody dto: EditSocialLinkRequestDto): Response {
+        artistInfoDetailUseCase.editSocialLink(id, dto)
+        return success(OK.reasonPhrase)
     }
 
     @Operation(summary = "Delete Social Link API")

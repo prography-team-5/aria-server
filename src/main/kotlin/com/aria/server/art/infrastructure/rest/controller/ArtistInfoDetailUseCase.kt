@@ -6,9 +6,11 @@ interface ArtistInfoDetailUseCase {
     fun getArtistInfoDetail(artistId: Long): GetArtistInfoDetailResponseDto
     fun getRandArtistInfoDetail(): GetArtistInfoDetailResponseDto
     fun createArtistInfo(dto: CreateArtistInfoRequestDto)
+    fun editArtistInfoIntro(dto: EditArtistInfoIntroRequestDto)
     fun createArtistTag(dto: CreateArtistTagRequestDto)
     fun deleteArtistTag(id: Long)
     fun createSocialLink(dto: CreateSocialLinkRequestDto)
+    fun editSocialLink(id: Long, dto: EditSocialLinkRequestDto)
     fun deleteSocialLink(id: Long)
 
 }

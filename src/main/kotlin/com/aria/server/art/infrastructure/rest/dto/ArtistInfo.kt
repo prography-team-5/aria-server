@@ -12,3 +12,7 @@ data class CreateArtistInfoRequestDto (
         ArtistInfo(artist, profileArtImageUrl, intro)
 
 }
+
+data class EditArtistInfoIntroRequestDto (
+    val intro: String
+)
