@@ -7,4 +7,5 @@ interface ArtistInfoService {
     fun createArtistInfo(artistInfo: ArtistInfo)
     fun updateArtistInfo()
     fun getArtistInfo(artistId: Long): ArtistInfo
+    fun getRandArtistInfo(): ArtistInfo
 }

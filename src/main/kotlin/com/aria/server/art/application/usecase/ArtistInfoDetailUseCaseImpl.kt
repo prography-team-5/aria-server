@@ -25,6 +25,16 @@ class ArtistInfoDetailUseCaseImpl (
         return GetArtistInfoDetailResponseDto.from(artist, artistInfo, artistTags, followers, socialLinks)
     }
 
+    @Transactional(readOnly = true)
+    override fun getRandArtistInfoDetail(): GetArtistInfoDetailResponseDto {
+        val artistInfo = artistInfoService.getRandArtistInfo()
+        val artist = artistInfo.member
+        val artistTags = artistTagService.getArtistTags(artist.id)
+        val followers = followService.getFollowerCount(artist.id)
+        val socialLinks = socialLinkService.getSocialLinks(artist.id)
+        return GetArtistInfoDetailResponseDto.from(artist, artistInfo, artistTags, followers, socialLinks)
+    }
+
     @Transactional
     override fun createArtistInfo(dto: CreateArtistInfoRequestDto) {
         val artist = memberService.getCurrentMember()
