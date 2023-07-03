@@ -1,6 +1,5 @@
 package com.aria.server.art.application.usecase
 
-import com.aria.server.art.infrastructure.rest.controller.MemberService
 import com.aria.server.art.infrastructure.rest.controller.ReportUseCase
 import com.aria.server.art.infrastructure.rest.dto.ReportArtRequestDto
 import com.aria.server.art.infrastructure.rest.dto.ReportMemberRequestDto

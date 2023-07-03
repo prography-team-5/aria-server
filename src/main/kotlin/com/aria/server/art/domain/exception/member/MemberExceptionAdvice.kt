@@ -14,9 +14,9 @@ class MemberExceptionAdvice {
     private val log = LoggerFactory.logger(javaClass)
 
     @ExceptionHandler(RestClientException::class)
-    @ResponseStatus(UNAUTHORIZED)
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
     fun restClientExceptionAdvice(e: RestClientException) =
-        failure("인증되지 않은 엑세스 토큰입니다.")
+        failure("소셜 서비스와 통신에 실패했습니다." + e.message!!)
 
     @ExceptionHandler(NoResponseBodyException::class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
