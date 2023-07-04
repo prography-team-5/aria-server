@@ -3,7 +3,7 @@ package com.aria.server.art.domain.art
 import javax.persistence.*
 
 @Entity
-class Style(
+class ArtTag(
     name: String
 ){
     @Id

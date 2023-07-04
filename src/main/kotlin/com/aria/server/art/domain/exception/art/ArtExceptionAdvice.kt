@@ -18,4 +18,9 @@ class ArtExceptionAdvice {
     @ResponseStatus(NOT_FOUND)
     fun artImageUrlNotFoundExceptionAdvice(e: ArtImageNotFoundException) =
         Response("해당 이미지를 찾을 수 없습니다.", null)
+
+    @ExceptionHandler(ArtNotFoundException::class)
+    @ResponseStatus(NOT_FOUND)
+    fun artNotFoundExceptionAdvice(e: ArtNotFoundException) =
+        Response("해당 작품을 찾을 수 없습니다.", null)
 }
