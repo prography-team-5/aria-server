@@ -8,4 +8,6 @@ interface ArtService {
     fun getRandomArt(): Art
 
     fun getArtsByArtistId(artistId: Long, page: Int, size: Int): List<Art>
+
+    fun getArtById(artId: Long): Art
 }

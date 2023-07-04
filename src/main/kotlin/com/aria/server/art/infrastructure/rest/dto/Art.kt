@@ -9,7 +9,7 @@ data class SimpleArtDto(
     val mainImageUrl: String,
     val year: Int,
     val size: Size,
-    val artTags: List<String>,
+    val style: String,
     val createdAt: LocalDateTime
 ) {
     companion object {
@@ -19,7 +19,7 @@ data class SimpleArtDto(
                 art.mainImage.url,
                 art.year,
                 art.size,
-                art.artTags.map { it.name },
+                art.style,
                 art.createdAt
             )
     }

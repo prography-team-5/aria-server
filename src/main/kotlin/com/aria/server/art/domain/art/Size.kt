@@ -4,12 +4,12 @@ import javax.persistence.Embeddable
 
 @Embeddable
 class Size (
-    width: Int,
-    height: Int
+    width: Float,
+    height: Float
 ) {
-    var width: Int = width
+    var width: Float = width
         protected set
 
-    var height: Int = height
+    var height: Float = height
         protected set
 }

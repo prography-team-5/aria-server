@@ -4,14 +4,17 @@ import com.aria.server.art.domain.art.Art
 import com.aria.server.art.domain.art.ArtImage
 import com.aria.server.art.domain.art.Size
 import com.aria.server.art.domain.art.ArtTag
+import com.aria.server.art.domain.exception.art.ArtImageNotFoundException
 import com.aria.server.art.infrastructure.rest.controller.ArtUseCase
 import com.aria.server.art.infrastructure.rest.dto.CreateArtImageResponse
 import com.aria.server.art.infrastructure.rest.dto.CreateArtRequest
 import com.aria.server.art.infrastructure.rest.dto.CreateArtResponse
+import com.aria.server.art.infrastructure.rest.dto.GetArtResponseDto
 import com.aria.server.art.infrastructure.rest.dto.GetRandomArtResponse
 import com.aria.server.art.infrastructure.rest.dto.SimpleArtDto
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.transaction.support.TransactionTemplate
 import org.springframework.web.multipart.MultipartFile
 
 @Service
@@ -19,7 +22,8 @@ class ArtUseCaseImpl(
     private val artService: ArtService,
     private val memberService: MemberService,
     private val artImageService: ArtImageService,
-    private val s3Service: S3Service
+    private val s3Service: S3Service,
+    private val transactionTemplate: TransactionTemplate
 ):ArtUseCase {
 
     @Transactional
@@ -51,9 +55,12 @@ class ArtUseCaseImpl(
     }
 
     override fun createArtImage(image: MultipartFile): CreateArtImageResponse {
-        val artist = memberService.getCurrentMember()
         val imageUrl = s3Service.uploadImage(image)
-        val artImageId = artImageService.createArtImage(ArtImage(imageUrl, artist)).id
+
+        val artImageId = transactionTemplate.execute {
+            val artist = memberService.getCurrentMember()
+            artImageService.createArtImage(ArtImage(imageUrl, artist)).id
+        } ?: throw ArtImageNotFoundException() // TODO: Make Transcation Error
 
         return CreateArtImageResponse(artImageId)
     }
@@ -63,13 +70,20 @@ class ArtUseCaseImpl(
         artService.getRandomArt()
             .let { GetRandomArtResponse.from(it) }
 
+    @Transactional(readOnly = true)
     override fun getArts(artistId: Long, page: Int, size: Int): List<SimpleArtDto> =
         artService.getArtsByArtistId(artistId, page, size)
             .map { SimpleArtDto.from(it) }
 
+    @Transactional(readOnly = true)
     override fun getMyArts(page: Int, size: Int): List<SimpleArtDto> {
         val artist = memberService.getCurrentMember()
         return artService.getArtsByArtistId(artist.id, page, size)
             .map { SimpleArtDto.from(it) }
     }
+
+    @Transactional(readOnly = true)
+    override fun getArt(artId: Long): GetArtResponseDto =
+        artService.getArtById(artId)
+            .let { GetArtResponseDto.from(it) }
 }
