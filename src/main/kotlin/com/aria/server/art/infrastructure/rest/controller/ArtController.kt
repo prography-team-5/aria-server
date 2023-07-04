@@ -48,7 +48,7 @@ class ArtController(
 
     // TODO: sorting 조건 추가
     @Operation(summary = "Get arts API")
-    @GetMapping("/{artistId}")
+    @GetMapping("/artists/{artistId}")
     fun getArts(@PathVariable artistId: Long, @RequestParam("page") page: Int, @RequestParam("size") size: Int): ResponseEntity<List<SimpleArtDto>> {
         val response = artUseCase.getArts(artistId, page, size)
         return ResponseEntity(response, OK)

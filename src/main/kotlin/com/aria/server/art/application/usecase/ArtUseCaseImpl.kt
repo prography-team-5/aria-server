@@ -3,7 +3,7 @@ package com.aria.server.art.application.usecase
 import com.aria.server.art.domain.art.Art
 import com.aria.server.art.domain.art.ArtImage
 import com.aria.server.art.domain.art.Size
-import com.aria.server.art.domain.art.Style
+import com.aria.server.art.domain.art.ArtTag
 import com.aria.server.art.infrastructure.rest.controller.ArtUseCase
 import com.aria.server.art.infrastructure.rest.dto.CreateArtImageResponse
 import com.aria.server.art.infrastructure.rest.dto.CreateArtRequest
@@ -25,14 +25,15 @@ class ArtUseCaseImpl(
     @Transactional
     override fun createArt(dto: CreateArtRequest): CreateArtResponse {
         val artist = memberService.getCurrentMember()
-        val styles = dto.styles.map { Style(it) }
+        val artTags = dto.artTags.map { ArtTag(it) }
         val artImages = dto.artImageIds.map { artImageService.getArtImageById(it) }
         val mainArtImage = artImageService.getArtImageById(dto.artImageIds[0])
 
         val art = Art(
             title = dto.title,
             year = dto.year,
-            styles = styles.toMutableList(),
+            style = dto.style,
+            tags = artTags.toMutableList(),
             size = Size(dto.size.width, dto.size.height),
             description = dto.description,
             mainImage = mainArtImage,
@@ -40,7 +41,7 @@ class ArtUseCaseImpl(
             member = artist
         )
 
-        styles.map { it.changeArt(art) }
+        artTags.map { it.changeArt(art) }
         artImages.map { it.changeArt(art) }
         artService.createArt(art)
 
@@ -57,22 +58,10 @@ class ArtUseCaseImpl(
         return CreateArtImageResponse(artImageId)
     }
 
-
     @Transactional(readOnly = true)
     override fun getRandomArt(): GetRandomArtResponse =
         artService.getRandomArt()
-            .run {
-                GetRandomArtResponse(
-                    artId = id,
-                    memberId = member.id,
-                    mainImageUrl = mainImage.url,
-                    title = title,
-                    year = year,
-                    styles = styles.map { it.name },
-                    size = size,
-                    description = description
-                )
-            }
+            .let { GetRandomArtResponse.from(it) }
 
     override fun getArts(artistId: Long, page: Int, size: Int): List<SimpleArtDto> =
         artService.getArtsByArtistId(artistId, page, size)

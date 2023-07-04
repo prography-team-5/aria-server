@@ -32,27 +32,27 @@ class SecurityConfig (
     @Throws(Exception::class)
     protected fun config(http: HttpSecurity): SecurityFilterChain =
          http
-            .csrf().disable()
-            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter::class.java)
-            .exceptionHandling()
-            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-            .accessDeniedHandler(jwtAccessDeniedHandler)
-
-            .and()
-            .apply(JwtSecurityConfig(jwtProvider))
-
-            .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
-            .and()
-            .authorizeHttpRequests { authorize ->
-                authorize
-                    .shouldFilterAllDispatcherTypes(false)
-                    .antMatchers("/swagger-ui/**", "/api-docs/**", "/v1/auth/sign-up", "/v1/auth/sign-in", "/api")
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated()
-            }
+//            .csrf().disable()
+//            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter::class.java)
+//            .exceptionHandling()
+//            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+//            .accessDeniedHandler(jwtAccessDeniedHandler)
+//
+//            .and()
+//            .apply(JwtSecurityConfig(jwtProvider))
+//
+//            .and()
+//            .sessionManagement()
+//            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//
+//            .and()
+//            .authorizeHttpRequests { authorize ->
+//                authorize
+//                    .shouldFilterAllDispatcherTypes(false)
+//                    .antMatchers("/swagger-ui/**", "/api-docs/**", "/v1/auth/sign-up", "/v1/auth/sign-in", "/api")
+//                    .permitAll()
+//                    .anyRequest()
+//                    .authenticated()
+//            }
              .build()
 }

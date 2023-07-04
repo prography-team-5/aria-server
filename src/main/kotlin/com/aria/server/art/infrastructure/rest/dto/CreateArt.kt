@@ -3,7 +3,8 @@ package com.aria.server.art.infrastructure.rest.dto
 data class CreateArtRequest(
     val title: String,
     val year: Int,
-    val styles: List<String>,
+    val style: String,
+    val artTags: List<String>,
     val size: Size,
     val description: String,
     val artImageIds: List<Long>,

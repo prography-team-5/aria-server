@@ -9,8 +9,9 @@ class Art (
     title: String,
     mainImage: ArtImage,
     images: MutableList<ArtImage>,
+    style: String,
     year: Int,
-    styles: MutableList<Style>,
+    tags: MutableList<ArtTag>,
     size: Size,
     description: String,
     member: Member
@@ -32,11 +33,15 @@ class Art (
         protected set
 
     @Column(nullable = false)
+    var style: String = style
+        protected set
+
+    @Column(nullable = false)
     var year: Int = year
         protected set
 
     @OneToMany(mappedBy = "art", cascade = [CascadeType.PERSIST])
-    var styles: MutableList<Style> = styles
+    var artTags: MutableList<ArtTag> = tags
         protected set
 
     @Embedded
