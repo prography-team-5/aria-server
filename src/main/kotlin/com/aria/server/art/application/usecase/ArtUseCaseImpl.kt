@@ -4,7 +4,6 @@ import com.aria.server.art.domain.art.Art
 import com.aria.server.art.domain.art.ArtImage
 import com.aria.server.art.domain.art.Size
 import com.aria.server.art.domain.art.Style
-import com.aria.server.art.infrastructure.rest.controller.ArtService
 import com.aria.server.art.infrastructure.rest.controller.ArtUseCase
 import com.aria.server.art.infrastructure.rest.dto.CreateArtImageResponse
 import com.aria.server.art.infrastructure.rest.dto.CreateArtRequest
@@ -58,6 +57,8 @@ class ArtUseCaseImpl(
         return CreateArtImageResponse(artImageId)
     }
 
+
+    @Transactional(readOnly = true)
     override fun getRandomArt(): GetRandomArtResponse =
         artService.getRandomArt()
             .run {
@@ -73,22 +74,13 @@ class ArtUseCaseImpl(
                 )
             }
 
-    override fun getArts(page: Int, size: Int): List<SimpleArtDto> {
-        TODO("Not yet implemented")
-    }
+    override fun getArts(artistId: Long, page: Int, size: Int): List<SimpleArtDto> =
+        artService.getArtsByArtistId(artistId, page, size)
+            .map { SimpleArtDto.from(it) }
 
     override fun getMyArts(page: Int, size: Int): List<SimpleArtDto> {
         val artist = memberService.getCurrentMember()
-        return artService.getMyArts(artist, page, size)
-            .map {
-                SimpleArtDto(
-                    title = it.title,
-                    mainImageUrl = it.mainImage.url,
-                    year = it.year,
-                    size = it.size,
-                    styles = it.styles,
-                    createdAt = it.createdAt
-                )
-            }
+        return artService.getArtsByArtistId(artist.id, page, size)
+            .map { SimpleArtDto.from(it) }
     }
 }

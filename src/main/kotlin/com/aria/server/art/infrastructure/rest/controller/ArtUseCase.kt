@@ -12,6 +12,6 @@ interface ArtUseCase {
     fun createArtImage(image: MultipartFile): CreateArtImageResponse
     fun getRandomArt(): GetRandomArtResponse
 
-    fun getArts(page: Int, size: Int): List<SimpleArtDto>
+    fun getArts(artistId: Long, page: Int, size: Int): List<SimpleArtDto>
     fun getMyArts(page: Int, size: Int): List<SimpleArtDto>
 }
