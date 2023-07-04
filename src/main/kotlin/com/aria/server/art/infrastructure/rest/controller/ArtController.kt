@@ -4,6 +4,7 @@ import com.aria.server.art.infrastructure.rest.dto.CreateArtImageResponse
 import com.aria.server.art.infrastructure.rest.dto.CreateArtRequest
 import com.aria.server.art.infrastructure.rest.dto.CreateArtResponse
 import com.aria.server.art.infrastructure.rest.dto.GetRandomArtResponse
+import com.aria.server.art.infrastructure.rest.dto.SimpleArtDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus.*
@@ -41,6 +42,23 @@ class ArtController(
     @GetMapping("/random")
     fun getRandomArt(): ResponseEntity<GetRandomArtResponse> {
         val response = artUseCase.getRandomArt()
+        return ResponseEntity(response, OK)
+    }
+
+    // TODO: sorting 조건 추가
+    @Operation(summary = "Get arts API")
+    @GetMapping
+    fun getArts(@RequestParam("page") page: Int, @RequestParam("size") size: Int): ResponseEntity<List<SimpleArtDto>> {
+        val response = artUseCase.getArts(page, size)
+        return ResponseEntity(response, OK)
+    }
+
+    // TODO: sorting 조건 추가
+
+    @Operation(summary = "Get my arts API")
+    @GetMapping
+    fun getMyArts(@RequestParam("page") page: Int, @RequestParam("size") size: Int): ResponseEntity<List<SimpleArtDto>> {
+        val response = artUseCase.getMyArts(page, size)
         return ResponseEntity(response, OK)
     }
 }

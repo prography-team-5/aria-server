@@ -10,6 +10,7 @@ import com.aria.server.art.infrastructure.rest.dto.CreateArtImageResponse
 import com.aria.server.art.infrastructure.rest.dto.CreateArtRequest
 import com.aria.server.art.infrastructure.rest.dto.CreateArtResponse
 import com.aria.server.art.infrastructure.rest.dto.GetRandomArtResponse
+import com.aria.server.art.infrastructure.rest.dto.SimpleArtDto
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
@@ -71,4 +72,23 @@ class ArtUseCaseImpl(
                     description = description
                 )
             }
+
+    override fun getArts(page: Int, size: Int): List<SimpleArtDto> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getMyArts(page: Int, size: Int): List<SimpleArtDto> {
+        val artist = memberService.getCurrentMember()
+        return artService.getMyArts(artist, page, size)
+            .map {
+                SimpleArtDto(
+                    title = it.title,
+                    mainImageUrl = it.mainImage.url,
+                    year = it.year,
+                    size = it.size,
+                    styles = it.styles,
+                    createdAt = it.createdAt
+                )
+            }
+    }
 }
