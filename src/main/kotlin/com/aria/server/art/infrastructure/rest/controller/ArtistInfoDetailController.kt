@@ -23,6 +23,12 @@ class ArtistInfoDetailController (
     fun getArtistInfoDetail(artistId: Long): Response =
         success(OK.reasonPhrase, artistInfoDetailUseCase.getArtistInfoDetail(artistId))
 
+    @Operation(summary = "Get My Artist Info Detail API")
+    @GetMapping("/me")
+    @ResponseStatus(OK)
+    fun getMyArtistInfoDetail(): Response =
+        success(OK.reasonPhrase, artistInfoDetailUseCase.getMyArtistInfoDetail())
+
     @Operation(summary = "Get Random Artist Info Detail API")
     @GetMapping("/rand")
     @ResponseStatus(OK)

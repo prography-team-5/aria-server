@@ -14,6 +14,7 @@ interface FollowRepository: JpaRepository<Follow, Long>{
     @EntityGraph(attributePaths = ["followee"])
     fun findFollowsByFollowerId(id: Long, pageable: Pageable): Slice<Follow>
     fun existsByFollowerAndFollowee(follower: Member, followee: Member): Boolean
+    fun findByFollowerAndFollowee(follower: Member, followee: Member): Follow?
     fun countByFolloweeId(id: Long): Int
     fun countByFollowerId(id: Long): Int
 }
