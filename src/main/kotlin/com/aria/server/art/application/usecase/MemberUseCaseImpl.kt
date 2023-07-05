@@ -26,6 +26,7 @@ class MemberUseCaseImpl (
     @Transactional
     override fun editNickname(dto: EditNicknameRequestDto) {
         val currentMember = memberService.getCurrentMember()
+        memberService.checkDuplicateMemberByNickname(dto.nickname)
         currentMember.changeNickname(dto.nickname)
     }
 
