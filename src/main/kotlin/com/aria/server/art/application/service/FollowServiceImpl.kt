@@ -27,14 +27,14 @@ class FollowServiceImpl(
         }
     }
 
-    override fun deleteFollow(follower: Member, followId: Long) =
-        getFollowById(followId).run {
-            if (this.follower == follower) {
-                followRepository.delete(this)
-            } else {
-                throw UnauthorizedException()
-            }
+    override fun deleteFollow(follower: Member, followee: Member) =
+        getFollowByFollowerAndFollowee(follower, followee).run {
+            followRepository.delete(this)
         }
+
+    override fun isFollowee(follower: Member, target: Member): Boolean =
+        followRepository.existsByFollowerAndFollowee(follower, target)
+
 
     override fun getFollowsByFollowerId(id: Long, pageable: Pageable): Slice<Follow> {
         val follows = followRepository.findFollowsByFollowerId(id, pageable)
@@ -61,10 +61,12 @@ class FollowServiceImpl(
     override fun getFolloweeCount(memberId: Long): Int =
         followRepository.countByFolloweeId(memberId)
 
-
     private fun getFollowById(id: Long): Follow =
         followRepository.findByIdOrNull(id)
             ?: throw FollowNotFoundException()
 
+    private fun getFollowByFollowerAndFollowee(follower: Member, followee: Member): Follow =
+        followRepository.findByFollowerAndFollowee(follower, followee)
+            ?: throw FollowNotFoundException()
 
 }

@@ -27,9 +27,9 @@ class FollowController (
     @Operation(summary = "Unfollow API")
     @DeleteMapping("")
     @ResponseStatus(OK)
-    fun unfollow(followId: Long): Response {
-        followUseCase.unFollow(followId)
-        return success(CREATED.reasonPhrase)
+    fun unfollow(followeeId: Long): Response {
+        followUseCase.unFollow(followeeId)
+        return success(OK.reasonPhrase)
     }
 
     @Operation(summary = "Get follower list API")

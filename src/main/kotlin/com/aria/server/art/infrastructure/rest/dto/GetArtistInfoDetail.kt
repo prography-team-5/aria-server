@@ -10,6 +10,7 @@ data class GetArtistInfoDetailResponseDto (
     val artistProfile: ArtistProfileResponseDto,
     val artistTags: List<ArtistTagResponseDto>,
     val followerCount: Int,
+    val isFollowee: Boolean?,
     val intro: String?,
     val socialLinks: List<SocialLinkResponseDto>
 ) {
@@ -19,12 +20,14 @@ data class GetArtistInfoDetailResponseDto (
             artistInfo: ArtistInfo,
             artistTags: MutableList<ArtistTag>,
             followerCount: Int,
+            isFollowee: Boolean?,
             socialLinks: MutableList<SocialLink>
             ): GetArtistInfoDetailResponseDto =
             GetArtistInfoDetailResponseDto(
                 ArtistProfileResponseDto.from(artistProfile),
                 artistTags.map { tag -> ArtistTagResponseDto.from(tag) },
                 followerCount,
+                isFollowee,
                 artistInfo.intro,
                 socialLinks.map { socialLink -> SocialLinkResponseDto.from(socialLink) }
             )

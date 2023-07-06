@@ -24,7 +24,7 @@ class SecurityConfig (
     private val jwtAccessDeniedHandler: JwtAccessDeniedHandler
 ) {
 
-    // 최종적으론 패스워드 없이 로그인, 현재는 Deprecated 문제해결 요
+    // TODO 최종적으론 패스워드 없이 로그인, 현재는 Deprecated 문제해결 요
     @Bean
     fun passwordEncoder(): PasswordEncoder = NoOpPasswordEncoder.getInstance()
 

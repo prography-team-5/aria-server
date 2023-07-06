@@ -10,4 +10,6 @@ interface MemberService {
     fun getCurrentMember(): Member
     fun getMemberById(id: Long): Member
     fun checkExistsMemberByEmail(email: String)
+    fun checkDuplicateMemberByNickname(nickname: String)
+
 }

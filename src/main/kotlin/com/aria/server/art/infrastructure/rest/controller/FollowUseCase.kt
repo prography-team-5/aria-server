@@ -7,7 +7,7 @@ import org.springframework.data.domain.Slice
 
 interface FollowUseCase {
     fun follow(followeeId: Long)
-    fun unFollow(followId: Long)
+    fun unFollow(followeeId: Long)
     fun getFollowers(followeeId: Long, pageable: Pageable): Slice<GetFollowerResponseDto>
     fun getMyFollowers(pageable: Pageable): Slice<GetFollowerResponseDto>
     fun getFollowees(followerId: Long, pageable: Pageable): Slice<GetFolloweeResponseDto>

@@ -39,7 +39,7 @@ class MemberServiceImpl (
         memberRepository.findByNickname(nickname)
             ?:throw MemberNotFoundException("닉네임")
 
-    fun checkDuplicateMemberByNickname(nickname: String) {
+    override fun checkDuplicateMemberByNickname(nickname: String) {
         if (memberRepository.existsByNickname(nickname))
             throw DuplicatedNicknameException()
     }

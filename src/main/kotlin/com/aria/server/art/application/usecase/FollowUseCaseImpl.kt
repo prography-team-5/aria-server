@@ -22,25 +22,22 @@ class FollowUseCaseImpl (
     }
 
     @Transactional
-    override fun unFollow(followId: Long) {
+    override fun unFollow(followeeId: Long) {
         val follower = memberService.getCurrentMember()
-        followService.deleteFollow(follower, followId)
+        val followee = memberService.getMemberById(followeeId)
+        followService.deleteFollow(follower, followee)
     }
 
     @Transactional(readOnly = true)
     override fun getFollowers(followeeId: Long, pageable: Pageable): Slice<GetFollowerResponseDto> =
         followService.getFollowsByFolloweeId(followeeId, pageable)
-            .map { follow ->
-                GetFollowerResponseDto.from(follow)
-            }
+            .map { follow -> GetFollowerResponseDto.from(follow) }
 
     @Transactional(readOnly = true)
     override fun getMyFollowers(pageable: Pageable): Slice<GetFollowerResponseDto> {
         val currentMemberId = memberService.getCurrentMember().id
         return followService.getFollowsByFolloweeId(currentMemberId, pageable)
-            .map { follow ->
-                GetFollowerResponseDto.from(follow)
-            }
+            .map { follow -> GetFollowerResponseDto.from(follow) }
     }
 
 
