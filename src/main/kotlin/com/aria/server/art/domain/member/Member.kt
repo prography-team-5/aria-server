@@ -11,7 +11,7 @@ import javax.persistence.Id
 class Member(
     email: String,
     nickname: String,
-    profileImageUrl: String,
+    profileImageUrl: String?,
     role: Role,
     platformType: PlatformType
 ): AuditEntity() {
@@ -27,8 +27,8 @@ class Member(
     var nickname: String = nickname
         protected set
 
-    @Column(nullable = false)
-    var profileImageUrl: String = profileImageUrl
+    @Column(nullable = true)
+    var profileImageUrl: String? = profileImageUrl
         protected set
 
     @Column(nullable = false)

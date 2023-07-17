@@ -7,6 +7,7 @@ import com.aria.server.art.domain.sociallink.SocialType
 import com.aria.server.art.domain.artisttag.ArtistTag
 
 data class GetArtistInfoDetailResponseDto (
+    val profileArtImageUrl: String,
     val artistProfile: ArtistProfileResponseDto,
     val artistTags: List<ArtistTagResponseDto>,
     val followerCount: Int,
@@ -24,6 +25,8 @@ data class GetArtistInfoDetailResponseDto (
             socialLinks: MutableList<SocialLink>
             ): GetArtistInfoDetailResponseDto =
             GetArtistInfoDetailResponseDto(
+                artistInfo.profileArtImageUrl
+                    ?:"basic_art.jpg",
                 ArtistProfileResponseDto.from(artistProfile),
                 artistTags.map { tag -> ArtistTagResponseDto.from(tag) },
                 followerCount,
@@ -73,6 +76,7 @@ data class ArtistProfileResponseDto (
                 member.id,
                 member.nickname,
                 member.profileImageUrl
+                    ?:"basic_member.jpg"
             )
     }
 }

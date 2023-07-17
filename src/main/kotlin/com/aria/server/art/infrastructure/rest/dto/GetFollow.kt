@@ -15,6 +15,7 @@ data class GetFollowerResponseDto(
                 follow.follower.id,
                 follow.follower.nickname,
                 follow.follower.profileImageUrl
+                    ?:"basic_member.jpg"
             )
     }
 }
@@ -32,6 +33,7 @@ data class GetFolloweeResponseDto(
                 follow.followee.id,
                 follow.followee.nickname,
                 follow.followee.profileImageUrl
+                    ?:"basic_member.jpg"
             )
     }
 }
