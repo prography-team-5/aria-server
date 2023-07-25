@@ -14,8 +14,7 @@ data class GetMemberProfileResponseDto (
             GetMemberProfileResponseDto(
                 member.id,
                 member.nickname,
-                member.profileImageUrl
-                    ?:"basic_member.jpg",
+                member.getProfileImageUrl(),
                 member.role
             )
     }

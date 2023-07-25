@@ -34,7 +34,7 @@ class AuthUseCaseImpl(
     override fun signUp(dto: SignUpRequestDto): TokenDto =
         getEmail(dto.accessToken, dto.platformType)
             .run {
-                memberService.createMember(Member(this, dto.nickname, null, Role.ROLE_MEMBER, dto.platformType))
+                memberService.createMember(Member(this, dto.nickname, Role.ROLE_MEMBER, dto.platformType))
                 jwtProvider.createTokenDto(getUserAuthentication(this))
             }
 

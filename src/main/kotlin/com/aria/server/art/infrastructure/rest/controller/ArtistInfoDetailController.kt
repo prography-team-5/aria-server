@@ -1,6 +1,5 @@
 package com.aria.server.art.infrastructure.rest.controller
 
-import com.aria.server.art.infrastructure.rest.dto.CreateArtistInfoRequestDto
 import com.aria.server.art.infrastructure.rest.dto.CreateArtistTagRequestDto
 import com.aria.server.art.infrastructure.rest.dto.CreateSocialLinkRequestDto
 import com.aria.server.art.infrastructure.rest.dto.EditSocialLinkRequestDto
@@ -35,13 +34,6 @@ class ArtistInfoDetailController (
     fun getRandArtistInfoDetail(): Response =
         success(OK.reasonPhrase, artistInfoDetailUseCase.getRandArtistInfoDetail())
 
-    @Operation(summary = "Create Artist Info API")
-    @PostMapping("/infos")
-    @ResponseStatus(CREATED)
-    fun createArtistInfo(@RequestBody dto: CreateArtistInfoRequestDto): Response {
-        artistInfoDetailUseCase.createArtistInfo(dto)
-        return success(CREATED.reasonPhrase)
-    }
 
     @Operation(summary = "Create Artist Tag API")
     @PostMapping("/tags")

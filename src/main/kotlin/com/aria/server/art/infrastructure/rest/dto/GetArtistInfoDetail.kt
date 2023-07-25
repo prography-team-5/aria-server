@@ -5,7 +5,9 @@ import com.aria.server.art.domain.member.Member
 import com.aria.server.art.domain.sociallink.SocialLink
 import com.aria.server.art.domain.sociallink.SocialType
 import com.aria.server.art.domain.artisttag.ArtistTag
+import com.fasterxml.jackson.annotation.JsonInclude
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class GetArtistInfoDetailResponseDto (
     val profileArtImageUrl: String,
     val artistProfile: ArtistProfileResponseDto,
@@ -25,8 +27,7 @@ data class GetArtistInfoDetailResponseDto (
             socialLinks: MutableList<SocialLink>
             ): GetArtistInfoDetailResponseDto =
             GetArtistInfoDetailResponseDto(
-                artistInfo.profileArtImageUrl
-                    ?:"basic_art.jpg",
+                artistInfo.getProfileArtImageUrl(),
                 ArtistProfileResponseDto.from(artistProfile),
                 artistTags.map { tag -> ArtistTagResponseDto.from(tag) },
                 followerCount,
@@ -75,8 +76,7 @@ data class ArtistProfileResponseDto (
             ArtistProfileResponseDto(
                 member.id,
                 member.nickname,
-                member.profileImageUrl
-                    ?:"basic_member.jpg"
+                member.getProfileImageUrl()
             )
     }
 }

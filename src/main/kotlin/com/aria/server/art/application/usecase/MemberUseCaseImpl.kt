@@ -1,5 +1,6 @@
 package com.aria.server.art.application.usecase
 
+import com.aria.server.art.domain.artistinfo.ArtistInfo
 import com.aria.server.art.infrastructure.rest.controller.MemberUseCase
 import com.aria.server.art.infrastructure.rest.dto.EditNicknameRequestDto
 import com.aria.server.art.infrastructure.rest.dto.GetMemberProfileResponseDto
@@ -8,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class MemberUseCaseImpl (
-    private val memberService: MemberService
+    private val memberService: MemberService,
+    private val artistInfoService: ArtistInfoService
 ): MemberUseCase {
 
     @Transactional(readOnly = true)
@@ -28,6 +30,13 @@ class MemberUseCaseImpl (
         val currentMember = memberService.getCurrentMember()
         memberService.checkDuplicateMemberByNickname(dto.nickname)
         currentMember.changeNickname(dto.nickname)
+    }
+
+    @Transactional
+    override fun changeRoleToArtist(id: Long) {
+        val member = memberService.getMemberById(id)
+        val artistInfo = ArtistInfo(member)
+        artistInfoService.createArtistInfo(artistInfo)
     }
 
     // TODO 프로필 이미지 바꾸기
