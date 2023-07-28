@@ -49,13 +49,6 @@ class ArtistInfoDetailUseCaseImpl (
     }
 
     @Transactional
-    override fun createArtistInfo(dto: CreateArtistInfoRequestDto) {
-        val artist = memberService.getCurrentMember()
-        val artistInfo = dto.toEntity(artist)
-        artistInfoService.createArtistInfo(artistInfo)
-    }
-
-    @Transactional
     override fun editArtistInfoIntro(dto: EditArtistInfoIntroRequestDto) {
         val artist = memberService.getCurrentMember()
         val artistInfo = artistInfoService.getArtistInfo(artist.id)
