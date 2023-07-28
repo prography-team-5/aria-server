@@ -14,7 +14,7 @@ data class GetFollowerResponseDto(
                 follow.id,
                 follow.follower.id,
                 follow.follower.nickname,
-                follow.follower.profileImageUrl
+                follow.follower.getProfileImageUrl()
             )
     }
 }
@@ -31,7 +31,7 @@ data class GetFolloweeResponseDto(
                 follow.id,
                 follow.followee.id,
                 follow.followee.nickname,
-                follow.followee.profileImageUrl
+                follow.followee.getProfileImageUrl()
             )
     }
 }

@@ -11,10 +11,9 @@ import javax.persistence.Id
 class Member(
     email: String,
     nickname: String,
-    profileImageUrl: String,
     role: Role,
     platformType: PlatformType
-): AuditEntity() {
+) : AuditEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
@@ -27,9 +26,8 @@ class Member(
     var nickname: String = nickname
         protected set
 
-    @Column(nullable = false)
-    var profileImageUrl: String = profileImageUrl
-        protected set
+    @Column(nullable = true)
+    private var profileImageUrl: String? = null
 
     @Column(nullable = false)
     var role: Role = role
@@ -48,6 +46,8 @@ class Member(
     }
 
     fun changeRole(role: Role) {
-        this.profileImageUrl = profileImageUrl
+        this.role = role
     }
+
+    fun getProfileImageUrl() = profileImageUrl ?: "basic_member.jpg"
 }

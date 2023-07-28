@@ -29,13 +29,12 @@ class AuthUseCaseImpl(
     val KAKAO_API = "https://kapi.kakao.com/v2/user/me"
     val NAVER_API = "https://openapi.naver.com/v1/nid/me"
     val APPLE_API = "https://appleid.apple.com/auth/userinfo"
-    val BASIC_IMAGE = "basic.jpg"
 
     @Transactional
     override fun signUp(dto: SignUpRequestDto): TokenDto =
         getEmail(dto.accessToken, dto.platformType)
             .run {
-                memberService.createMember(Member(this, dto.nickname, BASIC_IMAGE, Role.ROLE_MEMBER, dto.platformType))
+                memberService.createMember(Member(this, dto.nickname, Role.ROLE_MEMBER, dto.platformType))
                 jwtProvider.createTokenDto(getUserAuthentication(this))
             }
 

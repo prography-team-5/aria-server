@@ -5,6 +5,7 @@ import com.aria.server.art.infrastructure.rest.response.Response
 import com.aria.server.art.infrastructure.rest.response.Response.Companion.success
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.OK
 import org.springframework.web.bind.annotation.*
 
@@ -32,5 +33,13 @@ class MemberController (
     @ResponseStatus(OK)
     fun editNickname(@RequestBody dto: EditNicknameRequestDto): Response =
         success(OK.reasonPhrase, memberUseCase.editNickname(dto))
+
+    @Operation(summary = "Change Role To Artist API")
+    @PostMapping("/role/artist")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun changeRoleToArtist(id: Long): Response {
+        memberUseCase.changeRoleToArtist(id)
+        return success(HttpStatus.CREATED.reasonPhrase)
+    }
 
 }

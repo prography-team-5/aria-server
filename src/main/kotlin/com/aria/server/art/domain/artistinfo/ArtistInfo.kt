@@ -7,8 +7,6 @@ import javax.persistence.*
 @Entity
 class ArtistInfo (
     member: Member,
-    profileArtImageUrl: String?,
-    intro: String?
 ): AuditEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,12 +18,10 @@ class ArtistInfo (
         protected set
 
     @Column(nullable = true)
-    var profileArtImageUrl: String? = profileArtImageUrl
-        protected set
+    private var profileArtImageUrl: String? = null
 
     @Column(nullable = true)
-    var intro: String? = intro
-        protected set
+    var intro: String? = null
 
     fun changeProfileArtImageUrl(profileArtImageUrl: String) {
         this.profileArtImageUrl = profileArtImageUrl
@@ -34,5 +30,7 @@ class ArtistInfo (
     fun changeIntro(intro: String) {
         this.intro = intro
     }
+
+    fun getProfileArtImageUrl() = profileArtImageUrl ?: "basic_art.jpg"
 
 }
