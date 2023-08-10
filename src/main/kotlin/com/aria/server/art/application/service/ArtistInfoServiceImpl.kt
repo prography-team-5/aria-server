@@ -19,11 +19,6 @@ class ArtistInfoServiceImpl (
             artistInfoRepository.save(artistInfo)
         }
     }
-
-    override fun updateArtistInfo() {
-        TODO("Not yet implemented")
-    }
-
     override fun getArtistInfo(artistId: Long): ArtistInfo =
         artistInfoRepository.findByMemberId(artistId)
             ?: throw ArtistInfoNotFoundException()
