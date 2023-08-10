@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile
 @Service
 class ArtUseCaseImpl(
     private val artService: ArtService,
+    private val artistInfoService: ArtistInfoService,
+    private val socialLinkService: SocialLinkService,
     private val memberService: MemberService,
     private val artImageService: ArtImageService,
     private val s3Service: S3Service,
@@ -83,7 +85,11 @@ class ArtUseCaseImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun getArt(artId: Long): GetArtResponseDto =
-        artService.getArtById(artId)
-            .let { GetArtResponseDto.from(it) }
+    override fun getArt(artId: Long): GetArtResponseDto {
+        val art = artService.getArtById(artId)
+        val artistInfo = artistInfoService.getArtistInfo(art.member.id)
+        val socialLinks = socialLinkService.getSocialLinks(artistInfo.id)
+
+        return GetArtResponseDto.from(art, artistInfo, socialLinks)
+    }
 }
