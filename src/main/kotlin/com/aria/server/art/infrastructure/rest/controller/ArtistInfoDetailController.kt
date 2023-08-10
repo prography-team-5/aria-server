@@ -78,7 +78,7 @@ class ArtistInfoDetailController (
     @Operation(summary = "Edit Artist Intro API")
     @PatchMapping("/intro")
     @ResponseStatus(OK)
-    fun editArtistInfo(@RequestBody dto: EditArtistInfoIntroRequestDto): Response {
+    fun editArtistInfoIntro(@RequestBody dto: EditArtistInfoIntroRequestDto): Response {
         artistInfoDetailUseCase.editArtistInfoIntro(dto)
         return success(OK.reasonPhrase)
     }
