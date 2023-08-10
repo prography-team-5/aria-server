@@ -10,6 +10,7 @@ import com.aria.server.art.infrastructure.rest.dto.CreateArtImageResponse
 import com.aria.server.art.infrastructure.rest.dto.CreateArtRequest
 import com.aria.server.art.infrastructure.rest.dto.CreateArtResponse
 import com.aria.server.art.infrastructure.rest.dto.GetArtResponseDto
+import com.aria.server.art.infrastructure.rest.dto.GetRandomArtDto
 import com.aria.server.art.infrastructure.rest.dto.GetRandomArtResponse
 import com.aria.server.art.infrastructure.rest.dto.SimpleArtDto
 import org.springframework.stereotype.Service
@@ -62,15 +63,14 @@ class ArtUseCaseImpl(
         val artImageId = transactionTemplate.execute {
             val artist = memberService.getCurrentMember()
             artImageService.createArtImage(ArtImage(imageUrl, artist)).id
-        } ?: throw ArtImageNotFoundException() // TODO: Make Transcation Error
+        } ?: throw ArtImageNotFoundException() // TODO: Make Transaction Error
 
         return CreateArtImageResponse(artImageId)
     }
 
     @Transactional(readOnly = true)
-    override fun getRandomArt(): GetRandomArtResponse =
-        artService.getRandomArt()
-            .let { GetRandomArtResponse.from(it) }
+    override fun getRandomArts(size: Int): GetRandomArtResponse =
+        GetRandomArtResponse(artService.getRandomArts(size).map { GetRandomArtDto.from(it) })
 
     @Transactional(readOnly = true)
     override fun getArts(artistId: Long, page: Int, size: Int): List<SimpleArtDto> =

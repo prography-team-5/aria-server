@@ -42,8 +42,8 @@ class ArtController(
 
     @Operation(summary = "Get random art API")
     @GetMapping("/random")
-    fun getRandomArt(): ResponseEntity<GetRandomArtResponse> {
-        val response = artUseCase.getRandomArt()
+    fun getRandomArt(@RequestParam("size") size: Int): ResponseEntity<GetRandomArtResponse> {
+        val response = artUseCase.getRandomArts(size)
         return ResponseEntity(response, OK)
     }
 

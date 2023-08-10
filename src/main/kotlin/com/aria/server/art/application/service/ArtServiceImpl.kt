@@ -18,8 +18,8 @@ class ArtServiceImpl(
         artRepository.save(art)
 
 
-    override fun getRandomArt(): Art =
-        artRepository.findRandomArt()
+    override fun getRandomArts(size: Int): List<Art> =
+        artRepository.findRandomArts(size)
 
 
     override fun getArtsByArtistId(artistId: Long, page: Int, size: Int): List<Art> =

@@ -4,6 +4,10 @@ import com.aria.server.art.domain.art.Art
 import com.aria.server.art.domain.art.Size
 
 data class GetRandomArtResponse(
+    val arts: List<GetRandomArtDto>
+)
+
+data class GetRandomArtDto(
     val artId: Long,
     val memberId: Long,
     val mainImageUrl: String,
@@ -16,8 +20,8 @@ data class GetRandomArtResponse(
 ) {
 
     companion object {
-        fun from(art: Art): GetRandomArtResponse =
-            GetRandomArtResponse(
+        fun from(art: Art): GetRandomArtDto =
+            GetRandomArtDto(
                 artId = art.id,
                 memberId = art.member.id,
                 mainImageUrl = art.mainImage.url,
