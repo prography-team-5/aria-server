@@ -3,11 +3,7 @@ package com.aria.server.art.infrastructure.rest.dto
 import com.aria.server.art.domain.art.Art
 import com.aria.server.art.domain.art.Size
 
-data class GetRandomArtResponse(
-    val arts: List<GetRandomArtDto>
-)
-
-data class GetRandomArtDto(
+data class GetRandomArtResponseDto(
     val artId: Long,
     val memberId: Long,
     val mainImageUrl: String,
@@ -20,8 +16,8 @@ data class GetRandomArtDto(
 ) {
 
     companion object {
-        fun from(art: Art): GetRandomArtDto =
-            GetRandomArtDto(
+        fun from(art: Art): GetRandomArtResponseDto =
+            GetRandomArtResponseDto(
                 artId = art.id,
                 memberId = art.member.id,
                 mainImageUrl = art.mainImage.url,

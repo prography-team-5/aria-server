@@ -4,7 +4,7 @@ import com.aria.server.art.infrastructure.rest.dto.CreateArtImageResponse
 import com.aria.server.art.infrastructure.rest.dto.CreateArtRequest
 import com.aria.server.art.infrastructure.rest.dto.CreateArtResponse
 import com.aria.server.art.infrastructure.rest.dto.GetArtResponseDto
-import com.aria.server.art.infrastructure.rest.dto.GetRandomArtResponse
+import com.aria.server.art.infrastructure.rest.dto.GetRandomArtResponseDto
 import com.aria.server.art.infrastructure.rest.dto.SimpleArtDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -42,7 +42,7 @@ class ArtController(
 
     @Operation(summary = "Get random art API")
     @GetMapping("/random")
-    fun getRandomArt(@RequestParam("size") size: Int): ResponseEntity<GetRandomArtResponse> {
+    fun getRandomArt(@RequestParam("size") size: Int): ResponseEntity<List<GetRandomArtResponseDto>> {
         val response = artUseCase.getRandomArts(size)
         return ResponseEntity(response, OK)
     }
