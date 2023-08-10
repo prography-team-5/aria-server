@@ -18,6 +18,4 @@ class ArtImageServiceImpl(
     override fun getArtImageById(id: Long): ArtImage =
         artImageRepository.findByIdOrNull(id)
             ?: throw ArtImageNotFoundException()
-
-
 }
