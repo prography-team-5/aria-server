@@ -42,24 +42,24 @@ class ArtController(
 
     @Operation(summary = "Get random art API")
     @GetMapping("/random")
-    fun getRandomArt(@RequestParam("size") size: Int): ResponseEntity<List<GetRandomArtResponseDto>> {
-        val response = artUseCase.getRandomArts(size)
+    fun getRandomArt(@RequestParam("count") count: Int): ResponseEntity<List<GetRandomArtResponseDto>> {
+        val response = artUseCase.getRandomArts(count)
         return ResponseEntity(response, OK)
     }
 
     // TODO: sorting 조건 추가
     @Operation(summary = "Get arts API")
     @GetMapping("/artists/{artistId}")
-    fun getArts(@PathVariable artistId: Long, @RequestParam("page") page: Int, @RequestParam("size") size: Int): ResponseEntity<List<SimpleArtDto>> {
-        val response = artUseCase.getArts(artistId, page, size)
+    fun getArts(@PathVariable artistId: Long, @RequestParam("page") page: Int, @RequestParam("count") count: Int): ResponseEntity<List<SimpleArtDto>> {
+        val response = artUseCase.getArts(artistId, page, count)
         return ResponseEntity(response, OK)
     }
 
     // TODO: sorting 조건 추가
     @Operation(summary = "Get my arts API")
     @GetMapping
-    fun getMyArts(@RequestParam("page") page: Int, @RequestParam("size") size: Int): ResponseEntity<List<SimpleArtDto>> {
-        val response = artUseCase.getMyArts(page, size)
+    fun getMyArts(@RequestParam("page") page: Int, @RequestParam("count") count: Int): ResponseEntity<List<SimpleArtDto>> {
+        val response = artUseCase.getMyArts(page, count)
         return ResponseEntity(response, OK)
     }
 

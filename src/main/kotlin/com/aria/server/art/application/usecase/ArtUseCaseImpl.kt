@@ -68,18 +68,18 @@ class ArtUseCaseImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun getRandomArts(size: Int): List<GetRandomArtResponseDto> =
-        artService.getRandomArts(size).map { GetRandomArtResponseDto.from(it) }
+    override fun getRandomArts(count: Int): List<GetRandomArtResponseDto> =
+        artService.getRandomArts(count).map { GetRandomArtResponseDto.from(it) }
 
     @Transactional(readOnly = true)
-    override fun getArts(artistId: Long, page: Int, size: Int): List<SimpleArtDto> =
-        artService.getArtsByArtistId(artistId, page, size)
+    override fun getArts(artistId: Long, page: Int, count: Int): List<SimpleArtDto> =
+        artService.getArtsByArtistId(artistId, page, count)
             .map { SimpleArtDto.from(it) }
 
     @Transactional(readOnly = true)
-    override fun getMyArts(page: Int, size: Int): List<SimpleArtDto> {
+    override fun getMyArts(page: Int, count: Int): List<SimpleArtDto> {
         val artist = memberService.getCurrentMember()
-        return artService.getArtsByArtistId(artist.id, page, size)
+        return artService.getArtsByArtistId(artist.id, page, count)
             .map { SimpleArtDto.from(it) }
     }
 

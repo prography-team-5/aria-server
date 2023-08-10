@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ArtRepository: JpaRepository<Art, Long> {
-    @Query(value = "SELECT * FROM art ORDER BY RAND() LIMIT :size", nativeQuery = true)
-    fun findRandomArts(@Param("size") size: Int): List<Art>
+    @Query(value = "SELECT * FROM art ORDER BY RAND() LIMIT :count", nativeQuery = true)
+    fun findRandomArts(@Param("count") count: Int): List<Art>
 
     fun findSliceByMemberId(memberId: Long, pageable: Pageable): Slice<Art>
 }

@@ -11,8 +11,8 @@ import org.springframework.web.multipart.MultipartFile
 interface ArtUseCase {
     fun createArt(dto: CreateArtRequest): CreateArtResponse
     fun createArtImage(image: MultipartFile): CreateArtImageResponse
-    fun getRandomArts(size: Int): List<GetRandomArtResponseDto>
-    fun getArts(artistId: Long, page: Int, size: Int): List<SimpleArtDto>
-    fun getMyArts(page: Int, size: Int): List<SimpleArtDto>
+    fun getRandomArts(count: Int): List<GetRandomArtResponseDto>
+    fun getArts(artistId: Long, page: Int, count: Int): List<SimpleArtDto>
+    fun getMyArts(page: Int, count: Int): List<SimpleArtDto>
     fun getArt(artId: Long): GetArtResponseDto
 }
