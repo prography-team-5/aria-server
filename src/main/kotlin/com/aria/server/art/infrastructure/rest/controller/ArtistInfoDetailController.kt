@@ -2,6 +2,7 @@ package com.aria.server.art.infrastructure.rest.controller
 
 import com.aria.server.art.infrastructure.rest.dto.CreateArtistTagRequestDto
 import com.aria.server.art.infrastructure.rest.dto.CreateSocialLinkRequestDto
+import com.aria.server.art.infrastructure.rest.dto.EditArtistInfoIntroRequestDto
 import com.aria.server.art.infrastructure.rest.dto.EditSocialLinkRequestDto
 import com.aria.server.art.infrastructure.rest.response.Response
 import com.aria.server.art.infrastructure.rest.response.Response.Companion.success
@@ -33,7 +34,6 @@ class ArtistInfoDetailController (
     @ResponseStatus(OK)
     fun getRandArtistInfoDetail(): Response =
         success(OK.reasonPhrase, artistInfoDetailUseCase.getRandArtistInfoDetail())
-
 
     @Operation(summary = "Create Artist Tag API")
     @PostMapping("/tags")
@@ -72,6 +72,14 @@ class ArtistInfoDetailController (
     @ResponseStatus(OK)
     fun deleteSocialLink(id: Long): Response {
         artistInfoDetailUseCase.deleteSocialLink(id)
+        return success(OK.reasonPhrase)
+    }
+
+    @Operation(summary = "Edit Artist Intro API")
+    @PatchMapping("/intro")
+    @ResponseStatus(OK)
+    fun editArtistInfoIntro(@RequestBody dto: EditArtistInfoIntroRequestDto): Response {
+        artistInfoDetailUseCase.editArtistInfoIntro(dto)
         return success(OK.reasonPhrase)
     }
 
