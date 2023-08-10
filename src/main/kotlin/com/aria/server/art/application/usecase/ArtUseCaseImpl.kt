@@ -10,7 +10,7 @@ import com.aria.server.art.infrastructure.rest.dto.CreateArtImageResponse
 import com.aria.server.art.infrastructure.rest.dto.CreateArtRequest
 import com.aria.server.art.infrastructure.rest.dto.CreateArtResponse
 import com.aria.server.art.infrastructure.rest.dto.GetArtResponseDto
-import com.aria.server.art.infrastructure.rest.dto.GetRandomArtResponse
+import com.aria.server.art.infrastructure.rest.dto.GetRandomArtResponseDto
 import com.aria.server.art.infrastructure.rest.dto.SimpleArtDto
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -62,25 +62,24 @@ class ArtUseCaseImpl(
         val artImageId = transactionTemplate.execute {
             val artist = memberService.getCurrentMember()
             artImageService.createArtImage(ArtImage(imageUrl, artist)).id
-        } ?: throw ArtImageNotFoundException() // TODO: Make Transcation Error
+        } ?: throw ArtImageNotFoundException() // TODO: Make Transaction Error
 
         return CreateArtImageResponse(artImageId)
     }
 
     @Transactional(readOnly = true)
-    override fun getRandomArt(): GetRandomArtResponse =
-        artService.getRandomArt()
-            .let { GetRandomArtResponse.from(it) }
+    override fun getRandomArts(count: Int): List<GetRandomArtResponseDto> =
+        artService.getRandomArts(count).map { GetRandomArtResponseDto.from(it) }
 
     @Transactional(readOnly = true)
-    override fun getArts(artistId: Long, page: Int, size: Int): List<SimpleArtDto> =
-        artService.getArtsByArtistId(artistId, page, size)
+    override fun getArts(artistId: Long, page: Int, count: Int): List<SimpleArtDto> =
+        artService.getArtsByArtistId(artistId, page, count)
             .map { SimpleArtDto.from(it) }
 
     @Transactional(readOnly = true)
-    override fun getMyArts(page: Int, size: Int): List<SimpleArtDto> {
+    override fun getMyArts(page: Int, count: Int): List<SimpleArtDto> {
         val artist = memberService.getCurrentMember()
-        return artService.getArtsByArtistId(artist.id, page, size)
+        return artService.getArtsByArtistId(artist.id, page, count)
             .map { SimpleArtDto.from(it) }
     }
 
