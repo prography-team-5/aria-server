@@ -27,4 +27,9 @@ class S3ServiceImpl(
         }
         return s3Api.saveImage(objectKey, metadata, imageStream)
     }
+
+    override fun deleteImage(imageName: String) {
+        s3Api.deleteImage(imageName);
+    }
+
 }

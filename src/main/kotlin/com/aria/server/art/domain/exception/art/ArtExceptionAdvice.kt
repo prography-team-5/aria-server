@@ -12,7 +12,7 @@ class ArtExceptionAdvice {
     @ExceptionHandler(ArtImageS3Exception::class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     fun artImageS3ExceptionAdvice(e: ArtImageS3Exception) =
-        Response("S3에 이미지 업로드를 실패했습니다.", null)
+        Response("S3와의 통신에 실패했습니다.", null)
 
     @ExceptionHandler(ArtImageNotFoundException::class)
     @ResponseStatus(NOT_FOUND)
