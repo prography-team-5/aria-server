@@ -9,6 +9,7 @@ import com.aria.server.art.infrastructure.rest.dto.SimpleArtDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus.*
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -34,7 +35,7 @@ class ArtController(
     }
 
     @Operation(summary = "Create art image API")
-    @PostMapping("/image")
+    @PostMapping(value = ["/image"], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun createArtImage(@RequestParam("image") artImage: MultipartFile): ResponseEntity<CreateArtImageResponse> {
         val response = artUseCase.createArtImage(artImage)
         return ResponseEntity(response, CREATED)

@@ -6,12 +6,16 @@ import com.aria.server.art.infrastructure.rest.dto.EditNicknameRequestDto
 import com.aria.server.art.infrastructure.rest.dto.GetMemberProfileResponseDto
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.multipart.MultipartFile
 
 @Service
 class MemberUseCaseImpl (
     private val memberService: MemberService,
-    private val artistInfoService: ArtistInfoService
+    private val artistInfoService: ArtistInfoService,
+    private val s3Service: S3Service
 ): MemberUseCase {
+
+    val BASIC_MEMBER_PROFILE = "basic_member.jpg"
 
     @Transactional(readOnly = true)
     override fun getMemberProfile(id: Long): GetMemberProfileResponseDto {
@@ -39,11 +43,20 @@ class MemberUseCaseImpl (
         artistInfoService.createArtistInfo(artistInfo)
     }
 
-    // TODO 프로필 이미지 바꾸기
-//    @Transactional
-//    fun editMyProfileImage() {
-//        val currentMember = memberService.getCurrentMember()
-//        currentMember.changeNickname(dto.nickname)
-//    }
+    @Transactional
+    override fun changeProfileImageToNew(image: MultipartFile) {
+        val currentMember = memberService.getCurrentMember()
+        val profileImageUrl = currentMember.getProfileImageUrl()
+        if (profileImageUrl != BASIC_MEMBER_PROFILE) {
+            s3Service.deleteImage(profileImageUrl)
+        }
+        val newProfileImageUrl = s3Service.uploadImage(image)
+        currentMember.changeProfileImageUrl(newProfileImageUrl)
+    }
 
+    @Transactional
+    override fun changeProfileImageToBasic() {
+        val currentMember = memberService.getCurrentMember()
+        currentMember.changeProfileImageUrl(BASIC_MEMBER_PROFILE)
+    }
 }
