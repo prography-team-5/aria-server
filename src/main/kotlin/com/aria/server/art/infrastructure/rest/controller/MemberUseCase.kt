@@ -9,6 +9,6 @@ interface MemberUseCase {
     fun getMyProfile(): GetMemberProfileResponseDto
     fun editNickname(dto: EditNicknameRequestDto)
     fun changeRoleToArtist(id: Long)
-    fun changeProfileImageToNew(image: MultipartFile)
-    fun changeProfileImageToBasic()
+    fun changeProfileImage(image: MultipartFile)
+    fun deleteProfileImage()
 }

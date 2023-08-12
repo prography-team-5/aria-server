@@ -1,6 +1,8 @@
 package com.aria.server.art.application.usecase
 
 import com.aria.server.art.domain.artistinfo.ArtistInfo
+import com.aria.server.art.domain.exception.common.AlreadyProfileImageException
+import com.aria.server.art.domain.member.Role
 import com.aria.server.art.infrastructure.rest.controller.MemberUseCase
 import com.aria.server.art.infrastructure.rest.dto.EditNicknameRequestDto
 import com.aria.server.art.infrastructure.rest.dto.GetMemberProfileResponseDto
@@ -14,8 +16,6 @@ class MemberUseCaseImpl (
     private val artistInfoService: ArtistInfoService,
     private val s3Service: S3Service
 ): MemberUseCase {
-
-    val BASIC_MEMBER_PROFILE = "basic_member.jpg"
 
     @Transactional(readOnly = true)
     override fun getMemberProfile(id: Long): GetMemberProfileResponseDto {
@@ -39,15 +39,16 @@ class MemberUseCaseImpl (
     @Transactional
     override fun changeRoleToArtist(id: Long) {
         val member = memberService.getMemberById(id)
+        member.changeRole(Role.ROLE_ARTIST)
         val artistInfo = ArtistInfo(member)
         artistInfoService.createArtistInfo(artistInfo)
     }
 
     @Transactional
-    override fun changeProfileImageToNew(image: MultipartFile) {
+    override fun changeProfileImage(image: MultipartFile) {
         val currentMember = memberService.getCurrentMember()
-        val profileImageUrl = currentMember.getProfileImageUrl()
-        if (profileImageUrl != BASIC_MEMBER_PROFILE) {
+        if (!currentMember.isBasicProfileImage()) {
+            val profileImageUrl = currentMember.getProfileImageUrl()
             s3Service.deleteImage(profileImageUrl)
         }
         val newProfileImageUrl = s3Service.uploadImage(image)
@@ -55,8 +56,14 @@ class MemberUseCaseImpl (
     }
 
     @Transactional
-    override fun changeProfileImageToBasic() {
+    override fun deleteProfileImage() {
         val currentMember = memberService.getCurrentMember()
-        currentMember.changeProfileImageUrl(BASIC_MEMBER_PROFILE)
+        if (!currentMember.isBasicProfileImage()) {
+            throw AlreadyProfileImageException()
+        }
+        val profileImageUrl = currentMember.getProfileImageUrl()
+        s3Service.deleteImage(profileImageUrl)
+        currentMember.deleteProfileImageUrl()
     }
+
 }

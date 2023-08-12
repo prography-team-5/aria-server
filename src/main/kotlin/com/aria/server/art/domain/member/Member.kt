@@ -49,5 +49,12 @@ class Member(
         this.role = role
     }
 
+    fun deleteProfileImageUrl() {
+        this.profileImageUrl = null;
+    }
+
     fun getProfileImageUrl() = profileImageUrl ?: "basic_member.jpg"
+
+    fun isBasicProfileImage(): Boolean = profileImageUrl.isNullOrEmpty()
+
 }

@@ -45,19 +45,19 @@ class MemberController (
         return success(CREATED.reasonPhrase)
     }
 
-    @Operation(summary = "Change Member Profile Image To New API")
-    @PostMapping(value = ["/profile-image-new"], consumes = [MULTIPART_FORM_DATA_VALUE], produces = [APPLICATION_JSON_VALUE])
+    @Operation(summary = "Change Member Profile Image API")
+    @PostMapping(value = ["/profile-image"], consumes = [MULTIPART_FORM_DATA_VALUE], produces = [APPLICATION_JSON_VALUE])
     @ResponseStatus(OK)
-    fun changeProfileImageToNew(@RequestPart image: MultipartFile): Response {
-        memberUseCase.changeProfileImageToNew(image)
+    fun changeProfileImage(@RequestPart image: MultipartFile): Response {
+        memberUseCase.changeProfileImage(image)
         return success(CREATED.reasonPhrase)
     }
 
-    @Operation(summary = "Change Member Profile Image To Basic API")
-    @PostMapping("/profile-image-basic")
+    @Operation(summary = "Delete Member Profile Image API")
+    @DeleteMapping("/profile-image")
     @ResponseStatus(OK)
-    fun changeProfileImageToBasic(): Response {
-        memberUseCase.changeProfileImageToBasic()
+    fun deleteProfileImage(): Response {
+        memberUseCase.deleteProfileImage()
         return success(OK.reasonPhrase)
     }
 
