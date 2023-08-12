@@ -2,6 +2,7 @@ package com.aria.server.art.application.usecase
 
 import com.aria.server.art.domain.artistinfo.ArtistInfo
 import com.aria.server.art.domain.exception.common.AlreadyProfileImageException
+import com.aria.server.art.domain.exception.member.AlreadyArtistException
 import com.aria.server.art.domain.member.Role
 import com.aria.server.art.infrastructure.rest.controller.MemberUseCase
 import com.aria.server.art.infrastructure.rest.dto.EditNicknameRequestDto
@@ -39,6 +40,9 @@ class MemberUseCaseImpl (
     @Transactional
     override fun changeRoleToArtist(id: Long) {
         val member = memberService.getMemberById(id)
+        if (member.role == Role.ROLE_ARTIST) {
+            throw AlreadyArtistException()
+        } 
         member.changeRole(Role.ROLE_ARTIST)
         val artistInfo = ArtistInfo(member)
         artistInfoService.createArtistInfo(artistInfo)
