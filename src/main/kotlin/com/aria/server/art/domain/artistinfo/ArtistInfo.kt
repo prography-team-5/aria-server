@@ -33,4 +33,10 @@ class ArtistInfo (
 
     fun getProfileArtImageUrl() = profileArtImageUrl ?: "basic_art.jpg"
 
+    fun deleteProfileArtImageUrl() {
+        this.profileArtImageUrl = null;
+    }
+
+    fun isBasicProfileArtImage(): Boolean = profileArtImageUrl.isNullOrEmpty()
+
 }

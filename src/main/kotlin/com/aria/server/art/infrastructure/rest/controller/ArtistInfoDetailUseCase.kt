@@ -13,7 +13,7 @@ interface ArtistInfoDetailUseCase {
     fun createSocialLink(dto: CreateSocialLinkRequestDto)
     fun editSocialLink(id: Long, dto: EditSocialLinkRequestDto)
     fun deleteSocialLink(id: Long)
-    fun changeProfileArtImageToNew(image: MultipartFile)
-    fun changeProfileArtImageToBasic()
+    fun changeProfileArtImage(image: MultipartFile)
+    fun deleteProfileArtImage()
 
 }

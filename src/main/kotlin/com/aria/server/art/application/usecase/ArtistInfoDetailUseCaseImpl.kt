@@ -1,5 +1,6 @@
 package com.aria.server.art.application.usecase
 
+import com.aria.server.art.domain.exception.common.AlreadyProfileImageException
 import com.aria.server.art.infrastructure.rest.controller.ArtistInfoDetailUseCase
 import com.aria.server.art.infrastructure.rest.dto.*
 import org.springframework.stereotype.Service
@@ -15,8 +16,6 @@ class ArtistInfoDetailUseCaseImpl (
     private val artistTagService: ArtistTagService,
     private val s3Service: S3Service
 ): ArtistInfoDetailUseCase {
-
-    val BASIC_PROFILE_ART = "basic_art.jpg"
 
     @Transactional(readOnly = true)
     override fun getArtistInfoDetail(artistId: Long): GetArtistInfoDetailResponseDto {
@@ -60,20 +59,27 @@ class ArtistInfoDetailUseCaseImpl (
     }
 
     @Transactional
-    override fun changeProfileArtImageToNew(image: MultipartFile) {
-        val currentMember = memberService.getCurrentMember()
-        val profileImageUrl = currentMember.getProfileImageUrl()
-        if (profileImageUrl != BASIC_PROFILE_ART) {
-            s3Service.deleteImage(profileImageUrl)
+    override fun changeProfileArtImage(image: MultipartFile) {
+        val currentMemberId = memberService.getCurrentMember().id
+        val artistInfo = artistInfoService.getArtistInfo(currentMemberId)
+        if (!artistInfo.isBasicProfileArtImage()) {
+            val profileArtImageUrl = artistInfo.getProfileArtImageUrl()
+            s3Service.deleteImage(profileArtImageUrl)
         }
-        val newProfileImageUrl = s3Service.uploadImage(image)
-        currentMember.changeProfileImageUrl(newProfileImageUrl)
+        val newProfileArtImageUrl = s3Service.uploadImage(image)
+        artistInfo.changeProfileArtImageUrl(newProfileArtImageUrl)
     }
 
     @Transactional
-    override fun changeProfileArtImageToBasic() {
-        val currentMember = memberService.getCurrentMember()
-        currentMember.changeProfileImageUrl(BASIC_PROFILE_ART)
+    override fun deleteProfileArtImage() {
+        val currentMemberId = memberService.getCurrentMember().id
+        val artistInfo = artistInfoService.getArtistInfo(currentMemberId)
+        if (!artistInfo.isBasicProfileArtImage()) {
+            throw AlreadyProfileImageException()
+        }
+        val profileArtImageUrl = artistInfo.getProfileArtImageUrl()
+        s3Service.deleteImage(profileArtImageUrl)
+        artistInfo.deleteProfileArtImageUrl()
     }
 
     @Transactional

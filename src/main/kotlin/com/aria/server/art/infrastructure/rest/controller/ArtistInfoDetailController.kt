@@ -85,19 +85,19 @@ class ArtistInfoDetailController (
         return success(OK.reasonPhrase)
     }
 
-    @Operation(summary = "Change Profile Art Image To New API")
-    @PostMapping(value = ["/profile-art-image-new"], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Operation(summary = "Change Profile Art Image API")
+    @PostMapping(value = ["/profile-art-image"], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(CREATED)
-    fun changeProfileArtImageToNew(@RequestPart image: MultipartFile): Response {
-        artistInfoDetailUseCase.changeProfileArtImageToNew(image)
+    fun changeProfileArtImage(@RequestPart image: MultipartFile): Response {
+        artistInfoDetailUseCase.changeProfileArtImage(image)
         return success(CREATED.reasonPhrase)
     }
 
-    @Operation(summary = "Change Profile Art Image To Basic API")
-    @PostMapping("/profile-art-image-basic")
+    @Operation(summary = "Delete Profile Art Image API")
+    @DeleteMapping("/profile-art-image")
     @ResponseStatus(OK)
-    fun changeProfileArtImageToBasic(): Response {
-        artistInfoDetailUseCase.changeProfileArtImageToBasic()
+    fun deleteProfileArtImage(): Response {
+        artistInfoDetailUseCase.deleteProfileArtImage()
         return success(OK.reasonPhrase)
     }
 
