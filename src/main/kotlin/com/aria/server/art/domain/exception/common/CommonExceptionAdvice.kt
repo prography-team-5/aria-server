@@ -29,4 +29,9 @@ class CommonExceptionAdvice {
     fun unauthorizedExceptionAdvice(e: UnauthorizedException) =
         failure("해당 사용자의 권한으로는 요청이 불가합니다.")
 
+    @ExceptionHandler(AlreadyProfileImageException::class)
+    @ResponseStatus(BAD_REQUEST)
+    fun alreadyProfileImageExceptionAdvice(e: AlreadyProfileImageException) =
+            failure("이미 기본 이미지입니다.")
+
 }
