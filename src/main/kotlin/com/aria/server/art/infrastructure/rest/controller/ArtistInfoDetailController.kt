@@ -9,7 +9,9 @@ import com.aria.server.art.infrastructure.rest.response.Response.Companion.succe
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus.*
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 @Tag(name = "Artist Info Detail", description = "Artist Info Detail API Document")
 @RestController
@@ -80,6 +82,22 @@ class ArtistInfoDetailController (
     @ResponseStatus(OK)
     fun editArtistInfoIntro(@RequestBody dto: EditArtistInfoIntroRequestDto): Response {
         artistInfoDetailUseCase.editArtistInfoIntro(dto)
+        return success(OK.reasonPhrase)
+    }
+
+    @Operation(summary = "Change Profile Art Image To New API")
+    @PostMapping(value = ["/profile-art-image-new"], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(CREATED)
+    fun changeProfileArtImageToNew(@RequestPart image: MultipartFile): Response {
+        artistInfoDetailUseCase.changeProfileArtImageToNew(image)
+        return success(CREATED.reasonPhrase)
+    }
+
+    @Operation(summary = "Change Profile Art Image To Basic API")
+    @PostMapping("/profile-art-image-basic")
+    @ResponseStatus(OK)
+    fun changeProfileArtImageToBasic(): Response {
+        artistInfoDetailUseCase.changeProfileArtImageToBasic()
         return success(OK.reasonPhrase)
     }
 

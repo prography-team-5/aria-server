@@ -4,6 +4,7 @@ import com.aria.server.art.infrastructure.rest.controller.ArtistInfoDetailUseCas
 import com.aria.server.art.infrastructure.rest.dto.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.multipart.MultipartFile
 
 @Service
 class ArtistInfoDetailUseCaseImpl (
@@ -12,7 +13,10 @@ class ArtistInfoDetailUseCaseImpl (
     private val artistInfoService: ArtistInfoService,
     private val socialLinkService: SocialLinkService,
     private val artistTagService: ArtistTagService,
+    private val s3Service: S3Service
 ): ArtistInfoDetailUseCase {
+
+    val BASIC_PROFILE_ART = "basic_art.jpg"
 
     @Transactional(readOnly = true)
     override fun getArtistInfoDetail(artistId: Long): GetArtistInfoDetailResponseDto {
@@ -55,14 +59,22 @@ class ArtistInfoDetailUseCaseImpl (
         artistInfo.changeIntro(dto.intro)
     }
 
+    @Transactional
+    override fun changeProfileArtImageToNew(image: MultipartFile) {
+        val currentMember = memberService.getCurrentMember()
+        val profileImageUrl = currentMember.getProfileImageUrl()
+        if (profileImageUrl != BASIC_PROFILE_ART) {
+            s3Service.deleteImage(profileImageUrl)
+        }
+        val newProfileImageUrl = s3Service.uploadImage(image)
+        currentMember.changeProfileImageUrl(newProfileImageUrl)
+    }
 
-    // TODO 대표 이미지 바꾸기
-//    @Transactional
-//    override fun changeProfileArtImageUrl() {
-//        val artist = memberService.getCurrentMember()
-//        val artistInfo = artistInfoService.getArtistInfo(artist.id)
-//        artistInfo.changeProfileArtImageUrl()
-//    }
+    @Transactional
+    override fun changeProfileArtImageToBasic() {
+        val currentMember = memberService.getCurrentMember()
+        currentMember.changeProfileImageUrl(BASIC_PROFILE_ART)
+    }
 
     @Transactional
     override fun createArtistTag(dto: CreateArtistTagRequestDto) {
