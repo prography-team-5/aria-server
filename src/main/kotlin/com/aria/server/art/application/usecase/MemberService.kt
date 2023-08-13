@@ -11,4 +11,5 @@ interface MemberService {
     fun getMemberById(id: Long): Member
     fun checkExistsMemberByEmail(email: String)
     fun checkDuplicateMemberByNickname(nickname: String)
+    fun deleteMember(id: Long)
 }

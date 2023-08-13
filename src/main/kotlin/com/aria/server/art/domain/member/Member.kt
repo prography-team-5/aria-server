@@ -1,6 +1,8 @@
 package com.aria.server.art.domain.member
 
 import com.aria.server.art.domain.AuditEntity
+import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.Where
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -8,6 +10,8 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 
 @Entity
+@SQLDelete(sql = "UPDATE member SET deleted_at = NOW() WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
 class Member(
     email: String,
     nickname: String,

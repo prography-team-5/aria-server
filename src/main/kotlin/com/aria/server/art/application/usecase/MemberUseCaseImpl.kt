@@ -70,4 +70,10 @@ class MemberUseCaseImpl (
         currentMember.deleteProfileImageUrl()
     }
 
+    @Transactional
+    override fun withdrawal() {
+        val currentMemberId = memberService.getCurrentMember().id
+        memberService.deleteMember(currentMemberId)
+    }
+
 }
