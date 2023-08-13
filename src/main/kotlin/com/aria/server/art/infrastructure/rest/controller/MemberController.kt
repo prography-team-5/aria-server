@@ -5,9 +5,12 @@ import com.aria.server.art.infrastructure.rest.response.Response
 import com.aria.server.art.infrastructure.rest.response.Response.Companion.success
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatus.OK
+import org.springframework.http.HttpStatus.*
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
+
 
 @Tag(name = "Member", description = "Member API Document")
 @RestController
@@ -36,10 +39,26 @@ class MemberController (
 
     @Operation(summary = "Change Role To Artist API")
     @PostMapping("/role/artist")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(CREATED)
     fun changeRoleToArtist(id: Long): Response {
         memberUseCase.changeRoleToArtist(id)
-        return success(HttpStatus.CREATED.reasonPhrase)
+        return success(CREATED.reasonPhrase)
+    }
+
+    @Operation(summary = "Change Member Profile Image API")
+    @PostMapping(value = ["/profile-image"], consumes = [MULTIPART_FORM_DATA_VALUE], produces = [APPLICATION_JSON_VALUE])
+    @ResponseStatus(OK)
+    fun changeProfileImage(@RequestPart image: MultipartFile): Response {
+        memberUseCase.changeProfileImage(image)
+        return success(CREATED.reasonPhrase)
+    }
+
+    @Operation(summary = "Delete Member Profile Image API")
+    @DeleteMapping("/profile-image")
+    @ResponseStatus(OK)
+    fun deleteProfileImage(): Response {
+        memberUseCase.deleteProfileImage()
+        return success(OK.reasonPhrase)
     }
 
 }

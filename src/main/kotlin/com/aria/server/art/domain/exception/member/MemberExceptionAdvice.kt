@@ -38,4 +38,9 @@ class MemberExceptionAdvice {
     fun currentMemberNotFoundExceptionAdvice(e: CurrentMemberNotFoundException) =
         failure("현재 로그인한 사용자를 찾을 수 없습니다.")
 
+    @ExceptionHandler(AlreadyArtistException::class)
+    @ResponseStatus(BAD_REQUEST)
+    fun alreadyArtistExceptionAdvice(e: AlreadyArtistException) =
+            failure("이미 작가로 등록된 사용자입니다.")
+
 }

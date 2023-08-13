@@ -1,6 +1,7 @@
 package com.aria.server.art.infrastructure.rest.controller
 
 import com.aria.server.art.infrastructure.rest.dto.*
+import org.springframework.web.multipart.MultipartFile
 
 interface ArtistInfoDetailUseCase {
     fun getArtistInfoDetail(artistId: Long): GetArtistInfoDetailResponseDto
@@ -12,5 +13,7 @@ interface ArtistInfoDetailUseCase {
     fun createSocialLink(dto: CreateSocialLinkRequestDto)
     fun editSocialLink(id: Long, dto: EditSocialLinkRequestDto)
     fun deleteSocialLink(id: Long)
+    fun changeProfileArtImage(image: MultipartFile)
+    fun deleteProfileArtImage()
 
 }

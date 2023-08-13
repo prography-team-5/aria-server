@@ -1,16 +1,21 @@
 package com.aria.server.art.application.usecase
 
 import com.aria.server.art.domain.artistinfo.ArtistInfo
+import com.aria.server.art.domain.exception.common.AlreadyProfileImageException
+import com.aria.server.art.domain.exception.member.AlreadyArtistException
+import com.aria.server.art.domain.member.Role
 import com.aria.server.art.infrastructure.rest.controller.MemberUseCase
 import com.aria.server.art.infrastructure.rest.dto.EditNicknameRequestDto
 import com.aria.server.art.infrastructure.rest.dto.GetMemberProfileResponseDto
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.multipart.MultipartFile
 
 @Service
 class MemberUseCaseImpl (
     private val memberService: MemberService,
-    private val artistInfoService: ArtistInfoService
+    private val artistInfoService: ArtistInfoService,
+    private val s3Service: S3Service
 ): MemberUseCase {
 
     @Transactional(readOnly = true)
@@ -35,15 +40,34 @@ class MemberUseCaseImpl (
     @Transactional
     override fun changeRoleToArtist(id: Long) {
         val member = memberService.getMemberById(id)
+        if (member.role == Role.ROLE_ARTIST) {
+            throw AlreadyArtistException()
+        } 
+        member.changeRole(Role.ROLE_ARTIST)
         val artistInfo = ArtistInfo(member)
         artistInfoService.createArtistInfo(artistInfo)
     }
 
-    // TODO 프로필 이미지 바꾸기
-//    @Transactional
-//    fun editMyProfileImage() {
-//        val currentMember = memberService.getCurrentMember()
-//        currentMember.changeNickname(dto.nickname)
-//    }
+    @Transactional
+    override fun changeProfileImage(image: MultipartFile) {
+        val currentMember = memberService.getCurrentMember()
+        if (!currentMember.isBasicProfileImage()) {
+            val profileImageUrl = currentMember.getProfileImageUrl()
+            s3Service.deleteImage(profileImageUrl)
+        }
+        val newProfileImageUrl = s3Service.uploadImage(image)
+        currentMember.changeProfileImageUrl(newProfileImageUrl)
+    }
+
+    @Transactional
+    override fun deleteProfileImage() {
+        val currentMember = memberService.getCurrentMember()
+        if (!currentMember.isBasicProfileImage()) {
+            throw AlreadyProfileImageException()
+        }
+        val profileImageUrl = currentMember.getProfileImageUrl()
+        s3Service.deleteImage(profileImageUrl)
+        currentMember.deleteProfileImageUrl()
+    }
 
 }
