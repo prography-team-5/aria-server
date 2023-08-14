@@ -29,7 +29,6 @@ class S3ServiceImpl(
     }
 
     override fun deleteImage(imageName: String) {
-        s3Api.deleteImage(imageName);
+        s3Api.deleteImage(imageName)
     }
-
 }

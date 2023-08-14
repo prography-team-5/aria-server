@@ -23,7 +23,6 @@ abstract class AuditEntity {
     var updatedAt: LocalDateTime? = null
         protected set
 
-    @LastModifiedDate
     @Column(nullable = true)
     var deletedAt: LocalDateTime? = null
         protected set

@@ -26,7 +26,7 @@ class S3Api(
             throw ArtImageS3Exception()
         }
 
-        return s3Client.getUrl(bucketName, objectKey).toString()
+        return objectKey
     }
 
     fun deleteImage(imageName: String) {

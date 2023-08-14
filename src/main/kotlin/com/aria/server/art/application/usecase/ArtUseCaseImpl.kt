@@ -9,6 +9,13 @@ import com.aria.server.art.infrastructure.rest.controller.ArtUseCase
 import com.aria.server.art.infrastructure.rest.dto.CreateArtImageResponse
 import com.aria.server.art.infrastructure.rest.dto.CreateArtRequest
 import com.aria.server.art.infrastructure.rest.dto.CreateArtResponse
+import com.aria.server.art.infrastructure.rest.dto.EditArtDescriptionRequest
+import com.aria.server.art.infrastructure.rest.dto.EditArtImagesRequest
+import com.aria.server.art.infrastructure.rest.dto.EditArtSizeRequest
+import com.aria.server.art.infrastructure.rest.dto.EditArtStyleRequest
+import com.aria.server.art.infrastructure.rest.dto.EditArtTagsRequest
+import com.aria.server.art.infrastructure.rest.dto.EditArtTitleRequest
+import com.aria.server.art.infrastructure.rest.dto.EditArtYearRequest
 import com.aria.server.art.infrastructure.rest.dto.GetArtResponseDto
 import com.aria.server.art.infrastructure.rest.dto.GetRandomArtResponseDto
 import com.aria.server.art.infrastructure.rest.dto.SimpleArtDto
@@ -91,4 +98,49 @@ class ArtUseCaseImpl(
 
         return GetArtResponseDto.from(art, artistInfo, socialLinks)
     }
+
+    @Transactional
+    override fun editArtImages(dto: EditArtImagesRequest) {
+        val art = artService.getArtById(dto.artId)
+        art.changeMainImage(artImageService.getArtImageById(dto.imageIds[0]))
+        dto.imageIds.subList(1, dto.imageIds.size)
+            .map { artImageService.getArtImageById(it) }
+
+        val imagesToDelete = dto.originImageIds - dto.imageIds
+        imagesToDelete
+            .map {artImageService.getArtImageById(it)  }
+            .map { s3Service.deleteImage(it.url) }
+    }
+
+    @Transactional
+    override fun editArtTitle(dto: EditArtTitleRequest) =
+        artService.getArtById(dto.artId)
+            .run { changeTitle(dto.title) }
+
+    @Transactional
+    override fun editArtYear(dto: EditArtYearRequest) =
+        artService.getArtById(dto.artId)
+            .run { changeYear(dto.year) }
+
+
+    @Transactional
+    override fun editArtSize(dto: EditArtSizeRequest) =
+        artService.getArtById(dto.artId)
+            .run { changeSize(dto.size) }
+
+    @Transactional
+    override fun editArtStyle(dto: EditArtStyleRequest) =
+        artService.getArtById(dto.artId)
+            .run { changeStyle(dto.style) }
+
+    // NOTE: 진영이랑 일단 태그들은 삭제 안 하기로 했음
+    @Transactional
+    override fun editArtTags(dto: EditArtTagsRequest) =
+        artService.getArtById(dto.artId)
+            .run { changeArtTags(dto.tags) }
+
+    @Transactional
+    override fun editArtDescription(dto: EditArtDescriptionRequest) =
+        artService.getArtById(dto.artId)
+            .run { changeDescription(dto.description) }
 }
