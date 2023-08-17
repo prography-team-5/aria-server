@@ -61,4 +61,12 @@ class MemberController (
         return success(OK.reasonPhrase)
     }
 
+    @Operation(summary = "Withdrawal API")
+    @DeleteMapping("/withdrawal")
+    @ResponseStatus(OK)
+    fun withdrawal(): Response {
+        memberUseCase.withdrawal()
+        return success(OK.reasonPhrase)
+    }
+
 }

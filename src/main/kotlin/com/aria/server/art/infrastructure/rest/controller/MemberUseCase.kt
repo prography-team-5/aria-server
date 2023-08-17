@@ -11,4 +11,5 @@ interface MemberUseCase {
     fun changeRoleToArtist(id: Long)
     fun changeProfileImage(image: MultipartFile)
     fun deleteProfileImage()
+    fun withdrawal()
 }
