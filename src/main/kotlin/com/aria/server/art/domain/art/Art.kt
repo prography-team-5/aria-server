@@ -48,7 +48,7 @@ class Art (
     var size: Size = size
         protected set
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     var description: String = description
         protected set
 
