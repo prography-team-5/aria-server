@@ -9,4 +9,5 @@ interface ArtService {
     fun getArtsByArtistId(artistId: Long, page: Int, count: Int): List<Art>
     fun getArtById(artId: Long): Art
     fun searchArtsByTag(tag: String, page: Int, count: Int): List<Art>
+    fun deleteArt(artId: Long)
 }

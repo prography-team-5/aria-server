@@ -32,4 +32,7 @@ class ArtServiceImpl(
 
     override fun searchArtsByTag(tag: String, page: Int, count: Int): List<Art> =
         artRepository.findArtsByTag(tag, PageRequest.of(page, count))
+
+    override fun deleteArt(artId: Long) =
+        artRepository.deleteById(artId)
 }

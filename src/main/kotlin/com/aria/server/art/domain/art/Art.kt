@@ -2,9 +2,13 @@ package com.aria.server.art.domain.art
 
 import com.aria.server.art.domain.AuditEntity
 import com.aria.server.art.domain.member.Member
+import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.Where
 import javax.persistence.*
 
 @Entity
+@SQLDelete(sql = "UPDATE art SET deleted_at = NOW() WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
 class Art (
     title: String,
     mainImage: ArtImage,
@@ -40,7 +44,7 @@ class Art (
     var year: Int = year
         protected set
 
-    @OneToMany(mappedBy = "art", cascade = [CascadeType.PERSIST])
+    @OneToMany(mappedBy = "art", cascade = [CascadeType.ALL], orphanRemoval = true)
     var artTags: MutableList<ArtTag> = tags
         protected set
 

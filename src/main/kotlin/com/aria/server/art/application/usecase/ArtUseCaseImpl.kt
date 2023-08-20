@@ -148,4 +148,9 @@ class ArtUseCaseImpl(
     override fun searchArtsByArtTag(artTag: String, page: Int, count: Int): List<SimpleArtDto> =
         artService.searchArtsByTag(artTag, page, count)
             .map { SimpleArtDto.from(it) }
+
+    @Transactional
+    override fun deleteArt(artId: Long) {
+        artService.deleteArt(artId)
+    }
 }
