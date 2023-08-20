@@ -5,7 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
     //id("org.jlleitschuh.gradle.ktlint") version "11.0.0" // gradle build 시 문법오류를 잡으면서 에러를 던짐, 일단 주석처리 해놓고 다음에 적용
 
-    val kotlinVersion = "1.6.21"
+    val kotlinVersion = "1.9.0"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
