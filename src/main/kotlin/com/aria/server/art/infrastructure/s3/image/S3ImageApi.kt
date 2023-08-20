@@ -1,4 +1,4 @@
-package com.aria.server.art.infrastructure.s3
+package com.aria.server.art.infrastructure.s3.image
 
 import com.amazonaws.AmazonServiceException
 import com.amazonaws.SdkClientException
@@ -12,7 +12,7 @@ import java.io.InputStream
 
 
 @Controller
-class S3Api(
+class S3ImageApi(
     private val s3Client: AmazonS3,
     @Value("\${cloud.aws.s3.bucket}") private val bucketName: String
 ) {

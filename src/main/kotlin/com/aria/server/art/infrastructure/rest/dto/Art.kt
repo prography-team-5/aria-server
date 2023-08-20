@@ -16,7 +16,7 @@ data class SimpleArtDto(
         fun from(art: Art): SimpleArtDto =
             SimpleArtDto(
                 art.title,
-                art.mainImage.url,
+                art.mainImage.getUrl(),
                 art.year,
                 art.size,
                 art.style,

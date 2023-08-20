@@ -99,17 +99,17 @@ class ArtUseCaseImpl(
         return GetArtResponseDto.from(art, artistInfo, socialLinks)
     }
 
-    @Transactional
     override fun editArtImages(dto: EditArtImagesRequest) {
-        val art = artService.getArtById(dto.artId)
-        art.changeMainImage(artImageService.getArtImageById(dto.imageIds[0]))
-        dto.imageIds.subList(1, dto.imageIds.size)
-            .map { artImageService.getArtImageById(it) }
+        val imagesToDelete = transactionTemplate.execute {
+            val art = artService.getArtById(dto.artId)
+            art.changeMainImage(artImageService.getArtImageById(dto.imageIds[0]))
+            dto.imageIds.subList(1, dto.imageIds.size)
+                .map { artImageService.getArtImageById(it) }
 
-        val imagesToDelete = dto.originImageIds - dto.imageIds
-        imagesToDelete
-            .map {artImageService.getArtImageById(it)  }
-            .map { s3Service.deleteImage(it.url) }
+            (dto.originImageIds - dto.imageIds).map { artImageService.getArtImageById(it) }
+        } ?: emptyList()
+
+        imagesToDelete.map { s3Service.deleteImage(it.getUrl()) }
     }
 
     @Transactional

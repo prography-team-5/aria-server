@@ -21,7 +21,7 @@ data class GetArtResponseDto(
             GetArtResponseDto(
                 artistNickname = art.member.nickname,
                 artistProfileImageUrl = artistInfo.getProfileArtImageUrl(),
-                imagesUrl = listOf(art.mainImage.url) + art.images.map { it.url },
+                imagesUrl = listOf(art.mainImage.getUrl()) + art.images.map { it.getUrl() },
                 title = art.title,
                 description = art.description,
                 year = art.year,
