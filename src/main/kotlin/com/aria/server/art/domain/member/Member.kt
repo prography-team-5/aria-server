@@ -62,7 +62,10 @@ class Member(
         this.profileImageUrl = null
     }
 
-    fun getProfileImageUrl() = PROFILE_IMAGE_URL_PREFIX + profileImageUrl ?: PROFILE_IMAGE_URL_PREFIX + "basic_member.jpg"
+    fun getProfileImageUrl() =
+        profileImageUrl
+            ?.let { PROFILE_IMAGE_URL_PREFIX + profileImageUrl }
+            ?:(PROFILE_IMAGE_URL_PREFIX + "basic_member.jpg")
 
     fun isBasicProfileImage(): Boolean = profileImageUrl.isNullOrEmpty()
 }
