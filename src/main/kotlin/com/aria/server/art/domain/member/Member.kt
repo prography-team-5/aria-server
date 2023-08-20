@@ -18,6 +18,11 @@ class Member(
     role: Role,
     platformType: PlatformType
 ) : AuditEntity() {
+
+    companion object {
+        const val PROFILE_IMAGE_URL_PREFIX = "https://bucket-8th-team5.s3.ap-northeast-2.amazonaws.com/"
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
@@ -54,11 +59,10 @@ class Member(
     }
 
     fun deleteProfileImageUrl() {
-        this.profileImageUrl = null;
+        this.profileImageUrl = null
     }
 
-    fun getProfileImageUrl() = profileImageUrl ?: "basic_member.jpg"
+    fun getProfileImageUrl() = PROFILE_IMAGE_URL_PREFIX + profileImageUrl ?: PROFILE_IMAGE_URL_PREFIX + "basic_member.jpg"
 
     fun isBasicProfileImage(): Boolean = profileImageUrl.isNullOrEmpty()
-
 }
