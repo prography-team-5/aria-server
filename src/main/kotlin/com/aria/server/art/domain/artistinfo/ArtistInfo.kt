@@ -8,6 +8,11 @@ import javax.persistence.*
 class ArtistInfo (
     member: Member,
 ): AuditEntity() {
+
+    companion object {
+        const val PROFILE_ART_IMAGE_URL_PREFIX = "https://bucket-8th-team5.s3.ap-northeast-2.amazonaws.com/"
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
@@ -31,12 +36,12 @@ class ArtistInfo (
         this.intro = intro
     }
 
-    fun getProfileArtImageUrl() = profileArtImageUrl ?: "basic_art.jpg"
+    fun getProfileArtImageUrl() = PROFILE_ART_IMAGE_URL_PREFIX + profileArtImageUrl
+        ?: PROFILE_ART_IMAGE_URL_PREFIX + "basic_art.jpg"
 
     fun deleteProfileArtImageUrl() {
         this.profileArtImageUrl = null;
     }
 
     fun isBasicProfileArtImage(): Boolean = profileArtImageUrl.isNullOrEmpty()
-
 }
