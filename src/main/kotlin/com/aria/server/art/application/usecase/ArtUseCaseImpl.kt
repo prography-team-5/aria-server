@@ -143,4 +143,9 @@ class ArtUseCaseImpl(
     override fun editArtDescription(dto: EditArtDescriptionRequest) =
         artService.getArtById(dto.artId)
             .run { changeDescription(dto.description) }
+
+    @Transactional(readOnly = true)
+    override fun searchArtsByArtTag(artTag: String, page: Int, count: Int): List<SimpleArtDto> =
+        artService.searchArtsByTag(artTag, page, count)
+            .map { SimpleArtDto.from(it) }
 }

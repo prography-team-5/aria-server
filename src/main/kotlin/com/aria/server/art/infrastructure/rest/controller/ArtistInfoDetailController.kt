@@ -100,6 +100,4 @@ class ArtistInfoDetailController (
         artistInfoDetailUseCase.deleteProfileArtImage()
         return success(OK.reasonPhrase)
     }
-
-
 }

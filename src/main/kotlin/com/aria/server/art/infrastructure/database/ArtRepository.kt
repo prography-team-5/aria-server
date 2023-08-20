@@ -14,4 +14,7 @@ interface ArtRepository: JpaRepository<Art, Long> {
     fun findRandomArts(@Param("count") count: Int): List<Art>
 
     fun findSliceByMemberId(memberId: Long, pageable: Pageable): Slice<Art>
+
+    @Query(value = "SELECT a.* FROM art_tag t LEFT JOIN art a ON t.art_id = a.id WHERE t.name LIKE %:keyword%", nativeQuery = true)
+    fun findArtsByTag(@Param("keyword") keyword: String, pageable: Pageable): List<Art>
 }
