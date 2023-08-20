@@ -9,3 +9,7 @@ data class CreateArtistTagRequestDto (
     fun toEntity(artist: Member): ArtistTag =
         ArtistTag(name, artist)
 }
+
+data class CreateArtistTagResponseDto (
+    val tagId: Long
+)

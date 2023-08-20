@@ -11,11 +11,11 @@ class ArtistTagServiceImpl(
     private val artistTagRepository: ArtistTagRepository
 ): ArtistTagService {
 
-    override fun createArtistTag(artistTag: ArtistTag) {
+    override fun createArtistTag(artistTag: ArtistTag): ArtistTag {
         if (artistTagRepository.existsByName(artistTag.name)) {
             throw DuplicatedArtistTagException()
         } else {
-            artistTagRepository.save(artistTag)
+            return artistTagRepository.save(artistTag)
         }
     }
 

@@ -83,10 +83,11 @@ class ArtistInfoDetailUseCaseImpl (
     }
 
     @Transactional
-    override fun createArtistTag(dto: CreateArtistTagRequestDto) {
+    override fun createArtistTag(dto: CreateArtistTagRequestDto): CreateArtistTagResponseDto {
         val artist = memberService.getCurrentMember()
         val artistTag = dto.toEntity(artist)
-        artistTagService.createArtistTag(artistTag)
+        val artistTagId = artistTagService.createArtistTag(artistTag).id
+        return CreateArtistTagResponseDto(artistTagId)
     }
 
     // TODO 본인검증
@@ -96,15 +97,16 @@ class ArtistInfoDetailUseCaseImpl (
     }
 
     @Transactional
-    override fun createSocialLink(dto: CreateSocialLinkRequestDto) {
+    override fun createSocialLink(dto: CreateSocialLinkRequestDto): CreateSocialLinkResponseDto {
         val artist = memberService.getCurrentMember()
         val socialLink = dto.toEntity(artist)
-        socialLinkService.createSocialLink(socialLink)
+        val socialLinkId = socialLinkService.createSocialLink(socialLink).id
+        return CreateSocialLinkResponseDto(socialLinkId)
     }
 
     @Transactional
-    override fun editSocialLink(id: Long, dto: EditSocialLinkRequestDto) {
-        socialLinkService.updateSocialLink(id, dto.url)
+    override fun editSocialLink(dto: EditSocialLinkRequestDto) {
+        socialLinkService.updateSocialLink(dto.socialLinkId, dto.url)
     }
 
     @Transactional

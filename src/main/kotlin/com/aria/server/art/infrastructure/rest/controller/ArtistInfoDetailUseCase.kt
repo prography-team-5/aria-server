@@ -8,10 +8,10 @@ interface ArtistInfoDetailUseCase {
     fun getMyArtistInfoDetail(): GetArtistInfoDetailResponseDto
     fun getRandArtistInfoDetail(): GetArtistInfoDetailResponseDto
     fun editArtistInfoIntro(dto: EditArtistInfoIntroRequestDto)
-    fun createArtistTag(dto: CreateArtistTagRequestDto)
+    fun createArtistTag(dto: CreateArtistTagRequestDto): CreateArtistTagResponseDto
     fun deleteArtistTag(id: Long)
-    fun createSocialLink(dto: CreateSocialLinkRequestDto)
-    fun editSocialLink(id: Long, dto: EditSocialLinkRequestDto)
+    fun createSocialLink(dto: CreateSocialLinkRequestDto): CreateSocialLinkResponseDto
+    fun editSocialLink(dto: EditSocialLinkRequestDto)
     fun deleteSocialLink(id: Long)
     fun changeProfileArtImage(image: MultipartFile)
     fun deleteProfileArtImage()

@@ -14,11 +14,11 @@ class SocialLinkServiceImpl (
     private val socialLinkRepository: SocialLinkRepository
 ): SocialLinkService {
 
-    override fun createSocialLink(socialLink: SocialLink) {
+    override fun createSocialLink(socialLink: SocialLink): SocialLink {
         if (socialLinkRepository.existsByUrl(socialLink.url)) {
             throw DuplicatedSocialLinkException()
         } else {
-            socialLinkRepository.save(socialLink)
+            return socialLinkRepository.save(socialLink)
         }
     }
 
