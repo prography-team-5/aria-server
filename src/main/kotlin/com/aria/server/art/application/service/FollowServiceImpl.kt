@@ -19,11 +19,11 @@ class FollowServiceImpl(
     private val followRepository: FollowRepository
 ) : FollowService {
 
-    override fun createFollow(follower: Member, followee: Member) {
+    override fun createFollow(follower: Member, followee: Member): Follow {
         if (followRepository.existsByFollowerAndFollowee(follower, followee)) {
             throw AlreadyFollowException()
         } else {
-            followRepository.save(Follow(follower, followee))
+            return followRepository.save(Follow(follower, followee))
         }
     }
 

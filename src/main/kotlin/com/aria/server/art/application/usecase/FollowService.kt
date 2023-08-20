@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 
 interface FollowService {
-    fun createFollow(follower: Member, followee: Member)
+    fun createFollow(follower: Member, followee: Member): Follow
     fun deleteFollow(follower: Member, followee: Member)
     fun isFollowee(follower: Member, target: Member): Boolean
     fun getFollowsByFollowerId(id: Long, pageable: Pageable): Slice<Follow>

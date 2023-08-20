@@ -1,6 +1,7 @@
 package com.aria.server.art.application.usecase
 
 import com.aria.server.art.infrastructure.rest.controller.FollowUseCase
+import com.aria.server.art.infrastructure.rest.dto.FollowResponseDto
 import com.aria.server.art.infrastructure.rest.dto.GetFolloweeResponseDto
 import com.aria.server.art.infrastructure.rest.dto.GetFollowerResponseDto
 import org.springframework.data.domain.Pageable
@@ -15,10 +16,11 @@ class FollowUseCaseImpl (
 ): FollowUseCase {
 
     @Transactional
-    override fun follow(followeeId: Long) {
+    override fun follow(followeeId: Long): FollowResponseDto {
         val follower = memberService.getCurrentMember()
         val followee = memberService.getMemberById(followeeId)
-        followService.createFollow(follower, followee)
+        val followId = followService.createFollow(follower, followee).id
+        return FollowResponseDto(followId)
     }
 
     @Transactional
