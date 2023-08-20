@@ -1,6 +1,7 @@
 package com.aria.server.art.infrastructure.rest.controller
 
 import com.aria.server.art.infrastructure.rest.dto.EditNicknameRequestDto
+import com.aria.server.art.infrastructure.rest.dto.GetMemberProfileResponseDto
 import com.aria.server.art.infrastructure.rest.response.Response
 import com.aria.server.art.infrastructure.rest.response.Response.Companion.success
 import io.swagger.v3.oas.annotations.Operation
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus.*
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
@@ -21,52 +23,50 @@ class MemberController (
 
     @Operation(summary = "Get Member Profile API")
     @GetMapping("")
-    @ResponseStatus(OK)
-    fun getMemberProfile(id: Long): Response =
-        success(OK.reasonPhrase, memberUseCase.getMemberProfile(id))
+    fun getMemberProfile(id: Long): ResponseEntity<GetMemberProfileResponseDto> =
+        ResponseEntity(memberUseCase.getMemberProfile(id), OK)
 
     @Operation(summary = "Get My Profile API")
     @GetMapping("/me")
-    @ResponseStatus(OK)
-    fun getMyProfile(): Response =
-        success(OK.reasonPhrase, memberUseCase.getMyProfile())
+    fun getMyProfile(): ResponseEntity<GetMemberProfileResponseDto> =
+        ResponseEntity(memberUseCase.getMyProfile(), OK)
 
     @Operation(summary = "Edit Nickname API")
     @PatchMapping("/nickname")
-    @ResponseStatus(OK)
-    fun editNickname(@RequestBody dto: EditNicknameRequestDto): Response =
-        success(OK.reasonPhrase, memberUseCase.editNickname(dto))
+    fun editNickname(@RequestBody dto: EditNicknameRequestDto): ResponseEntity<Unit> {
+        memberUseCase.editNickname(dto)
+        return ResponseEntity(OK)
+    }
 
     @Operation(summary = "Change Role To Artist API")
     @PostMapping("/role/artist")
-    @ResponseStatus(CREATED)
-    fun changeRoleToArtist(id: Long): Response {
+    fun changeRoleToArtist(id: Long): ResponseEntity<Unit> {
         memberUseCase.changeRoleToArtist(id)
-        return success(CREATED.reasonPhrase)
+        return ResponseEntity(OK)
     }
 
     @Operation(summary = "Change Member Profile Image API")
-    @PostMapping(value = ["/profile-image"], consumes = [MULTIPART_FORM_DATA_VALUE], produces = [APPLICATION_JSON_VALUE])
-    @ResponseStatus(OK)
-    fun changeProfileImage(@RequestPart image: MultipartFile): Response {
+    @PostMapping(value = ["/profile-image"],
+        consumes = [MULTIPART_FORM_DATA_VALUE],
+        produces = [APPLICATION_JSON_VALUE])
+    fun changeProfileImage(@RequestPart image: MultipartFile): ResponseEntity<Unit> {
         memberUseCase.changeProfileImage(image)
-        return success(CREATED.reasonPhrase)
+        return ResponseEntity(CREATED)
     }
 
     @Operation(summary = "Delete Member Profile Image API")
     @DeleteMapping("/profile-image")
-    @ResponseStatus(OK)
-    fun deleteProfileImage(): Response {
+    fun deleteProfileImage(): ResponseEntity<Unit> {
         memberUseCase.deleteProfileImage()
-        return success(OK.reasonPhrase)
+        return ResponseEntity(OK)
     }
 
     @Operation(summary = "Withdrawal API")
     @DeleteMapping("/withdrawal")
     @ResponseStatus(OK)
-    fun withdrawal(): Response {
+    fun withdrawal(): ResponseEntity<Unit> {
         memberUseCase.withdrawal()
-        return success(OK.reasonPhrase)
+        return ResponseEntity(OK)
     }
 
 }
