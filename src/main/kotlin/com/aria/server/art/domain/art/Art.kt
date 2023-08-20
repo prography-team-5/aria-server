@@ -56,4 +56,36 @@ class Art (
     @JoinColumn(name = "member_id", nullable = false)
     var member: Member = member
         protected set
+
+    fun changeTitle(title: String) {
+        this.title = title
+    }
+
+    fun changeMainImage(mainImage: ArtImage) {
+        this.mainImage = mainImage
+    }
+
+    fun changeImages(images: List<ArtImage>) {
+        this.images = images.toMutableList()
+    }
+
+    fun changeStyle(style: String) {
+        this.style = style
+    }
+
+    fun changeYear(year: Int) {
+        this.year = year
+    }
+
+    fun changeArtTags(artTags: List<ArtTag>) {
+        this.artTags = artTags.toMutableList()
+    }
+
+    fun changeSize(size: Size) {
+        this.size = size
+    }
+
+    fun changeDescription(description: String) {
+        this.description = description
+    }
 }

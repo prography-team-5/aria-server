@@ -20,7 +20,7 @@ data class GetRandomArtResponseDto(
             GetRandomArtResponseDto(
                 artId = art.id,
                 memberId = art.member.id,
-                mainImageUrl = art.mainImage.url,
+                mainImageUrl = art.mainImage.getUrl(),
                 style = art.style,
                 title = art.title,
                 year = art.year,
