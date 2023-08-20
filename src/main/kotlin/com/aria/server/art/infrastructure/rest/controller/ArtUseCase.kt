@@ -33,4 +33,6 @@ interface ArtUseCase {
     fun editArtDescription(dto: EditArtDescriptionRequest)
 
     fun searchArtsByArtTag(artTag: String, page: Int, count: Int): List<SimpleArtDto>
+
+    fun deleteArt(artId: Long)
 }
