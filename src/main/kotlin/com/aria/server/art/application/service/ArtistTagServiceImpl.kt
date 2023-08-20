@@ -25,5 +25,4 @@ class ArtistTagServiceImpl(
 
     override fun getArtistTags(artistId: Long): MutableList<ArtistTag> =
         artistTagRepository.findArtistTagByMemberId(artistId)
-
 }

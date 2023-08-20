@@ -29,4 +29,7 @@ class ArtServiceImpl(
     override fun getArtById(artId: Long): Art =
         artRepository.findByIdOrNull(artId)
             ?: throw ArtNotFoundException()
+
+    override fun searchArtsByTag(tag: String, page: Int, count: Int): List<Art> =
+        artRepository.findArtsByTag(tag, PageRequest.of(page, count))
 }

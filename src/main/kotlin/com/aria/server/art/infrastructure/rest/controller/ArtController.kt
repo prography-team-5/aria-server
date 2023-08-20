@@ -127,4 +127,13 @@ class ArtController(
         artUseCase.editArtDescription(dto)
         return ResponseEntity(OK)
     }
+
+
+    // TODO: 검색 고도화 (ex. 글자 단위 매칭)
+    @Operation(summary = "Search arts API by art tag")
+    @GetMapping("/search")
+    fun searchArts(@RequestParam("query") query: String, @RequestParam("page") page: Int, @RequestParam("count")count: Int): ResponseEntity<List<SimpleArtDto>> {
+        val response = artUseCase.searchArtsByArtTag(query, page, count)
+        return ResponseEntity(response, OK)
+    }
 }
