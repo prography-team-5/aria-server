@@ -35,3 +35,7 @@ data class GetFolloweeResponseDto(
             )
     }
 }
+
+data class FollowResponseDto(
+    val followId: Long
+)

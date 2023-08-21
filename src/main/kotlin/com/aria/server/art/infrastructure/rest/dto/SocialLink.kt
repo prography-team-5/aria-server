@@ -13,5 +13,10 @@ data class CreateSocialLinkRequestDto (
 }
 
 data class EditSocialLinkRequestDto (
+    val socialLinkId: Long,
     val url: String
+)
+
+data class CreateSocialLinkResponseDto (
+    val socialLinkId: Long
 )

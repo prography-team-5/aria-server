@@ -36,8 +36,10 @@ class ArtistInfo (
         this.intro = intro
     }
 
-    fun getProfileArtImageUrl() = PROFILE_ART_IMAGE_URL_PREFIX + profileArtImageUrl
-        ?: PROFILE_ART_IMAGE_URL_PREFIX + "basic_art.jpg"
+    fun getProfileArtImageUrl() =
+        profileArtImageUrl
+            ?.let { PROFILE_ART_IMAGE_URL_PREFIX + profileArtImageUrl }
+            ?:(PROFILE_ART_IMAGE_URL_PREFIX + "basic_art.jpg")
 
     fun deleteProfileArtImageUrl() {
         this.profileArtImageUrl = null;
