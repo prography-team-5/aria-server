@@ -28,31 +28,17 @@ class FollowServiceImpl(
     }
 
     override fun deleteFollow(follower: Member, followee: Member) =
-        getFollowByFollowerAndFollowee(follower, followee).run {
-            followRepository.delete(this)
-        }
+        getFollowByFollowerAndFollowee(follower, followee)
+            .run { followRepository.delete(this) }
 
     override fun isFollowee(follower: Member, target: Member): Boolean =
         followRepository.existsByFollowerAndFollowee(follower, target)
 
+    override fun getFollowsByFollowerId(id: Long): List<Follow> =
+       followRepository.findFollowsByFollowerId(id)
 
-    override fun getFollowsByFollowerId(id: Long, pageable: Pageable): Slice<Follow> {
-        val follows = followRepository.findFollowsByFollowerId(id, pageable)
-        if (follows.isEmpty) {
-            throw NoMoreFollowException()
-        } else {
-            return follows
-        }
-    }
-
-    override fun getFollowsByFolloweeId(id: Long, pageable: Pageable): Slice<Follow> {
-        val follows = followRepository.findFollowsByFolloweeId(id, pageable)
-        if (follows.isEmpty) {
-            throw NoMoreFollowException()
-        } else {
-            return follows
-        }
-    }
+    override fun getFollowsByFolloweeId(id: Long): List<Follow> =
+        followRepository.findFollowsByFolloweeId(id)
 
     override fun getFollowerCount(memberId: Long): Int =
         followRepository.countByFollowerId(memberId)
@@ -68,5 +54,23 @@ class FollowServiceImpl(
     private fun getFollowByFollowerAndFollowee(follower: Member, followee: Member): Follow =
         followRepository.findByFollowerAndFollowee(follower, followee)
             ?: throw FollowNotFoundException()
+
+//    override fun getFollowsByFollowerId(id: Long, pageable: Pageable): Slice<Follow> {
+//        val follows = followRepository.findFollowsByFollowerId(id, pageable)
+//        if (follows.isEmpty) {
+//            throw NoMoreFollowException()
+//        } else {
+//            return follows
+//        }
+//    }
+//
+//    override fun getFollowsByFolloweeId(id: Long, pageable: Pageable): Slice<Follow> {
+//        val follows = followRepository.findFollowsByFolloweeId(id, pageable)
+//        if (follows.isEmpty) {
+//            throw NoMoreFollowException()
+//        } else {
+//            return follows
+//        }
+//    }
 
 }

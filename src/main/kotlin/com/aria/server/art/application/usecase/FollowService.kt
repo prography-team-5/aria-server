@@ -10,8 +10,8 @@ interface FollowService {
     fun createFollow(follower: Member, followee: Member): Follow
     fun deleteFollow(follower: Member, followee: Member)
     fun isFollowee(follower: Member, target: Member): Boolean
-    fun getFollowsByFollowerId(id: Long, pageable: Pageable): Slice<Follow>
-    fun getFollowsByFolloweeId(id: Long, pageable: Pageable): Slice<Follow>
+    fun getFollowsByFollowerId(id: Long): List<Follow>
+    fun getFollowsByFolloweeId(id: Long): List<Follow>
     fun getFollowerCount(memberId: Long): Int
     fun getFolloweeCount(memberId: Long): Int
 

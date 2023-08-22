@@ -35,25 +35,25 @@ class FollowController (
 
     @Operation(summary = "Get follower list API")
     @GetMapping("/followers")
-    fun getFollowers(followeeId: Long, pageable: Pageable): ResponseEntity<Slice<GetFollowerResponseDto>> =
-        ResponseEntity(followUseCase.getFollowers(followeeId, pageable), OK)
+    fun getFollowers(followeeId: Long): ResponseEntity<List<GetFollowerResponseDto>> =
+        ResponseEntity(followUseCase.getFollowers(followeeId), OK)
 
     @Operation(summary = "Get my follower list API")
     @GetMapping("/followers/me")
-    fun getMyFollowers(pageable: Pageable): ResponseEntity<Slice<GetFollowerResponseDto>> =
-        ResponseEntity(followUseCase.getMyFollowers(pageable), OK)
+    fun getMyFollowers(): ResponseEntity<List<GetFollowerResponseDto>> =
+        ResponseEntity(followUseCase.getMyFollowers(), OK)
 
 
     @Operation(summary = "Get followee list API")
     @GetMapping("/followees")
-    fun getFollowees(followerId: Long, pageable: Pageable): ResponseEntity<Slice<GetFolloweeResponseDto>> =
-        ResponseEntity(followUseCase.getFollowees(followerId, pageable), OK)
+    fun getFollowees(followerId: Long): ResponseEntity<List<GetFolloweeResponseDto>> =
+        ResponseEntity(followUseCase.getFollowees(followerId), OK)
 
 
     @Operation(summary = "Get my followee list API")
     @GetMapping("/followees/me")
-    fun getMyFollowees(pageable: Pageable): ResponseEntity<Slice<GetFolloweeResponseDto>> =
-        ResponseEntity(followUseCase.getMyFollowees(pageable), OK)
+    fun getMyFollowees(): ResponseEntity<List<GetFolloweeResponseDto>> =
+        ResponseEntity(followUseCase.getMyFollowees(), OK)
 
 
 }
