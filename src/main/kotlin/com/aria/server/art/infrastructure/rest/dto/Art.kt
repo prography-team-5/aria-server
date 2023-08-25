@@ -5,6 +5,7 @@ import com.aria.server.art.domain.art.Size
 import java.time.LocalDateTime
 
 data class SimpleArtDto(
+    val artId: Long,
     val title: String,
     val mainImageUrl: String,
     val year: Int,
@@ -15,6 +16,7 @@ data class SimpleArtDto(
     companion object {
         fun from(art: Art): SimpleArtDto =
             SimpleArtDto(
+                art.id,
                 art.title,
                 art.mainImage.getUrl(),
                 art.year,

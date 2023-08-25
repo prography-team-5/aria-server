@@ -50,7 +50,7 @@ class FollowUseCaseImpl (
     @Transactional(readOnly = true)
     override fun getMyFollowees(): List<GetFolloweeResponseDto> {
         val currentMemberId = memberService.getCurrentMember().id
-        return followService.getFollowsByFolloweeId(currentMemberId)
+        return followService.getFollowsByFollowerId(currentMemberId)
             .map { follow -> GetFolloweeResponseDto.from(follow) }
     }
 
